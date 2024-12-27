@@ -1,3 +1,10 @@
+<?php
+include 'sqlconnection.php'; 
+if(!isset($_SESSION['userId'])){
+    header ('location:loginForm.php');
+}
+?> 
+
 <!DOCTYPE html>
 
 <html>
