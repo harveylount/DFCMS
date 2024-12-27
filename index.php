@@ -6,7 +6,7 @@
 
     <link href="./index.css" rel="stylesheet" type="text/css" />
 
-    <title>WAT Portfolio</title>
+    <title>Case List</title>
 
 </head>
 
