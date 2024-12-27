@@ -14,7 +14,7 @@ h1 {
 /* Structure */
 #pagewrap {
     padding: 5px;
-    width: 1600px; /* Fixed typo: '1600spx' to '1600px' */
+    width: 1500px; 
     margin: 20px auto;
 }
 
@@ -79,6 +79,39 @@ header, #content, #sidebar, nav {
     color: #fff;
     background-color: #000;
     text-decoration: none;
+}
+
+
+/* Style for the logout bar */
+#logout-bar {
+    background-color: #f1f1f1;
+    padding: 10px 20px;
+    text-align: right; /* Aligns the content to the right */
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+}
+
+#logout-bar span {
+    margin-right: 20px;
+    font-size: 16px;
+    color: #333;
+}
+
+#logout-bar #username, #logout-bar #role {
+    font-weight: bold;
+}
+
+#logout-bar #logout-button {
+    padding: 8px 16px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#logout-bar #logout-button:hover {
+    background-color: #0056b3;
 }
 
 /************************************************************************************
