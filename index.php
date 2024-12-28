@@ -32,7 +32,7 @@ if(!isset($_SESSION['userId'])){
         <div id="logout-bar">
             <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
             <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
-            <a href="logout.php" id="logout-button">Logout</a>
+            <a href="logoutFunction.php" id="logout-button">Logout</a>
         </div>
 
         <section id="content">
