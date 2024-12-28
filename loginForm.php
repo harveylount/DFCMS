@@ -2,6 +2,15 @@
 <html>
 <?php
 session_start();
+if (!isset($_SESSION['message'])) {
+    $_SESSION['message']='';
+}
+if (!isset($_SESSION['txtUsernameR'])) {
+    $_SESSION['txtUsernameR']='';
+}
+if (!isset($_SESSION['txtPasswordR'])) {
+    $_SESSION['txtPasswordR']='';
+}
 ?>
 
 <head>
@@ -59,7 +68,7 @@ session_start();
             
             <?php
             echo $_SESSION['message'];
-            unset($_SESSION['message']);
+            $_SESSION['message']='';
             ?>
 
         </section>
