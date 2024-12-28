@@ -58,8 +58,8 @@ session_start();
             </form>
             
             <?php
-            echo $_SESSION['registered'];
-            unset($_SESSION['registered']);
+            echo $_SESSION['message'];
+            unset($_SESSION['message']);
             ?>
 
         </section>

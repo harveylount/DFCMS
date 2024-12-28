@@ -44,17 +44,14 @@ if (file_exists($file)) {
                     $query="SELECT role FROM users WHERE Username = '$username';";
                     $result=mysqli_query($connection, $query);
                     if ($result) {
-                        // Fetch the result as an associative array
-                        $row = mysqli_fetch_assoc($result);
+                        $row = mysqli_fetch_assoc($result); // Fetch the result as an associative array
                     
-                        // Check if the row contains data
-                        if ($row) {
-                            // Store the role in the session
-                            $_SESSION['userRole'] = $row['role'];
+                        if ($row) { // Check if the row contains data
+                            $_SESSION['userRole'] = $row['role']; // Store the role in the session
                     
                         } else {
-                            // Handle case where no user is found
-                            header('location:loginForm.php');
+                            header('location:loginForm.php');// Handle case where no user is found
+
                         }
                     }
 
@@ -62,7 +59,7 @@ if (file_exists($file)) {
                     exit();
 
                 } else {
-                    $_SESSION['registered']='Login failed.';
+                    $_SESSION['message']='Login failed.';
                     header('location:loginForm.php');
                     exit();
                 }
@@ -74,7 +71,7 @@ if (file_exists($file)) {
         }
                             
         header('location:loginForm.php');
-        $_SESSION['registered']='There were errors you have not been registered!';
+        $_SESSION['message']='There were errors you have not been logged in!';
     }
 }
 ?>
