@@ -27,7 +27,7 @@ if (!isset($_SESSION['txtPasswordR'])) {
 
         <header>
 
-            <h1>Name of Product</h1>
+            <h1>DFCMS</h1>
 
             <h2> a Digital Forensics Case Management System </h2>
 

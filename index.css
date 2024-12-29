@@ -37,7 +37,7 @@ footer {
 
 /* Border & Guideline */
 #content {
-    background: #f8f8f8;
+    background: #ffffff;
 }
 
 #sidebar {
@@ -111,6 +111,34 @@ header, #content, #sidebar, nav {
 }
 
 #logout-bar #logout-button:hover {
+    background-color: #0056b3;
+}
+
+/* Style for the create case bar */
+#createcase-bar {
+    background-color: #f1f1f1;
+    padding: 10px 20px;
+    text-align: right; /* Aligns the content to the right */
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+}
+
+#createcase-bar span {
+    margin-right: 20px;
+    font-size: 16px;
+    color: #333;
+}
+
+#createcase-bar #createcase-button {
+    padding: 8px 16px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#createcase-bar #createcase-button:hover {
     background-color: #0056b3;
 }
 

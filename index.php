@@ -39,6 +39,14 @@ if(!isset($_SESSION['userId'])){
 
             <h2>Cases</h2>
 
+            <div id="createcase-bar">
+                <?php
+                if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'Lead Investigator') {
+                    echo '<a href="createCaseForm.php" id="createcase-button">Create Case</a>';
+                }
+                ?>
+            </div>
+
             <p>Cases displayed here</p>
 
         </section>
