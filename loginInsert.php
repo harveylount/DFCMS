@@ -13,7 +13,7 @@ if (file_exists($file)) {
         if (!empty($username)) {
             $_SESSION['txtUsernameF']=$_POST['txtUsername'];
             
-            if (preg_match('/^[a-zA-Z]+$/', $username)) {
+            if (preg_match('/^[a-zA-Z-]+$/', $username)) {
                 $usernameCheck = true;
             } else {
                 $usernameCheck = false;
