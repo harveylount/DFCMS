@@ -21,19 +21,6 @@ $currentDate = date('d-m-Y');
 // Get the date 5 years from now
 $maxDate = date('d-m-Y', strtotime('+5 years'));
 
-// Removes array key errors
-if (!isset($_SESSION['message'])) {
-    $_SESSION['message']='';
-}
-if (!isset($_SESSION['txtCaseReferenceR'])) {
-    $_SESSION['txtCaseReferenceR']='';
-}
-if (!isset($_SESSION['txtCaseNameR'])) {
-    $_SESSION['txtCaseNameR']='';
-}
-if (!isset($_SESSION['dateDeadlineR'])) {
-    $_SESSION['dateDeadlineR']='';
-}
 ?>
  
 
@@ -71,33 +58,15 @@ if (!isset($_SESSION['dateDeadlineR'])) {
 
                     <!-- Case reference field -->
                     <label for="txtCaseReference">Case Reference: </label><br />
-                    <input type="text" name="txtCaseReference" value="<?php 
-                        if(isset($_SESSION['txtCaseReferenceF'])) {
-                            echo $_SESSION['txtCaseReferenceF'];
-                            unset($_SESSION['txtCaseReferenceF']);
-                        } // Autofill remembered field data for failed form submittion
-                    ?>"/>
-                    <?php echo $_SESSION['txtCaseReferenceR']; unset($_SESSION['txtCaseReferenceR']);?><br /><br /><!-- Displays error message -->
+                    <input type="text" name="txtCaseReference" required/> <br /><br />
 
                     <!-- Case name field -->
                     <label for="txtCaseName">Case Name: </label><br />
-                    <input type="text" name="txtCaseName" value="<?php 
-                        if(isset($_SESSION['txtCaseNameF'])) {
-                            echo $_SESSION['txtCaseNameF'];
-                            unset($_SESSION['txtCaseNameF']);
-                        } // Autofill remembered field data for failed form submittion
-                    ?>"/>
-                    <?php echo $_SESSION['txtCaseNameR']; unset($_SESSION['txtCaseNameR']);?><br /><br /><!-- Displays error message -->
+                    <input type="text" name="txtCaseName" required/> <br /><br />
 
                     <!-- Case deadline date field -->
                     <label for="dateDeadline">Deadline date:</label><br />
-                    <input type="date" id="dateDeadline" name="dateDeadline" min="<?php echo $currentDate; ?>" max="<?php echo $maxDate; ?>" value="<?php 
-                        if(isset($_SESSION['dateDeadlineF'])) {
-                            echo htmlspecialchars($_SESSION['dateDeadlineF'], ENT_QUOTES, 'UTF-8');
-                            unset($_SESSION['dateDeadlineF']);
-                        } // Autofill remembered field data for failed form submittion
-                    ?>">
-                    <?php echo $_SESSION['dateDeadlineR']; unset($_SESSION['dateDeadlineR']);?><br /><br /><!-- Displays error message -->
+                    <input type="date" id="dateDeadline" name="dateDeadline" min="<?php echo $currentDate; ?>" max="<?php echo $maxDate; ?>" required> <br /><br />
 
                     <input type="submit" value="Submit" name="subEvent" />
                     <input type="reset" value="Clear" />
@@ -105,12 +74,6 @@ if (!isset($_SESSION['dateDeadlineR'])) {
                 </fieldset>
                 
             </form>
-            
-            <?php
-            // Removes submittion error message
-            echo $_SESSION['message'];
-            $_SESSION['message']='';
-            ?>
 
         </section>
 
