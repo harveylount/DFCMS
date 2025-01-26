@@ -16,10 +16,10 @@ if ($_SESSION['userRole'] !== 'Lead Investigator') {
 }
 
 // Get the current date and format it as YYYY-MM-DD
-$currentDate = date('d-m-Y');
+$currentDate = date('Y-m-d');
 
 // Get the date 5 years from now
-$maxDate = date('d-m-Y', strtotime('+5 years'));
+$maxDate = date('Y-m-d', strtotime('+5 years'));
 
 ?>
  
