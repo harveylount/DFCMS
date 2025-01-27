@@ -47,7 +47,7 @@ if(!isset($_SESSION['userId'])){
                 ?>
             </div>
 
-            <p>Cases displayed here
+            <p>
                 <?php
                 
                 include 'displayCases.php';

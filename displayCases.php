@@ -1,5 +1,4 @@
 <?php
-    include 'sqlConnection.php';
 
     $query = "SELECT * FROM cases";
     $results = mysqli_query($connection, $query);
