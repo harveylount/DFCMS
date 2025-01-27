@@ -1,5 +1,5 @@
 <?php
-include 'sqlconnection.php'; 
+include 'sqlConnection.php'; 
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
@@ -47,7 +47,13 @@ if(!isset($_SESSION['userId'])){
                 ?>
             </div>
 
-            <p>Cases displayed here</p>
+            <p>Cases displayed here
+                <?php
+                
+                include 'displayCases.php';
+
+                ?>
+            </p>
 
         </section>
 

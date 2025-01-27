@@ -1,5 +1,6 @@
 <?php
 include 'sqlConnection.php';
+session_start();
 
 $file = "encryptionkey.txt";
 if (file_exists($file)) {
