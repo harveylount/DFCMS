@@ -3,6 +3,13 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['txtCaseReferenceM'])) {
+    $_SESSION['txtCaseReferenceM']='';
+}
+if (!isset($_SESSION['txtCaseNameM'])) {
+    $_SESSION['txtCaseNameM']='';
+}
+
 // Returns to index page if user role is not set
 if (!isset($_SESSION['userRole'])) {
     header ('location:index.php');
@@ -58,11 +65,21 @@ $maxDate = date('Y-m-d', strtotime('+5 years'));
 
                     <!-- Case reference field -->
                     <label for="txtCaseReference">Case Reference: </label><br />
-                    <input type="text" name="txtCaseReference" required/> <br /><br />
+                    <input type="text" name="txtCaseReference" value="<?php 
+                        if(isset($_SESSION['txtCaseReferenceF'])) {
+                            echo $_SESSION['txtCaseReferenceF'];
+                            unset($_SESSION['txtCaseReferenceF']);
+                        }
+                    ?>" required/><?php echo $_SESSION['txtCaseReferenceM']; unset($_SESSION['txtCaseReferenceM']);?><br /><br />
 
                     <!-- Case name field -->
                     <label for="txtCaseName">Case Name: </label><br />
-                    <input type="text" name="txtCaseName" required/> <br /><br />
+                    <input type="text" name="txtCaseName" value="<?php 
+                        if(isset($_SESSION['txtCaseNameF'])) {
+                            echo $_SESSION['txtCaseNameF'];
+                            unset($_SESSION['txtCaseNameF']);
+                        }
+                    ?>" required/><?php echo $_SESSION['txtCaseNameM']; unset($_SESSION['txtCaseNameM']);?><br /><br />
 
                     <!-- Case deadline date field -->
                     <label for="dateDeadline">Deadline date:</label><br />
