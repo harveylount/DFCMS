@@ -21,6 +21,12 @@ if(!isset($_SESSION['userId'])){
 
     <div id="pagewrap">
 
+        <div id="logout-bar">
+            <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
+            <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
+            <a href="logoutFunction.php" id="logout-button">Logout</a>
+        </div>
+
         <header>
 
             <h1>DFCMS</h1>
@@ -28,12 +34,6 @@ if(!isset($_SESSION['userId'])){
             <h2> a Digital Forensics Case Management System </h2>
 
         </header>
-
-        <div id="logout-bar">
-            <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
-            <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
-            <a href="logoutFunction.php" id="logout-button">Logout</a>
-        </div>
 
         <section id="content">
 
