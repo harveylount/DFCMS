@@ -38,7 +38,9 @@ if(!isset($_SESSION['userId'])){
         <section id="content">
 
             <p>
-                Case info here
+                <?php
+                    include 'displayCaseInfo.php';
+                ?>
             </p>
 
         </section>
