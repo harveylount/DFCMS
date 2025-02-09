@@ -142,6 +142,34 @@ header, #content, #sidebar, nav {
     background-color: #0056b3;
 }
 
+/* Style for the case navigation bar */
+#navcase-bar {
+    background-color: #f1f1f1;
+    padding: 10px 20px;
+    text-align: left; /* Aligns the content to the right */
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+}
+
+#navcase-bar span {
+    margin-right: 20px;
+    font-size: 16px;
+    color: #333;
+}
+
+#navcase-bar #navcase-button {
+    padding: 8px 16px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#navcase-bar #navcase-button:hover {
+    background-color: #0056b3;
+}
+
 /************************************************************************************
  MEDIA QUERIES
  ************************************************************************************/

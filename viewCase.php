@@ -3,6 +3,8 @@ include 'sqlConnection.php';
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
+
+$identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
 ?> 
 
 <!DOCTYPE html>
@@ -34,6 +36,10 @@ if(!isset($_SESSION['userId'])){
             <h2> a Digital Forensics Case Management System </h2>
 
         </header>
+
+        <div id="navcase-bar">
+            <a href="<?php echo "viewCase.php?identifier=$identifier" ?>" id="navcase-button">Case Overview</a>
+        </div>
 
         <section id="content">
 
