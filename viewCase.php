@@ -39,6 +39,7 @@ $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL
 
         <div id="navcase-bar">
             <a href="<?php echo "viewCase.php?identifier=$identifier" ?>" id="navcase-button">Case Overview</a>
+            <a href="<?php echo "viewEvidence.php?identifier=$identifier" ?>" id="navcase-button">Evidence</a>
         </div>
 
         <section id="content">
