@@ -2,6 +2,9 @@
 <html>
 <?php
 session_start();
+if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
+    header ('location:loginForm.php');
+}
 
 if (!isset($_SESSION['txtCaseReferenceM'])) {
     $_SESSION['txtCaseReferenceM']='';
