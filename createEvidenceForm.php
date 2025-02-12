@@ -6,6 +6,23 @@ if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
     header ('location:loginForm.php');
 }
 
+if (!isset($_SESSION['txtExhibitReferenceM'])) {
+    $_SESSION['txtExhibitReferenceM']='';
+    $_SESSION['txtManufacturerM']='';
+    $_SESSION['txtModelM']='';
+    $_SESSION['txtSerialM']='';
+    $_SESSION['txtStorageM']='';
+    $_SESSION['txtOSM']='';
+    $_SESSION['txtCPUM']='';
+    $_SESSION['txtRAMM']='';
+    $_SESSION['txtMACM']='';
+    $_SESSION['txtIPM']='';
+    $_SESSION['txtFirmwareM']='';
+    $_SESSION['txtPeripheralM']='';
+    $_SESSION['txtNetworkM']='';
+
+}
+
 $identifier = intval($_GET['identifier']);
 ?>
  
@@ -15,6 +32,13 @@ $identifier = intval($_GET['identifier']);
     <link href="./index.css" rel="stylesheet" type="text/css" />
 
     <title>Create Evidence</title>
+
+    <style>
+        .tall-input {
+            height: 50px; /* Adjust the height as needed */
+            width: 254px;
+        }
+    </style>
 
 </head>
 
@@ -47,7 +71,143 @@ $identifier = intval($_GET['identifier']);
 
             <h2>Create a Computers & Laptops Evidence Exhibit</h2>
 
-            
+            <form method="post" action="createEvidenceInsert.php">
+                <fieldset class="field-set width">
+                    <legend>
+                    Enter evidence details
+                    </legend>
+
+                    <!-- Case reference field -->
+                    <label for="txtExhibitReference">Exhibit Reference: *</label><br />
+                    <input type="text" name="txtExhibitReference" size="32" value="<?php 
+                        if(isset($_SESSION['txtExhibitReferenceF'])) {
+                            echo $_SESSION['txtExhibitReferenceF'];
+                            unset($_SESSION['txtExhibitReferenceF']);
+                        }
+                    ?>" required/><?php echo $_SESSION['txtExhibitReferenceM']; unset($_SESSION['txtExhibitReferenceM']);?><br /><br />
+
+                    <!-- Devise type field -->
+                    <label for="deviceType">Device Type: *</label><br />
+                    <select name="deviceType" required>
+                        <option value="Desktop" <?php if(isset($_SESSION['deviceType']) && $_SESSION['deviceType'] == 'Desktop') echo 'selected'; ?>>Desktop</option>
+                        <option value="Laptop" <?php if(isset($_SESSION['deviceType']) && $_SESSION['deviceType'] == 'Laptop') echo 'selected'; ?>>Laptop</option>
+                        <option value="Workstation" <?php if(isset($_SESSION['deviceType']) && $_SESSION['deviceType'] == 'Workstation') echo 'selected'; ?>>Workstation</option>
+                    </select><br /><br />
+                    
+                    <!-- Manufacture field -->
+                    <label for="txtManufacturer">Manufacturer: *</label><br />
+                    <input type="text" name="txtManufacturer" size="32" value="<?php 
+                        if(isset($_SESSION['txtManufacturerF'])) {
+                            echo $_SESSION['txtManufacturerF'];
+                            unset($_SESSION['txtManufacturerF']);
+                        }
+                    ?>" required/><?php echo $_SESSION['txtManufacturerM']; unset($_SESSION['txtManufacturerM']);?> [Manufacturer / brand name]<br /><br />
+
+                    <!-- Model field -->
+                    <label for="txtModel">Model: *</label><br />
+                    <input type="text" name="txtModel" size="32" value="<?php 
+                        if(isset($_SESSION['txtModelF'])) {
+                            echo $_SESSION['txtModelF'];
+                            unset($_SESSION['txtModelF']);
+                        }
+                    ?>" required/><?php echo $_SESSION['txtModelM']; unset($_SESSION['txtModelM']);?> [Specific model name or number]<br /><br />
+
+                    <!-- Serial field -->
+                    <label for="txtSerial">Serial Number: *</label><br />
+                    <input type="text" name="txtSerial" size="32" value="<?php 
+                        if(isset($_SESSION['txtSerialF'])) {
+                            echo $_SESSION['txtSerialF'];
+                            unset($_SESSION['txtSerialF']);
+                        }
+                    ?>" required/><?php echo $_SESSION['txtSerialM']; unset($_SESSION['txtSerialM']);?> [Unique identifier provided by the manufacturer]<br /><br />
+
+                    <!-- Storage field -->
+                    <label for="txtStorage">Storage Capacity: *</label><br />
+                    <input type="text" name="txtStorage" size="32" value="<?php 
+                        if(isset($_SESSION['txtStorageF'])) {
+                            echo $_SESSION['txtStorageF'];
+                            unset($_SESSION['txtStorageF']);
+                        }
+                    ?>" required/><?php echo $_SESSION['txtStorageM']; unset($_SESSION['txtStorageM']);?> [Size & type of internal storage (e.g. 1TB SSD)]<br /><br />
+
+                    <!-- Operating System field -->
+                    <label for="txtOS">Operating System: *</label><br />
+                    <input type="text" name="txtOS" size="32" value="<?php 
+                        if(isset($_SESSION['txtOSF'])) {
+                            echo $_SESSION['txtOSF'];
+                            unset($_SESSION['txtOSF']);
+                        }
+                    ?>" required/><?php echo $_SESSION['txtOSM']; unset($_SESSION['txtOSM']);?> [Version & build number (e.g. Windows 11 22H2)]<br /><br />
+
+                    <!-- CPU information field -->
+                    <label for="txtCPU">CPU Information:</label><br />
+                    <input type="text" name="txtCPU" size="32" value="<?php 
+                        if(isset($_SESSION['txtCPUF'])) {
+                            echo $_SESSION['txtCPUF'];
+                            unset($_SESSION['txtCPUF']);
+                        }
+                    ?>"/><?php echo $_SESSION['txtCPUM']; unset($_SESSION['txtCPUM']);?> [CPU model, number of cores, speed (e.g. i7 7700k, 6 core, 3.6GHz)]<br /><br />
+
+                    <!-- RAM information field -->
+                    <label for="txtRAM">RAM Information:</label><br />
+                    <input type="text" name="txtRAM" size="32" value="<?php 
+                        if(isset($_SESSION['txtRAMF'])) {
+                            echo $_SESSION['txtRAMF'];
+                            unset($_SESSION['txtRAMF']);
+                        }
+                    ?>"/><?php echo $_SESSION['txtRAMM']; unset($_SESSION['txtRAMM']);?> [Size & type of (e.g. 16GB DDR4)] <br /><br />
+
+                    <!-- MAC information field -->
+                    <label for="txtMAC">MAC Information:</label><br />
+                    <input type="text" name="txtMAC" size="32" value="<?php 
+                        if(isset($_SESSION['txtMACF'])) {
+                            echo $_SESSION['txtMACF'];
+                            unset($_SESSION['txtMACF']);
+                        }
+                    ?>"/><?php echo $_SESSION['txtMACM']; unset($_SESSION['txtMACM']);?> [Unique network identifier for the device (e.g. A1-B2-C3-D4-E5-F6)]<br /><br />
+
+                    <!-- IP information field -->
+                    <label for="txtIP">IP Address Information:</label><br />
+                    <input type="text" name="txtIP" size="32" value="<?php 
+                        if(isset($_SESSION['txtIPF'])) {
+                            echo $_SESSION['txtIPF'];
+                            unset($_SESSION['txtIPF']);
+                        }
+                    ?>"/><?php echo $_SESSION['txtIPM']; unset($_SESSION['txtIPM']);?> [Current or last known IP address used]<br /><br />
+
+                    <!-- Firmware version field -->
+                    <label for="txtFirmware">Firmware Version:</label><br />
+                    <input type="text" name="txtFirmware" size="32" value="<?php 
+                        if(isset($_SESSION['txtFirmwareF'])) {
+                            echo $_SESSION['txtFirmwareF'];
+                            unset($_SESSION['txtFirmwareF']);
+                        }
+                    ?>"/><?php echo $_SESSION['txtFirmwareM']; unset($_SESSION['txtFirmwareM']);?> [BIOS or UEFI version]<br /><br />
+
+                    <!-- Peripheral devices field -->
+                    <label for="txtPeripheral">Peripheral Devices:</label><br />
+                    <textarea name="txtPeripheral" size="32" value="<?php 
+                        if(isset($_SESSION['txtPeripheralF'])) {
+                            echo $_SESSION['txtPeripheralF'];
+                            unset($_SESSION['txtPeripheralF']);
+                        }
+                    ?>" class="tall-input"></textarea><?php echo $_SESSION['txtPeripheralM']; unset($_SESSION['txtPeripheralM']);?> [Connected devices (e.g. mouse, keyboard, etc.)]<br /><br />
+
+                    <!-- Network interface information field -->
+                    <label for="txtNetwork">Network Interface Information:</label><br />
+                    <input type="text" name="txtNetwork" size="32" value="<?php 
+                        if(isset($_SESSION['txtNetworkF'])) {
+                            echo $_SESSION['txtNetworkF'];
+                            unset($_SESSION['txtNetworkF']);
+                        }
+                    ?>"/><?php echo $_SESSION['txtNetworkM']; unset($_SESSION['txtNetworkM']);?> [Wired (Ethernet) or wireless (Wi-Fi) network details]<br /><br />
+
+                    <input type="submit" value="Submit" name="subEvent" />
+                    <input type="reset" value="Clear" />
+
+                </fieldset>
+                
+            </form>
 
         </section>
 
