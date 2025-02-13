@@ -188,8 +188,7 @@ foreach ($unsetMsg as $msg) {
                                 unset($_SESSION['txtPeripheralF']);
                             }
                         ?>
-                    </textarea>
-                    <p class="error-message"><?php echo $_SESSION['txtPeripheralM']; unset($_SESSION['txtPeripheralM']);?></p> [Connected devices (e.g. mouse, keyboard, etc.)]<br /><br />
+                    </textarea><p class="error-message"><?php echo $_SESSION['txtPeripheralM']; unset($_SESSION['txtPeripheralM']);?></p> [Connected devices (e.g. mouse, keyboard, etc.)]<br /><br />
 
                     <!-- Network interface information field -->
                     <label for="txtNetwork">Network Interface Information:</label><br />
@@ -199,9 +198,7 @@ foreach ($unsetMsg as $msg) {
                                 echo $_SESSION['txtNetworkF'];
                                 unset($_SESSION['txtNetworkF']);
                             }
-                    ?>
-                    
-                    "/><p class="error-message"><?php echo $_SESSION['txtNetworkM']; unset($_SESSION['txtNetworkM']);?></p> [Wired (Ethernet) or wireless (Wi-Fi) network details]<br /><br />
+                    ?>"/><p class="error-message"><?php echo $_SESSION['txtNetworkM']; unset($_SESSION['txtNetworkM']);?></p> [Wired (Ethernet) or wireless (Wi-Fi) network details]<br /><br />
 
                     <input type="submit" value="Submit" name="subEvent" />
                     <input type="reset" value="Clear" />
