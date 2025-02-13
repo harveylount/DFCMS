@@ -170,6 +170,13 @@ header, #content, #sidebar, nav {
     background-color: #0056b3;
 }
 
+/* Error message */
+.error-message {
+    color: red;
+    display: inline;  
+    margin-left: 10px; 
+}
+
 /************************************************************************************
  MEDIA QUERIES
  ************************************************************************************/
