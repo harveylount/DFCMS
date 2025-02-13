@@ -1,5 +1,7 @@
 <?php
 include 'sqlconnection.php'; 
 unset($_SESSION['userId']);
-header('location:./index.php')
+session_destroy();
+header('location:./index.php');
+
 ?>

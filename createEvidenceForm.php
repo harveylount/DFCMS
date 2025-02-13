@@ -181,23 +181,20 @@ foreach ($unsetMsg as $msg) {
                     ?>"/><p class="error-message"><?php echo $_SESSION['txtFirmwareM']; unset($_SESSION['txtFirmwareM']);?></p> [BIOS or UEFI version]<br /><br />
 
                     <label for="txtPeripheral">Peripheral Devices:</label><br />
-                    <textarea name="txtPeripheral" class="tall-input">
-                        <?php 
-                            if(isset($_SESSION['txtPeripheralF'])) {
-                                echo $_SESSION['txtPeripheralF'];
-                                unset($_SESSION['txtPeripheralF']);
-                            }
-                        ?>
-                    </textarea><p class="error-message"><?php echo $_SESSION['txtPeripheralM']; unset($_SESSION['txtPeripheralM']);?></p> [Connected devices (e.g. mouse, keyboard, etc.)]<br /><br />
+                    <textarea name="txtPeripheral" class="tall-input"><?php 
+                        if(isset($_SESSION['txtPeripheralF'])) {
+                            echo $_SESSION['txtPeripheralF'];
+                            unset($_SESSION['txtPeripheralF']);
+                        }
+                    ?></textarea><p class="error-message"><?php echo $_SESSION['txtPeripheralM']; unset($_SESSION['txtPeripheralM']);?></p> [Connected devices (e.g. mouse, keyboard, etc.)]<br /><br />
 
                     <!-- Network interface information field -->
                     <label for="txtNetwork">Network Interface Information:</label><br />
-                    <input type="text" name="txtNetwork" size="32" value="
-                        <?php 
-                            if(isset($_SESSION['txtNetworkF'])) {
-                                echo $_SESSION['txtNetworkF'];
-                                unset($_SESSION['txtNetworkF']);
-                            }
+                    <input type="text" name="txtNetwork" size="32" value="<?php 
+                        if(isset($_SESSION['txtNetworkF'])) {
+                            echo $_SESSION['txtNetworkF'];
+                            unset($_SESSION['txtNetworkF']);
+                        }
                     ?>"/><p class="error-message"><?php echo $_SESSION['txtNetworkM']; unset($_SESSION['txtNetworkM']);?></p> [Wired (Ethernet) or wireless (Wi-Fi) network details]<br /><br />
 
                     <input type="submit" value="Submit" name="subEvent" />
