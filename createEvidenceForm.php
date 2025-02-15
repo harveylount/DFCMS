@@ -58,9 +58,9 @@ foreach ($unsetMsg as $msg) {
 
         <div id="navcase-bar">
             <a href="<?php echo "createEvidenceForm.php?identifier=$identifier" ?>" id="navcase-button">Computers & Laptops</a>
-            <a href="<?php echo "createEvidenceFormMobile.php?identifier=$identifier" ?>" id="navcase-button">Mobile Devices</a>
-            <a href="<?php echo "createEvidenceFormExternal.php?identifier=$identifier" ?>" id="navcase-button">External Storage</a>
-            <a href="<?php echo "createEvidenceFormNetwork.php?identifier=$identifier" ?>" id="navcase-button">Network Devices</a>
+            <a href="<?php echo "createEvidenceMobileForm.php?identifier=$identifier" ?>" id="navcase-button">Mobile Devices</a>
+            <a href="<?php echo "createEvidenceExternalForm.php?identifier=$identifier" ?>" id="navcase-button">External Storage</a>
+            <a href="<?php echo "createEvidenceNetworkForm.php?identifier=$identifier" ?>" id="navcase-button">Network Devices</a>
         </div>
 
         <section id="content">
