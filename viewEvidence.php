@@ -49,7 +49,7 @@ $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL
             </div>
 
             <p>
-                Evidence here
+                <?php include 'displayEvidence.php'; ?>
             </p>
 
         </section>
