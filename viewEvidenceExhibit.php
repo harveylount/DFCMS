@@ -1,0 +1,68 @@
+<?php
+include 'sqlConnection.php'; 
+if(!isset($_SESSION['userId'])){
+    header ('location:loginForm.php');
+}
+
+$identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
+$evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection
+?> 
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <link href="./index.css" rel="stylesheet" type="text/css" />
+
+    <title>Evidence Exhibit</title>
+
+</head>
+
+<body>
+
+    <div id="pagewrap">
+
+        <div id="logout-bar">
+            <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
+            <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
+            <a href="logoutFunction.php" id="logout-button">Logout</a>
+        </div>
+
+        <header>
+
+            <h1>DFCMS</h1>
+
+            <h2> a Digital Forensics Case Management System </h2>
+
+        </header>
+
+        <div id="navcase-bar">
+            <a href="<?php echo "viewEvidenceExhibit.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Evidence Overview</a>
+            <a href="<?php echo "viewLBU01.php?identifer=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU01</a>
+        </div>
+
+        <section id="content">
+
+            <p>
+                <?php
+                    include 'displayEvidenceInfo.php';
+                ?>
+            </p>
+
+        </section>
+
+        
+
+        <footer>
+
+            <h4>Harvey Lount c3654483</h4>
+
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
