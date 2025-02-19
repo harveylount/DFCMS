@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <?php
-session_start();
+include 'SqlConnection.php';
+
 if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
     header ('location:loginForm.php');
 }
@@ -11,7 +12,8 @@ $identifier = intval($_GET['identifier']);
 $unsetMsg = [
     'txtExhibitReferenceM', 'txtManufacturerM', 'txtModelM', 'txtSerialM', 
     'txtStorageM', 'txtOSM', 'txtCPUM', 'txtRAMM', 'txtMACM', 'txtIPM', 
-    'txtFirmwareM', 'txtPeripheralM', 'txtNetworkM'
+    'txtFirmwareM', 'txtPeripheralM', 'txtNetworkM', 'txtLocationM', 'txtReceivedFromM',
+    'txtReceivedFromRankM', 'txtReceivedFromCompanyM', 'txtSealNumberM'
 ];
 
 foreach ($unsetMsg as $msg) {
@@ -27,11 +29,14 @@ foreach ($unsetMsg as $msg) {
 
     <link href="./index.css" rel="stylesheet" type="text/css" />
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Create Evidence</title>
 
     <style>
         .tall-input {
-            height: 50px; /* Adjust the height as needed */
+            height: 50px;
             width: 254px;
         }
     </style>
@@ -67,22 +72,16 @@ foreach ($unsetMsg as $msg) {
 
             <h2>Create a Computers & Laptops Evidence Exhibit</h2>
 
-            <form method="post" action="createEvidenceInsert.php?identifier=<?php echo "$identifier" ?>">
+            <form method="post" action="createEvidenceInsert.php?identifier=<?php echo "$identifier" ?> " onsubmit="return validateForm()">
                 <fieldset class="field-set width">
+
                     <legend>
                     Enter evidence details
                     </legend>
 
-                    <!-- Case reference field -->
-                    <label for="txtExhibitReference">Exhibit Reference: *</label><br />
-                    <input type="text" name="txtExhibitReference" size="32" value="<?php 
-                        if(isset($_SESSION['txtExhibitReferenceF'])) {
-                            echo $_SESSION['txtExhibitReferenceF'];
-                            unset($_SESSION['txtExhibitReferenceF']);
-                        }
-                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtExhibitReferenceM']; unset($_SESSION['txtExhibitReferenceM']);?></p><br /><br />
+                    <?php include 'createEvidenceLBU01.php'; ?>
 
-                    <!-- Devise type field -->
+                    <!-- Device type field -->
                     <label for="deviceType">Device Type: *</label><br />
                     <select name="deviceType" required>
                         <option value="Desktop" <?php if(isset($_SESSION['deviceType']) && $_SESSION['deviceType'] == 'Desktop') echo 'selected'; ?>>Desktop</option>
@@ -118,22 +117,22 @@ foreach ($unsetMsg as $msg) {
                     ?>" required/><p class="error-message"><?php echo $_SESSION['txtSerialM']; unset($_SESSION['txtSerialM']);?></p> [Unique identifier provided by the manufacturer]<br /><br />
 
                     <!-- Storage field -->
-                    <label for="txtStorage">Storage Capacity: *</label><br />
+                    <label for="txtStorage">Storage Capacity:</label><br />
                     <input type="text" name="txtStorage" size="32" value="<?php 
                         if(isset($_SESSION['txtStorageF'])) {
                             echo $_SESSION['txtStorageF'];
                             unset($_SESSION['txtStorageF']);
                         }
-                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtStorageM']; unset($_SESSION['txtStorageM']);?></p> [Size & type of internal storage (e.g. 1TB SSD)]<br /><br />
+                    ?>"/><p class="error-message"><?php echo $_SESSION['txtStorageM']; unset($_SESSION['txtStorageM']);?></p> [Size & type of internal storage (e.g. 1TB SSD)]<br /><br />
 
                     <!-- Operating System field -->
-                    <label for="txtOS">Operating System: *</label><br />
+                    <label for="txtOS">Operating System: </label><br />
                     <input type="text" name="txtOS" size="32" value="<?php 
                         if(isset($_SESSION['txtOSF'])) {
                             echo $_SESSION['txtOSF'];
                             unset($_SESSION['txtOSF']);
                         }
-                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtOSM']; unset($_SESSION['txtOSM']);?></p> [Version & build number (e.g. Windows 11 22H2)]<br /><br />
+                    ?>" /><p class="error-message"><?php echo $_SESSION['txtOSM']; unset($_SESSION['txtOSM']);?></p> [Version & build number (e.g. Windows 11 22H2)]<br /><br />
 
                     <!-- CPU information field -->
                     <label for="txtCPU">CPU Information:</label><br />
@@ -203,6 +202,12 @@ foreach ($unsetMsg as $msg) {
                 </fieldset>
                 
             </form>
+
+            <?php include 'signatureLBU01Script.php'; ?>
+
+            
+
+
 
         </section>
 
