@@ -262,29 +262,25 @@ if (isset($_POST['subEvent'])) {
             unset($_SESSION[$var]);
         }
 
+        // SQL query to get case reference
+        $sqlCaseRef = "SELECT CaseReference FROM cases WHERE Identifier = ?";
+        $stmt = $connection->prepare($sqlCaseRef);
+        $stmt->bind_param("s", $identifier);
+        $stmt->execute();
+        $stmt->bind_result($caseReference);
+        $stmt->fetch();
+        mysqli_stmt_close($stmt);
+
         $query = "INSERT INTO evidence 
-                (Identifier, EvidenceType, ExhibitRef, SeizedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, Model, SerialNumber, IMEI, SIM, PhoneNumber, MAC, Storage, OS, BatteryHealth, InstalledApps, EncryptionType, AccountInfo, ScreenLock)
+                (Identifier, CaseReference, EvidenceType, ExhibitRef, SeizedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, Model, SerialNumber, IMEI, SIM, PhoneNumber, MAC, Storage, OS, BatteryHealth, InstalledApps, EncryptionType, AccountInfo, ScreenLock)
                 VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "sssssssssssssssssssss", $identifier, $evidenceType, $exhibitReference, $seizedTime, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $IMEI, $SIM, $phoneNumber, $MAC, $storage, $OS, $batteryHealth, $installedApps, $encryption, $account, $screenLock);
+        mysqli_stmt_bind_param($stmt, "ssssssssssssssssssssss", $identifier, $caseReference, $evidenceType, $exhibitReference, $seizedTime, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $IMEI, $SIM, $phoneNumber, $MAC, $storage, $OS, $batteryHealth, $installedApps, $encryption, $account, $screenLock);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
-        // SQL query
-        $sqlCaseRef = "SELECT CaseReference FROM cases WHERE Identifier = ?";
-        // Prepare statement
-        $stmt = $connection->prepare($sqlCaseRef);
-        // Bind the parameter to the prepared statement
-        $stmt->bind_param("s", $identifier);
-        // Execute the statement
-        $stmt->execute();
-        // Bind the result to PHP variables
-        $stmt->bind_result($caseReference);
-        // Fetch the result
-        $stmt->fetch();
-        mysqli_stmt_close($stmt);
 
         if (!empty($signatureDataFrom) && !empty($signatureDataBy)) {
             $querySignature = "INSERT INTO lbu01

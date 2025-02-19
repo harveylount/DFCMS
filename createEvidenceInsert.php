@@ -230,28 +230,23 @@ if (isset($_POST['subEvent'])) {
             unset($_SESSION[$var]);
         }
 
+        // SQL query to get case reference
+        $sqlCaseRef = "SELECT CaseReference FROM cases WHERE Identifier = ?";
+        $stmt = $connection->prepare($sqlCaseRef);
+        $stmt->bind_param("s", $identifier);
+        $stmt->execute();
+        $stmt->bind_result($caseReference);
+        $stmt->fetch();
+        mysqli_stmt_close($stmt);
+
         $query = "INSERT INTO evidence 
-                (Identifier, EvidenceType, ExhibitRef, SeizedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, Model, SerialNumber, Storage, OS, CPU, RAM, MAC, IP, Firmware, Peripheral, Network)
+                (Identifier, CaseReference, EvidenceType, ExhibitRef, SeizedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, Model, SerialNumber, Storage, OS, CPU, RAM, MAC, IP, Firmware, Peripheral, Network)
                 VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "sssssssssssssssssss", $identifier, $evidenceType, $exhibitReference, $timestamp, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $storage, $OS, $CPU, $RAM, $MAC, $IP, $firmware, $peripheral, $network);
+        mysqli_stmt_bind_param($stmt, "ssssssssssssdsssssss", $identifier, $caseReference, $evidenceType, $exhibitReference, $timestamp, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $storage, $OS, $CPU, $RAM, $MAC, $IP, $firmware, $peripheral, $network);
         mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-        
-        // SQL query
-        $sqlCaseRef = "SELECT CaseReference FROM cases WHERE Identifier = ?";
-        // Prepare statement
-        $stmt = $connection->prepare($sqlCaseRef);
-        // Bind the parameter to the prepared statement
-        $stmt->bind_param("s", $identifier);
-        // Execute the statement
-        $stmt->execute();
-        // Bind the result to PHP variables
-        $stmt->bind_result($caseReference);
-        // Fetch the result
-        $stmt->fetch();
         mysqli_stmt_close($stmt);
         
 

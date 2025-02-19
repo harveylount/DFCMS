@@ -154,17 +154,7 @@ if (isset($_POST['subEvent'])) {
             unset($_SESSION[$var]);
         }
 
-        $query = "INSERT INTO evidence 
-                (Identifier, EvidenceType, ExhibitRef, SeizedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, Model, SerialNumber, Storage, InterfaceType, FileSystem, EncryptionType)
-                VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "ssssssssssssss", $identifier, $evidenceType, $exhibitReference, $seizedTime, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $storage, $interface, $fileSystem, $encryption);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        // SQL query to get CaseReference from cases
+        // SQL query to get case reference
         $sqlCaseRef = "SELECT CaseReference FROM cases WHERE Identifier = ?";
         $stmt = $connection->prepare($sqlCaseRef);
         $stmt->bind_param("s", $identifier);
@@ -172,6 +162,17 @@ if (isset($_POST['subEvent'])) {
         $stmt->bind_result($caseReference);
         $stmt->fetch();
         mysqli_stmt_close($stmt);
+
+        $query = "INSERT INTO evidence 
+                (Identifier, CaseReference, EvidenceType, ExhibitRef, SeizedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, Model, SerialNumber, Storage, InterfaceType, FileSystem, EncryptionType)
+                VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "sssssssssssssss", $identifier, $caseReference, $evidenceType, $exhibitReference, $seizedTime, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $storage, $interface, $fileSystem, $encryption);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
 
         if (!empty($signatureDataFrom) && !empty($signatureDataBy)) {
             
