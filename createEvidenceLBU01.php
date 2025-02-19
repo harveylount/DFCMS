@@ -11,12 +11,10 @@
 </style>
 
 <?php
-if (!isset($_SESSION['timestampDatabase'])) {
-    $_SESSION['timestampDatabase'] = date('Y-m-d H:i:s');
-}
-if (!isset($_SESSION['timestampDisplay'])) {
-    $_SESSION['timestampDisplay'] = date('d-m-Y H:i:s');
-}
+
+$_SESSION['timestampDatabase'] = date('Y-m-d H:i:s');
+$_SESSION['timestampDisplay'] = date('d-m-Y H:i:s');
+
 
 //$userid = 2; // Example: replace with dynamic user ID or input from GET/POST
 $userid = $_SESSION['userId'];

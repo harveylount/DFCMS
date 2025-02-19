@@ -6,7 +6,7 @@ $identifier = intval($_GET['identifier']);
 if (isset($_POST['subEvent'])) {
     $evidenceType = 'Mobile';
     $exhibitReference=$_POST['txtExhibitReference'];
-    $seizedTime = date('Y-m-d H:i:s');
+    $seizedTime = $_SESSION['timestampDatabase'];
     $status = "Seized";
     $sealNumber=$_POST['txtSealNumber'];
     $location=$_POST['txtLocation'];
