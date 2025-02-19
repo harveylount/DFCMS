@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <?php
-session_start();
+include 'SqlConnection.php';
+
 if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
     header ('location:loginForm.php');
 }
@@ -11,7 +12,8 @@ $identifier = intval($_GET['identifier']);
 $unsetMsg = [
     'txtExhibitReferenceM', 'txtDeviceM', 'txtManufacturerM', 'txtModelM', 'txtSerialM', 
     'txtIMEIM', 'txtSIMM', 'txtNumberM', 'txtMACM', 'txtStorageM', 'txtOSM', 
-    'txtBatteryM', 'txtAppsM', 'txtAccountM', 'txtEncryptionM', 'txtPasscodeM' 
+    'txtBatteryM', 'txtAppsM', 'txtAccountM', 'txtEncryptionM', 'txtPasscodeM', 
+    'txtLocationM', 'txtReceivedFromM', 'txtReceivedFromRankM', 'txtReceivedFromCompanyM', 'txtSealNumberM'
 ];
 
 foreach ($unsetMsg as $msg) {
@@ -26,6 +28,9 @@ foreach ($unsetMsg as $msg) {
 <head>
 
     <link href="./index.css" rel="stylesheet" type="text/css" />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Create Evidence</title>
 
@@ -67,20 +72,13 @@ foreach ($unsetMsg as $msg) {
 
             <h2>Create a Mobile Device Evidence Exhibit</h2>
 
-            <form method="post" action="createEvidenceMobileInsert.php?identifier=<?php echo "$identifier" ?>">
+            <form method="post" action="createEvidenceMobileInsert.php?identifier=<?php echo "$identifier" ?> " onsubmit="return validateForm()">
                 <fieldset class="field-set width">
                     <legend>
                     Enter evidence details
                     </legend>
 
-                    <!-- Case reference field -->
-                    <label for="txtExhibitReference">Exhibit Reference: *</label><br />
-                    <input type="text" name="txtExhibitReference" size="32" value="<?php 
-                        if(isset($_SESSION['txtExhibitReferenceF'])) {
-                            echo $_SESSION['txtExhibitReferenceF'];
-                            unset($_SESSION['txtExhibitReferenceF']);
-                        }
-                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtExhibitReferenceM']; unset($_SESSION['txtExhibitReferenceM']);?></p><br /><br />
+                    <?php include 'createEvidenceLBU01.php'; ?>
 
                     <!-- Device type field -->
                     <label for="deviceType">Device Type: *</label><br />
@@ -119,13 +117,13 @@ foreach ($unsetMsg as $msg) {
                     ?>" /><p class="error-message"><?php echo $_SESSION['txtSerialM']; unset($_SESSION['txtSerialM']);?></p> [Unique identifier provided by the manufacturer]<br /><br />
 
                     <!-- IMEI field -->
-                    <label for="txtIMEI">IMEI Number: *</label><br />
+                    <label for="txtIMEI">IMEI Number:</label><br />
                     <input type="text" name="txtIMEI" size="32" value="<?php 
                         if(isset($_SESSION['txtIMEIF'])) {
                             echo $_SESSION['txtIMEIF'];
                             unset($_SESSION['txtIMEIF']);
                         }
-                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtIMEIM']; unset($_SESSION['txtIMEIM']);?></p> [International Mobile Equipment Identity number]<br /><br />
+                    ?>" /><p class="error-message"><?php echo $_SESSION['txtIMEIM']; unset($_SESSION['txtIMEIM']);?></p> [International Mobile Equipment Identity number]<br /><br />
 
                     <!-- Sim field -->
                     <label for="txtSIM">SIM Card Information:</label><br />
@@ -164,13 +162,13 @@ foreach ($unsetMsg as $msg) {
                     ?>" /><p class="error-message"><?php echo $_SESSION['txtStorageM']; unset($_SESSION['txtStorageM']);?></p> [Size of internal storage (e.g. 1TB SSD)]<br /><br />
 
                     <!-- Operating System field -->
-                    <label for="txtOS">Operating System: *</label><br />
+                    <label for="txtOS">Operating System:</label><br />
                     <input type="text" name="txtOS" size="32" value="<?php 
                         if(isset($_SESSION['txtOSF'])) {
                             echo $_SESSION['txtOSF'];
                             unset($_SESSION['txtOSF']);
                         }
-                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtOSM']; unset($_SESSION['txtOSM']);?></p> [Type & version (e.g. iOS 17.2)]<br /><br />
+                    ?>" /><p class="error-message"><?php echo $_SESSION['txtOSM']; unset($_SESSION['txtOSM']);?></p> [Type & version (e.g. iOS 17.2)]<br /><br />
 
                     <!-- Battery health field -->
                     <label for="txtBattery">Battery Health Information:</label><br />
@@ -223,6 +221,8 @@ foreach ($unsetMsg as $msg) {
                 </fieldset>
                 
             </form>
+
+            <?php include 'signatureLBU01Script.php'; ?>
 
         </section>
 
