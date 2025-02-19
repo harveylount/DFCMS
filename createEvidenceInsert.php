@@ -221,7 +221,7 @@ if (isset($_POST['subEvent'])) {
     if ($exhibitReferenceCheck && $sealNumberCheck && $locationCheck && $receivedFromCheck && $receivedFromRankCheck && $receivedFromCompanyCheck && $manufacturerCheck && $modelCheck && $serialCheck && $storageCheck && $OSCheck && $CPUCheck && $RAMCheck && $MACCheck && $IPCheck && $firmwareCheck && $peripheralCheck && $networkCheck) {
         
         $session_vars = [
-            'txtExhibitReferenceF', 'txtExhibitReferenceF', 'txtSealNumberF', 'txtLocationF', 
+            'txtExhibitReferenceF', 'txtSealNumberF', 'txtLocationF', 
             'txtReceivedFromF', 'txtReceivedFromRankF', 'txtReceivedFromCompanyF',
             'txtManufacturerF', 'txtModelF', 'txtSerialF', 
             'txtStorageF', 'txtOSF', 'txtCPUF', 'txtRAMF', 'txtMACF', 'txtIPF', 

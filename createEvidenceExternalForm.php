@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <?php
-session_start();
+include 'SqlConnection.php';
+
 if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
     header ('location:loginForm.php');
 }
@@ -10,7 +11,8 @@ $identifier = intval($_GET['identifier']);
 
 $unsetMsg = [
     'txtExhibitReferenceM', 'txtManufacturerM', 'txtModelM', 'txtSerialM', 
-    'txtStorageM', 'txtEncryptionM'];
+    'txtStorageM', 'txtEncryptionM', 'txtLocationM', 'txtReceivedFromM',
+    'txtReceivedFromRankM', 'txtReceivedFromCompanyM', 'txtSealNumberM'];
 
 foreach ($unsetMsg as $msg) {
     if (!isset($_SESSION[$msg])) {
@@ -24,6 +26,9 @@ foreach ($unsetMsg as $msg) {
 <head>
 
     <link href="./index.css" rel="stylesheet" type="text/css" />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Create Evidence</title>
 
@@ -65,20 +70,13 @@ foreach ($unsetMsg as $msg) {
 
             <h2>Create a External Storage Evidence Exhibit</h2>
 
-            <form method="post" action="createEvidenceExternalInsert.php?identifier=<?php echo "$identifier" ?>">
+            <form method="post" action="createEvidenceExternalInsert.php?identifier=<?php echo "$identifier" ?> " onsubmit="return validateForm()">
                 <fieldset class="field-set width">
                     <legend>
                     Enter evidence details
                     </legend>
 
-                    <!-- Case reference field -->
-                    <label for="txtExhibitReference">Exhibit Reference: *</label><br />
-                    <input type="text" name="txtExhibitReference" size="32" value="<?php 
-                        if(isset($_SESSION['txtExhibitReferenceF'])) {
-                            echo $_SESSION['txtExhibitReferenceF'];
-                            unset($_SESSION['txtExhibitReferenceF']);
-                        }
-                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtExhibitReferenceM']; unset($_SESSION['txtExhibitReferenceM']);?></p><br /><br />
+                    <?php include 'createEvidenceLBU01.php'; ?>
 
                     <!-- Device type field -->
                     <label for="deviceType">Device Type: *</label><br />
@@ -124,13 +122,13 @@ foreach ($unsetMsg as $msg) {
                     ?>" /><p class="error-message"><?php echo $_SESSION['txtSerialM']; unset($_SESSION['txtSerialM']);?></p> [Unique identifier provided by the manufacturer]<br /><br />
 
                     <!-- Storage field -->
-                    <label for="txtStorage">Storage Capacity: *</label><br />
+                    <label for="txtStorage">Storage Capacity:</label><br />
                     <input type="text" name="txtStorage" size="32" value="<?php 
                         if(isset($_SESSION['txtStorageF'])) {
                             echo $_SESSION['txtStorageF'];
                             unset($_SESSION['txtStorageF']);
                         }
-                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtStorageM']; unset($_SESSION['txtStorageM']);?></p> [Size & type of internal storage (e.g. 1TB SSD)]<br /><br />
+                    ?>" /><p class="error-message"><?php echo $_SESSION['txtStorageM']; unset($_SESSION['txtStorageM']);?></p> [Size & type of internal storage (e.g. 1TB SSD)]<br /><br />
 
                     <!-- Interface type field -->
                     <label for="interfaceType">Interface Type: *</label><br />
@@ -199,9 +197,9 @@ foreach ($unsetMsg as $msg) {
                 
             </form>
 
-        </section>
+            <?php include 'signatureLBU01Script.php'; ?>
 
-        
+        </section>
 
         <footer>
 
