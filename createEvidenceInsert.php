@@ -146,14 +146,14 @@ if (isset($_POST['subEvent'])) {
         $_SESSION['txtOSM']='Maximum string length of 20 characters';
     }
 
-    if (preg_match('/^.{0,20}$/', $CPU)) {
+    if (preg_match('/^.{0,40}$/', $CPU)) {
         $CPUCheck = true;
         if (($CPU) == '') {
             $CPU = 'Unknown CPU';
         }
     } else {
         $CPUCheck = false;
-        $_SESSION['txtCPUM']='Maximum string length of 20 characters';
+        $_SESSION['txtCPUM']='Maximum string length of 40 characters';
     }
 
     if (preg_match('/^.{0,20}$/', $RAM)) {
@@ -245,7 +245,7 @@ if (isset($_POST['subEvent'])) {
                 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "ssssssssssssdsssssss", $identifier, $caseReference, $evidenceType, $exhibitReference, $timestamp, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $storage, $OS, $CPU, $RAM, $MAC, $IP, $firmware, $peripheral, $network);
+        mysqli_stmt_bind_param($stmt, "ssssssssssssssssssss", $identifier, $caseReference, $evidenceType, $exhibitReference, $timestamp, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $storage, $OS, $CPU, $RAM, $MAC, $IP, $firmware, $peripheral, $network);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         
