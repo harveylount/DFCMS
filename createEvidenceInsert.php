@@ -168,8 +168,8 @@ if (isset($_POST['subEvent'])) {
 
     if (preg_match('/^.{0,17}$/', $MAC)) {
         $MACCheck = true;
-        if (($storage) == '') {
-            $storage = 'Unknown MAC';
+        if (($MAC) == '') {
+            $MAC = 'Unknown MAC';
         }
     } else {
         $MACCheck = false;
