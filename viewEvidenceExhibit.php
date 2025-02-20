@@ -40,7 +40,7 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
 
         <div id="navcase-bar">
             <a href="<?php echo "viewEvidenceExhibit.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Evidence Overview</a>
-            <a href="<?php echo "viewLBU01.php?identifer=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU01</a>
+            <a href="<?php echo "viewLBU01.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU01</a>
         </div>
 
         <section id="content">
