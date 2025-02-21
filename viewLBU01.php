@@ -41,6 +41,7 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
         <div id="navcase-bar">
             <a href="<?php echo "viewEvidenceExhibit.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Evidence Overview</a>
             <a href="<?php echo "viewLBU01.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU01</a>
+            <a href="<?php echo "viewLBU03.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU03</a>
         </div>
 
         <section id="content">
@@ -54,7 +55,7 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
                 $results = $stmt->get_result();
         
                 while ($row = mysqli_fetch_assoc($results)) {
-                    echo "<h2>LBU01   " . $row['ExhibitRef'] . "  Information</h2>";
+                    echo "<h2>" . $row['ExhibitRef'] . " - Exhibit Receipt Form (LBU01)</h2>";
                     
                     echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                     echo "<tr><td><b>Case Reference:</b></td><td>" . $row['CaseReference'] . "</td></tr>";
