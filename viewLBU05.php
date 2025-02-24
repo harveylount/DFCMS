@@ -1,0 +1,206 @@
+<?php
+include 'sqlConnection.php'; 
+if(!isset($_SESSION['userId'])){
+    header ('location:loginForm.php');
+}
+
+$identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
+$evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection
+?> 
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <link href="./index.css" rel="stylesheet" type="text/css" />
+
+    <title>LBU05</title>
+
+</head>
+
+<body>
+
+    <div id="pagewrap">
+
+        <div id="logout-bar">
+            <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
+            <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
+            <a href="logoutFunction.php" id="logout-button">Logout</a>
+        </div>
+
+        <header>
+
+            <h1>DFCMS</h1>
+
+            <h2> a Digital Forensics Case Management System </h2>
+
+        </header>
+
+        <div id="navcase-bar">
+            <a href="<?php echo "viewEvidenceExhibit.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Evidence Overview</a>
+            <a href="<?php echo "viewLBU01.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU01</a>
+            <a href="<?php echo "viewLBU03.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU03</a>
+            <a href="<?php echo "viewLBU05.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU05</a>
+        </div>
+
+        <section id="content">
+
+            <div id="navcase-bar">
+                <a href="<?php echo "createLBU05EntryInForm.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Create Entry</a>
+            </div>
+
+            <p>
+                <?php
+                    // Step 1: Fetch the first row (for the first table)
+                    $sqlFirstRow = 
+                        "SELECT TimestampIn, NewLocation, SealNumberIn, ActionerIn, ActionerInUsername, Validate
+                        FROM LBU05 
+                        WHERE Identifier = ? AND EvidenceID = ? 
+                        ORDER BY LBU05id ASC LIMIT 1";
+
+                    $stmtFirstRow = $connection->prepare($sqlFirstRow);
+                    $stmtFirstRow->bind_param("ii", $identifier, $evidenceID);
+                    $stmtFirstRow->execute();
+                    $resultFirstRow = $stmtFirstRow->get_result();
+
+                    if ($resultFirstRow->num_rows > 0) {
+                        $rowFirst = $resultFirstRow->fetch_assoc();
+                        
+                        // Display the first row in the first table
+                        echo '<table border="1" cellpadding="10" cellspacing="0" style="width: 100%;">';
+                        echo '<thead><tr><th>Timestamp In</th><th>New Location</th><th>Seal Number</th><th>Actioner</th></tr></thead>';
+                        echo '<tbody>';
+                        echo '<tr>';
+                        echo '<td>' . ($rowFirst['TimestampIn'] ?? 'N/A') . '</td>';
+                        echo '<td>' . ($rowFirst['NewLocation'] ?? 'N/A') . '</td>';
+                        echo '<td>' . ($rowFirst['SealNumberIn'] ?? 'N/A') . '</td>';
+                        echo '<td>' . ($rowFirst['ActionerIn'] ?? 'N/A') . '</td>';
+                        echo '</tr>';
+                        echo '</tbody>';
+                        echo '</table>';
+                    } else {
+                        echo 'No first row found.';
+                    }
+
+                    echo "</br>";
+
+                    // Close the first row statement
+                    $stmtFirstRow->close();
+
+                    // Step 1: Fetch the rows (skip the first one, and join the rest)
+                    $sqlRows = "SELECT TimestampOut, OriginalLocation, ReasonOut, SealNumberOut, ActionerOut, 
+                                TimestampIn, NewLocation, SealNumberIn, ActionerIn, Validate
+                                FROM LBU05 
+                                WHERE Identifier = ? AND EvidenceID = ? 
+                                ORDER BY LBU05id ASC"; // No limit here; we need all rows
+
+                    $stmtRows = $connection->prepare($sqlRows);
+                    $stmtRows->bind_param("ii", $identifier, $evidenceID);
+                    $stmtRows->execute();
+                    $resultRows = $stmtRows->get_result();
+
+                    if ($resultRows->num_rows > 0) {
+                        // Start displaying the table for joined "Out" and "In" rows
+                        echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                        echo '<thead>
+                        <tr>
+                        <th>Timestamp Out</th>
+                        <th>Original Location</th>
+                        <th>Reason Out</th>
+                        <th>Seal Number Out</th>
+                        <th>Actioner Out</th>
+                        <th>Timestamp In</th>
+                        <th>New Location</th>
+                        <th>Seal Number In</th>
+                        <th>Actioner In</th>
+                        </tr>
+                        </thead>';
+                        echo '<tbody>';
+
+                        $prevRow = null; // To hold the previous row for joining with the next one
+
+                        while ($row = $resultRows->fetch_assoc()) {
+                            // If the current row is "Out", we display it and check if there's an "In" to join it with
+                            if ($row['Validate'] == 'Out') {
+                                // If there was a previous "Out" row without a corresponding "In", display it separately
+                                if ($prevRow && $prevRow['Validate'] == 'Out' && $prevRow['TimestampIn'] == null) {
+                                    echo '<tr>';
+                                    echo '<td>' . ($prevRow['TimestampOut'] ?? 'N/A') . '</td>';
+                                    echo '<td>' . ($prevRow['OriginalLocation'] ?? 'N/A') . '</td>';
+                                    echo '<td>' . ($prevRow['ReasonOut'] ?? 'N/A') . '</td>';
+                                    echo '<td>' . ($prevRow['SealNumberOut'] ?? 'N/A') . '</td>';
+                                    echo '<td>' . ($prevRow['ActionerOut'] ?? 'N/A') . '</td>';
+                                    echo '<td colspan="4">No matching "In" row</td>';
+                                    echo '</tr>';
+                                    $prevRow = null; // Reset the previous row
+                                }
+                                
+                                // Store the current "Out" row for later pairing
+                                $prevRow = $row;
+                            } 
+                            // If the current row is "In", display it alongside the previous "Out" row
+                            elseif ($row['Validate'] == 'In' && $prevRow) {
+                                // Display the "Out" and "In" rows together
+                                echo '<tr>';
+                                echo '<td>' . ($prevRow['TimestampOut'] ?? 'N/A') . '</td>';
+                                echo '<td>' . ($prevRow['OriginalLocation'] ?? 'N/A') . '</td>';
+                                echo '<td>' . ($prevRow['ReasonOut'] ?? 'N/A') . '</td>';
+                                echo '<td>' . ($prevRow['SealNumberOut'] ?? 'N/A') . '</td>';
+                                echo '<td>' . ($prevRow['ActionerOut'] ?? 'N/A') . '</td>';
+
+                                echo '<td>' . ($row['TimestampIn'] ?? 'N/A') . '</td>';
+                                echo '<td>' . ($row['NewLocation'] ?? 'N/A') . '</td>';
+                                echo '<td>' . ($row['SealNumberIn'] ?? 'N/A') . '</td>';
+                                echo '<td>' . ($row['ActionerIn'] ?? 'N/A') . '</td>';
+                                echo '</tr>';
+
+                                $prevRow = null; // Reset the previous row for the next pair
+                            }
+                        }
+
+                        // If there is an "Out" row left without an "In" row, display it
+                        if ($prevRow && $prevRow['Validate'] == 'Out') {
+                            echo '<tr>';
+                            echo '<td>' . ($prevRow['TimestampOut'] ?? 'N/A') . '</td>';
+                            echo '<td>' . ($prevRow['OriginalLocation'] ?? 'N/A') . '</td>';
+                            echo '<td>' . ($prevRow['ReasonOut'] ?? 'N/A') . '</td>';
+                            echo '<td>' . ($prevRow['SealNumberOut'] ?? 'N/A') . '</td>';
+                            echo '<td>' . ($prevRow['ActionerOut'] ?? 'N/A') . '</td>';
+                            echo '<td colspan="4"></td>';
+                            echo '</tr>';
+                        }
+
+                        echo '</tbody>';
+                        echo '</table>';
+                    } else {
+                        echo 'No rows found.';
+                    }
+
+                    // Close the statement
+                    $stmtRows->close();
+
+
+
+
+
+
+                ?>
+            </p>
+
+        </section>
+
+        
+
+        <footer>
+
+            <h4>Harvey Lount c3654483</h4>
+
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
