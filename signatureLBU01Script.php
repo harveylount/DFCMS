@@ -33,10 +33,15 @@
         ctxFrom.lineCap = 'round';
         ctxFrom.strokeStyle = 'black';
 
-        ctxFrom.lineTo(e.clientX - canvasFrom.offsetLeft, e.clientY - canvasFrom.offsetTop);
+        // Get the canvas position relative to the viewport
+        var rect = canvasFrom.getBoundingClientRect();
+        var offsetX = e.clientX - rect.left;
+        var offsetY = e.clientY - rect.top;
+
+        ctxFrom.lineTo(offsetX, offsetY);
         ctxFrom.stroke();
         ctxFrom.beginPath();
-        ctxFrom.moveTo(e.clientX - canvasFrom.offsetLeft, e.clientY - canvasFrom.offsetTop);
+        ctxFrom.moveTo(offsetX, offsetY);
     }
 
     canvasFrom.addEventListener('mousedown', startPositionFrom);
@@ -61,10 +66,15 @@
         ctxBy.lineCap = 'round';
         ctxBy.strokeStyle = 'black';
 
-        ctxBy.lineTo(e.clientX - canvasBy.offsetLeft, e.clientY - canvasBy.offsetTop);
+        // Get the canvas position relative to the viewport
+        var rect = canvasBy.getBoundingClientRect();
+        var offsetX = e.clientX - rect.left;
+        var offsetY = e.clientY - rect.top;
+
+        ctxBy.lineTo(offsetX, offsetY);
         ctxBy.stroke();
         ctxBy.beginPath();
-        ctxBy.moveTo(e.clientX - canvasBy.offsetLeft, e.clientY - canvasBy.offsetTop);
+        ctxBy.moveTo(offsetX, offsetY);
     }
 
     canvasBy.addEventListener('mousedown', startPositionBy);
