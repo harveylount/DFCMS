@@ -42,7 +42,7 @@ if (file_exists($file)) {
                     unset($_SESSION['txtUsernameF']);
                     unset($_SESSION['txtPasswordF']);
 
-                    $query="SELECT role, FullName FROM users WHERE Username = '$username';";
+                    $query="SELECT role, FullName, SocoNumber FROM users WHERE Username = '$username';";
                     $result=mysqli_query($connection, $query);
                     if ($result) {
                         $row = mysqli_fetch_assoc($result); // Fetch the result as an associative array
@@ -50,6 +50,7 @@ if (file_exists($file)) {
                         if ($row) { // Check if the row contains data
                             $_SESSION['userRole'] = $row['role']; // Store the role in the session
                             $_SESSION['fullName'] = $row['FullName'];
+                            $_SESSION['socoNumber'] = $row['SocoNumber'];
                     
                         } else {
                             header('location:loginForm.php');// Handle case where no user is found
