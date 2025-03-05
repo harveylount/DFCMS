@@ -121,56 +121,14 @@ if (isset($_POST['subEvent'])) {
     $numberOfSceneSketches, $locationOfSceneSketches, $numberOfItemsForExamination, $disclosureExhibitNumberString, $disclosureEvidenceSeizedString, $disclosureHandedSentByString, $disclosureToPersonLocationString,
     $disclosureTimestampString, $signatureDataSoco);
 
-    
-    // Manually construct the SQL query for debugging
-$sql_debug = sprintf(
-    "INSERT INTO your_table_name (
-        Identifier, CaseReference, SocoName, SocoUsername, SocoNumber, DateSceneExamined,
-        SceneArriveTime, SceneConcluded, OthersOnScene, OthersTimeIn, OthersTimeOut,
-        TypeOfCrime, LocationOfCrime, ExaminationNotes, NumberOfPhotos, LocationOfPhotos,
-        NumberOfSketches, LocationOfSketches, NumberOfItems, DisclosureExhibit,
-        EvidenceSeized, HandedSentBy, ToPersonOrLocation, DisclosureTimestamp, SocoSig
-    ) VALUES (
-        '%s', '%s', '%s', '%s', '%s', '%s',
-        '%s', '%s', '%s', '%s', '%s',
-        '%s', '%s', '%s', '%s', '%s',
-        '%s', '%s', '%s', '%s',
-        '%s', '%s', '%s', '%s', '%s'
-    );",
-    $identifier, $caseReference, $socoName, $socoUsername, $socoNumber, $dateSceneExaminedDatabase,
-    $timestampArrived, $timestampConcluded, $othersOnSceneString, $othersTimestampInString, $othersTimestampOutString,
-    $typeOfCrime, $locationOfCrime, $notes, $numberOfScenePhotos, $locationOfScenePhotos,
-    $numberOfSceneSketches, $locationOfSceneSketches, $numberOfItemsForExamination, $disclosureExhibitNumberString,
-    $disclosureEvidenceSeizedString, $disclosureHandedSentByString, $disclosureToPersonLocationString,
-    $disclosureTimestampString, $signatureDataSoco
-);
-
-// Print the query
-echo "SQL Query:\n" . $sql_debug;
-
-
-
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
+    unset($_SESSION['dateExaminedDatabaseLBU06']);
+    unset($_SESSION['timestampInDatabaseLBU06']);
 
-
-    var_dump($othersOnSceneArray);
-    var_dump($othersTimestampInArray);
-    var_dump($othersTimestampOutArray);
-    var_dump($othersOnSceneArray);
-    var_dump($disclosureExhibitNumberArray);
-    var_dump($disclosureEvidenceSeizedArray);
-    var_dump($disclosureHandedSentByArray);
-    var_dump($disclosureTimestampArray);
+    header('Location: viewLBU06.php?identifier=' . $identifier);
     exit();
     
-
-
-
-
-
-    echo ($othersOnScene);
-    echo ($disclosureOfEvidence);
 }
 ?>
