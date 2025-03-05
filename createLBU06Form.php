@@ -8,12 +8,11 @@ if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
 }
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
-$evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection
 
 
-$sql = "SELECT CaseReference FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
+$sql = "SELECT CaseReference FROM evidence WHERE Identifier = ?";
 $stmt = $connection->prepare($sql);
-$stmt->bind_param("ss", $identifier, $evidenceID);
+$stmt->bind_param("s", $identifier);
 $stmt->execute();
 $stmt->bind_result($caseReference);
 $stmt->fetch();
