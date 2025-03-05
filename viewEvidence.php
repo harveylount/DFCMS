@@ -5,6 +5,11 @@ if(!isset($_SESSION['userId'])){
 }
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
+
+$query2 = "SELECT CaseReference FROM cases WHERE Identifier = $identifier";
+    $results2 = mysqli_query($connection, $query2);
+    $caseReferenceRow = mysqli_fetch_assoc($results2);
+    $caseReference = $caseReferenceRow['CaseReference'] ?? 'No Case Reference';
 ?> 
 
 <!DOCTYPE html>
@@ -40,9 +45,12 @@ $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL
             <div id="navcase-bar">
                 <a href="<?php echo "viewCase.php?identifier=$identifier" ?>" id="navcase-button">Case Overview</a>
                 <a href="<?php echo "viewEvidence.php?identifier=$identifier" ?>" id="navcase-button">Evidence</a>
+                <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier" ?>" id="navcase-button">Crime Scene Reports</a>
             </div>
 
         <section id="content">
+
+            <h2><?php echo $caseReference ?> - View Evidence Exhibits</h2>
 
             <div id="navcase-bar">
                 <a href="<?php echo "createEvidenceForm.php?identifier=$identifier" ?>" id="navcase-button">Create Evidence</a>
