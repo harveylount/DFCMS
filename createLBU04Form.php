@@ -78,7 +78,7 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
 
             <h2><?php echo $caseReference; ?> - Create a Computer Exhibit Detail Form (LBU04)</h2>
 
-            <form method="post" action="createLBU06Insert.php?identifier=<?php echo "$identifier"?>">
+            <form method="post" action="createLBU06Insert.php?identifier=<?php echo "$identifier"?>" id="dynamicForm"> 
                 <fieldset class="field-set width">
                     <legend>Enter Computer Exhibit Details</legend>
 
@@ -87,19 +87,15 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
 
                     <h3>Details</h3>
 
-                    <!-- Manufacturer field -->
                     <label for="txtManufacturer">Manufacturer: *</label><br />
                     <input type="text" name="txtManufacturer" size="32" required/><br /><br />
 
-                    <!-- Model field -->
                     <label for="txtModel">Model: *</label><br />
                     <input type="text" name="txtModel" size="32" required/><br /><br />
                     
-                    <!-- Serial Number field -->
                     <label for="txtSerialNumber">Serial Number: *</label><br />
                     <input type="text" name="txtSerialNumber" size="32" required/><br /><br />
 
-                    <!-- Type field -->
                     <label for="txtType">Type: *</label><br />
                     <input type="text" name="txtType" size="32" required/><br /><br />
 
@@ -165,16 +161,16 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
                     <input type="text" name="txtBootOrder" size="32" required/><br /><br />
 
                     <label for="txtBIOSDate">BIOS Date: *</label><br />
-                    <input type="text" name="txtBIOSDate" size="32" required/><br /><br />
+                    <input type="date" name="txtBIOSDate" required/><br /><br />
     
                     <label for="txtBIOSTime">BIOS Time: *</label><br />
-                    <input type="text" name="txtBIOSTime" size="32" required/><br /><br />
+                    <input type="time" name="txtBIOSTime" size="32" required/><br /><br />
 
                     <label for="txtActualDate">Actual Date: *</label><br />
-                    <input type="text" name="txtActualDate" size="32" required/><br /><br />
+                    <input type="date" name="txtActualDate" required/><br /><br />
     
                     <label for="txtActualTime">Actual Time: *</label><br />
-                    <input type="text" name="txtActualTime" size="32" required/><br /><br />
+                    <input type="time" name="txtActualTime" size="32" required/><br /><br />
 
                     <label for="txtBIOSNotes">BIOS Notes:</label><br />
                     <textarea name="txtBIOSNotes" class="condition-notes-input"></textarea><br /><br />
@@ -234,8 +230,16 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
                                 <button type="button" onclick="removeFormSetHDD(${formCountHDD})">Remove</button><br /><br />
                             `;
 
-                            // Append the new form set to the container
-                            document.getElementById('formSetsContainerHDD').appendChild(newFormSetHDD);
+                            document.getElementById("formSetsContainerHDD").appendChild(newFormSetHDD);
+
+                            newFormSetHDD.querySelector(`input[name="txtReferenceHDD_${formCountHDD}"]`).addEventListener("input", validateHDDReference);
+                            newFormSetHDD.querySelector(`input[name="txtModelHDD_${formCountHDD}"]`).addEventListener("input", validateHDDModel);
+                            newFormSetHDD.querySelector(`input[name="txtSerialNumberHDD_${formCountHDD}"]`).addEventListener("input", validateHDDSerial);
+                            newFormSetHDD.querySelector(`input[name="txtTypeHDD_${formCountHDD}"]`).addEventListener("input", validateHDDType);
+                            newFormSetHDD.querySelector(`input[name="txtSizeHDD_${formCountHDD}"]`).addEventListener("input", validateHDDSize);
+                            newFormSetHDD.querySelector(`input[name="txtImagingMethodHDD_${formCountHDD}"]`).addEventListener("input", validateHDDImagingMethod);
+                            newFormSetHDD.querySelector(`textarea[name="txtNotesHDD_${formCountHDD}"]`).addEventListener("input", validateHDDNotes);
+
                         }
 
                         // Remove a form set
@@ -243,9 +247,341 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
                             const formSetHDD = document.getElementById('formSetHDD_' + setIdHDD);
                             formSetHDD.remove();
                         }
+                        
+                        window.onload = function () {
+                            
+                            document.querySelector('input[name="txtManufacturer"]').addEventListener("input", validateManufacturer);
+                            document.querySelector('input[name="txtModel"]').addEventListener("input", validateModel);
+                            document.querySelector('input[name="txtSerialNumber"]').addEventListener("input", validateSerial);
+                            document.querySelector('input[name="txtType"]').addEventListener("input", validateType);
+                            document.querySelector('textarea[name="txtConditionNotes"]').addEventListener("input", validateConditionNotes);
+
+                            document.querySelector('input[name="txtOpticalDrive"]').addEventListener("input", validateOpticalDrive);
+                            document.querySelector('input[name="txtFloppyDisk"]').addEventListener("input", validateFloppyDisk);
+                            document.querySelector('input[name="txtNetwork"]').addEventListener("input", validateNetwork);
+                            document.querySelector('input[name="txtModem"]').addEventListener("input", validateModem);
+                            document.querySelector('input[name="txtFirewire"]').addEventListener("input", validateFirewire);
+                            document.querySelector('input[name="txtMediaCardReader"]').addEventListener("input", validateMediaCard);
+                            document.querySelector('input[name="txtUSB"]').addEventListener("input", validateUSB);
+                            document.querySelector('input[name="txtSIMSlot"]').addEventListener("input", validateSIMSlot);
+                            document.querySelector('input[name="txtBattery"]').addEventListener("input", validateBattery);
+                            document.querySelector('input[name="txtVideoCard"]').addEventListener("input", validateVideoCard);
+                            document.querySelector('textarea[name="txtOtherPeripherals"]').addEventListener("input", validateOther);
+                            document.querySelector('input[name="txtBIOSKey"]').addEventListener("input", validateBIOSKey);
+                            document.querySelector('input[name="txtBIOSPassword"]').addEventListener("input", validatePassword);
+                            document.querySelector('input[name="txtBIOSSystem"]').addEventListener("input", validateBIOSSystem);
+                            document.querySelector('input[name="txtBootOrder"]').addEventListener("input", validateBootOrder);
+                            document.querySelector('textarea[name="txtBIOSNotes"]').addEventListener("input", validateBIOSNotes);
+                            
+                        };
 
                     </script>
                     <!-- Modified Generative AI output. Reference: J, K, L - END -->
+
+                    <script>
+                        function validateManufacturer(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9]{0,50}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Manufacturer can only contain letters (A-Z, a-z) with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateType(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Type can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateOpticalDrive(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Optical Drive can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateFloppyDisk(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Floppy Disk can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateNetwork(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Network can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateModem(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Modem can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateFirewire(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Firewire can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateMediaCard(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Media Card can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateBattery(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Battery can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateModel(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("Model can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateSIMSlot(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("SIM Slot can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateBootOrder(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,100}$/;
+
+                            if (!regex.test(value)) {
+                                alert("Boot Order can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 100 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 100);
+                            }
+                        }
+
+                        function validateVideoCard(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s\-]{0,50}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("Video Card can only contain letters (A-Z, a-z), numbers (0-9), spaces, and hyphens (-) with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s\-]/g, "").substring(0, 50); 
+                            }
+                        }
+
+                        function validateUSB(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s\.]{0,50}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("USB can only contain letters (A-Z, a-z), numbers (0-9), spaces, and dots (.) with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s\.]/g, "").substring(0, 50); 
+                            }
+                        }
+
+                        function validateBIOSSystem(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,10}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("BIOS System can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 10 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 10);
+                            }
+                        }
+
+                        function validateBIOSKey(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,10}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("BIOS Key can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 10 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 10);
+                            }
+                        }
+
+                        function validateSerial(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+
+                            if (value.length > 50) {
+                                alert("Serial cannot exceed 50 characters.");
+                                inputField.value = value.substring(0, 255); 
+                            }
+                        }
+
+                        function validatePassword(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+
+                            if (value.length > 255) {
+                                alert("Password cannot exceed 255 characters.");
+                                inputField.value = value.substring(0, 255); 
+                            }
+                        }
+
+                        function validateOther(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+
+                            if (value.length > 500) {
+                                alert("Othere Notes cannot exceed 500 characters.");
+                                inputField.value = value.substring(0, 500); 
+                            }
+                        }
+
+                        function validateConditionNotes(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+
+                            if (value.length > 500) {
+                                alert("Condition Notes cannot exceed 500 characters.");
+                                inputField.value = value.substring(0, 500); 
+                            }
+                        }
+
+                        function validateBIOSNotes(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+
+                            if (value.length > 500) {
+                                alert("BIOS Notes cannot exceed 500 characters.");
+                                inputField.value = value.substring(0, 500); 
+                            }
+                        }
+
+                        function validateHDDReference(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s\-\/]{0,50}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("Hard Drive Reference can only contain letters (A-Z, a-z), numbers (0-9), spaces, hyphens (-), and forward slashes (/) with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s\-\/]/g, "").substring(0, 50); 
+                            }
+                        }
+
+                        function validateHDDModel(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("Hard Drive Model can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateHDDType(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("Hard Drive Type can only contain letters (A-Z, a-z) and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateHDDSize(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,20}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("Hard Drive Size can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 20 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 20);
+                            }
+                        }
+
+                        function validateHDDImagingMethod(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("Hard Drive Imaging Method can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
+                            }
+                        }
+
+                        function validateHDDSerial(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+
+                            if (value.length > 30) {
+                                alert("Hard Drive Notes cannot exceed 30 characters.");
+                                inputField.value = value.substring(0, 30); 
+                            }
+                        }
+
+                        function validateHDDNotes(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+
+                            if (value.length > 500) {
+                                alert("Hard Drive Notes cannot exceed 500 characters.");
+                                inputField.value = value.substring(0, 500); 
+                            }
+                        }
+
+
+                    </script>
 
 
         </section>
