@@ -53,6 +53,15 @@ header, #content, #sidebar, nav {
     padding: 5px;
 }
 
+header, #LBU, #sidebar, nav {
+    margin-bottom: 5px;
+}
+
+#pagewrap, header, #LBU, #sidebar, footer, nav {
+    border: solid 1px #ccc;
+    padding: 5px;
+}
+
 /* Navigation */
 #navlist {
     margin-left: 0;

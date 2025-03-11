@@ -6,6 +6,37 @@ if(!isset($_SESSION['userId'])){
 
 $identifier = intval($_GET['identifier']);  
 $evidenceID = intval($_GET['EvidenceID']);  
+
+                // If evidence is not a computer device redirects
+                $query = "SELECT EvidenceType FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
+                $stmt = $connection->prepare($query);
+                $stmt->bind_param("ss", $identifier, $evidenceID);  
+                $stmt->execute();
+                $results = $stmt->get_result();
+                $row = $results->fetch_assoc();
+
+                if ($row['EvidenceType'] !== "Computer") {
+                    header('Location: viewEvidenceExhibit.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
+                    $stmt->close();
+                    exit();
+                }
+                
+
+                // If LBU04 doesn't exist redirects to create form
+                $query = "SELECT * FROM lbu04 WHERE Identifier = ? AND EvidenceID = ?";
+                $stmt = $connection->prepare($query);
+                $stmt->bind_param("ss", $identifier, $evidenceID);  
+                $stmt->execute();
+                $results = $stmt->get_result();
+
+                if ($results->num_rows == 0) {
+                    header('Location: createLBU04Form.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
+                    $stmt->close();
+                    exit();
+                }
+
+
+
 ?> 
 
 <!DOCTYPE html>
@@ -46,43 +77,6 @@ $evidenceID = intval($_GET['EvidenceID']);
             <a href="<?php echo "viewLBU05.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU05</a>
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier"?>" id="navcase-button">LBU06</a>
         </div>
-
-        <section id="content">
-            <p>
-            <?php
-
-                // If evidence is not a computer device redirects
-                $query = "SELECT EvidenceType FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
-                $stmt = $connection->prepare($query);
-                $stmt->bind_param("ss", $identifier, $evidenceID);  
-                $stmt->execute();
-                $results = $stmt->get_result();
-
-                if ($row['EvidenceType'] !== "Computer") {
-                    header('Location: viewEvidenceExhibit.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
-                    $stmt->close();
-                    exit();
-                }
-                
-
-                // If LBU04 doesn't exist redirects to create form
-                $query = "SELECT * FROM lbu04 WHERE Identifier = ? AND EvidenceID = ?";
-                $stmt = $connection->prepare($query);
-                $stmt->bind_param("ss", $identifier, $evidenceID);  
-                $stmt->execute();
-                $results = $stmt->get_result();
-
-                if ($results->num_rows == 0) {
-                    header('Location: createLBU04Form.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
-                    $stmt->close();
-                    exit();
-                }
-
-            ?>
-            </p>
-
-        </section>
-
 
         <section id="LBU">
 
