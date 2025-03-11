@@ -47,6 +47,25 @@ $evidenceID = intval($_GET['EvidenceID']);
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier"?>" id="navcase-button">LBU06</a>
         </div>
 
+        <section id="content">
+            <p>
+            <?php
+                $query = "SELECT * FROM lbu04 WHERE Identifier = ? AND EvidenceID = ?";
+                $stmt = $connection->prepare($query);
+                $stmt->bind_param("ss", $identifier, $evidenceID);  
+                $stmt->execute();
+                $results = $stmt->get_result();
+
+                if ($results->num_rows == 0) {
+                    header('Location: createLBU04Form.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
+                }
+                exit();
+            ?>
+            </p>
+
+        </section>
+
+
         <section id="LBU">
 
             <p>
