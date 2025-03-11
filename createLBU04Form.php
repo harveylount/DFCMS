@@ -78,7 +78,7 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
 
             <h2><?php echo $caseReference; ?> - Create a Computer Exhibit Detail Form (LBU04)</h2>
 
-            <form method="post" action="createLBU06Insert.php?identifier=<?php echo "$identifier"?>" id="dynamicForm"> 
+            <form method="post" action="createLBU04Insert.php?identifier=<?php echo "$identifier"?>&EvidenceID=<?php echo "$evidenceID"?>" id="dynamicForm"> 
                 <fieldset class="field-set width">
                     <legend>Enter Computer Exhibit Details</legend>
 
@@ -184,6 +184,14 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
 
                     </div>
                     <button type="button" onclick="addFormSetHDD()">Add More</button>
+
+                    
+                    <input type="hidden" id="hardDriveDetails" name="hardDriveDetails" value="">
+                    <br /><br />
+                    <input type="submit" value="Submit" name="subEvent" />
+                    <input type="reset" value="Clear" />
+                </fieldset>
+            </form>
 
                     <script>
 
@@ -580,6 +588,10 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
                             }
                         }
 
+                        document.getElementById('dynamicForm').addEventListener('submit', function() {
+                            document.getElementById('hardDriveDetails').value = formCountHDD;
+                            
+                        });
 
                     </script>
 
