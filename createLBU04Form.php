@@ -2,6 +2,7 @@
 <html>
 <?php
 include 'SqlConnection.php';
+include 'timezoneFunction.php'; 
 
 if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
     header ('location:loginForm.php');
@@ -17,6 +18,7 @@ $stmt->bind_param("ss", $identifier, $evidenceID);
 $stmt->execute();
 $results = $stmt->get_result();
 $row = $results->fetch_assoc();
+$stmt->close();
 
 if ($row['EvidenceType'] !== "Computer") {
     header('Location: viewEvidenceExhibit.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
@@ -29,7 +31,7 @@ $stmt->bind_param("ss", $identifier, $evidenceID);
 $stmt->execute();
 $stmt->bind_result($caseReference, $exhibitReference);
 $stmt->fetch();
-mysqli_stmt_close($stmt);
+$stmt->close();
 
 $_SESSION['dateExaminedDatabaseLBU06'] = date('Y-m-d');
 $_SESSION['dateExaminedDisplayLBU06'] = date('d-m-y');

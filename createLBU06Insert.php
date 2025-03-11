@@ -1,5 +1,6 @@
 <?php
 include 'SqlConnection.php';
+include 'timezoneFunction.php'; 
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
 $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection

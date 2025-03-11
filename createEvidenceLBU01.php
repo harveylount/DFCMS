@@ -11,6 +11,7 @@
 </style>
 
 <?php
+include 'timezoneFunction.php'; 
 
 $_SESSION['timestampDatabase'] = date('Y-m-d H:i:s');
 $_SESSION['timestampDisplay'] = date('d-m-Y H:i:s');

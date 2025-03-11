@@ -17,6 +17,7 @@ if (isset($_GET['identifier'])) {
         echo "<br /><br />Investigators: " . $row['Investigator'];
         echo "<br /><br />Case Created: " . $row['DateCreated'];
         echo "<br /><br />Case Deadline: " . $row['DeadlineDate'];
+        echo "<br /><br />Case Timezone: " . $row['Timezone'];
         echo "<br /><br />Suspects: " . $row['Suspect'];
         echo "<br /><br />Notes: " . $row['Notes'];
 

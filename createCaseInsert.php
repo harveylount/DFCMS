@@ -1,5 +1,6 @@
 <?php
 include 'SqlConnection.php';
+include 'timezoneFunction.php'; 
 
 if (isset($_POST['subEvent'])) {
     $caseReference=$_POST['txtCaseReference'];
@@ -10,6 +11,7 @@ if (isset($_POST['subEvent'])) {
     $CaseStatus = "Open";
     $_SESSION['txtCaseReferenceF']=$caseReference;
     $_SESSION['txtCaseNameF']=$caseName;
+    $timezone = $_POST['timezone'];
 
     if (preg_match('/^[a-zA-Z0-9\/]+$/', $caseReference)) {
         $caseReferenceCheck = true;
@@ -30,12 +32,12 @@ if (isset($_POST['subEvent'])) {
         unset($_SESSION['txtCaseNameF']);
 
         $query = "INSERT INTO cases 
-                (CaseReference, CaseName, LeadInvestigator, DateCreated, DeadlineDate, CaseStatus)
+                (CaseReference, CaseName, LeadInvestigator, DateCreated, DeadlineDate, CaseStatus, Timezone)
                 VALUES
-                (?, ?, ?, ?, ?, ?)";
+                (?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "ssssss", $caseReference, $caseName, $investigator, $caseCreated, $dateDeadline, $CaseStatus);
+        mysqli_stmt_bind_param($stmt, "sssssss", $caseReference, $caseName, $investigator, $caseCreated, $dateDeadline, $CaseStatus, $timezone);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         header('location:index.php');

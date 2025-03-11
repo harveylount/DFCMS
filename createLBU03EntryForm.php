@@ -2,6 +2,8 @@
 <html>
 <?php
 include 'SqlConnection.php';
+include 'timezoneFunction.php'; 
+
 
 if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
     header ('location:loginForm.php');
