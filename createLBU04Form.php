@@ -211,6 +211,9 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
                                 <label for="txtReferenceHDD_${formCountHDD}">Reference: *</label><br />
                                 <input type="text" name="txtReferenceHDD_${formCountHDD}" size="32" required/><br /><br />
 
+                                <label for="txtManufacturerHDD_${formCountHDD}">Manufacturer: *</label><br />
+                                <input type="text" name="txtManufacturerHDD_${formCountHDD}" size="32" required/><br /><br />
+
                                 <label for="txtModelHDD_${formCountHDD}">Model: *</label><br />
                                 <input type="text" name="txtModelHDD_${formCountHDD}" size="32" required/><br /><br />
 
@@ -241,6 +244,7 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
                             document.getElementById("formSetsContainerHDD").appendChild(newFormSetHDD);
 
                             newFormSetHDD.querySelector(`input[name="txtReferenceHDD_${formCountHDD}"]`).addEventListener("input", validateHDDReference);
+                            newFormSetHDD.querySelector(`input[name="txtManufacturerHDD_${formCountHDD}"]`).addEventListener("input", validateHDDManufacturer);
                             newFormSetHDD.querySelector(`input[name="txtModelHDD_${formCountHDD}"]`).addEventListener("input", validateHDDModel);
                             newFormSetHDD.querySelector(`input[name="txtSerialNumberHDD_${formCountHDD}"]`).addEventListener("input", validateHDDSerial);
                             newFormSetHDD.querySelector(`input[name="txtTypeHDD_${formCountHDD}"]`).addEventListener("input", validateHDDType);
@@ -521,6 +525,17 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
                             if (!regex.test(value)) {
                                 alert("Hard Drive Reference can only contain letters (A-Z, a-z), numbers (0-9), spaces, hyphens (-), and forward slashes (/) with a max of 50 characters.");
                                 inputField.value = value.replace(/[^A-Za-z0-9\s\-\/]/g, "").substring(0, 50); 
+                            }
+                        }
+
+                        function validateHDDManufacturer(event) {
+                            const inputField = event.target;
+                            const value = inputField.value;
+                            const regex = /^[A-Za-z0-9\s]{0,50}$/; 
+
+                            if (!regex.test(value)) {
+                                alert("Hard Drive Manufacturer can only contain letters (A-Z, a-z), numbers (0-9), and spaces with a max of 50 characters.");
+                                inputField.value = value.replace(/[^A-Za-z0-9\s]/g, "").substring(0, 50);
                             }
                         }
 

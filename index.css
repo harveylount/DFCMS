@@ -177,6 +177,48 @@ header, #content, #sidebar, nav {
     margin-left: 10px; 
 }
 
+.lbu-high {
+    background-color: #87c1ff;
+    color: white;
+    font-weight: bold;
+}
+
+.lbu-dark {
+    background-color: #87c1ff;
+    color: white;
+    font-weight: bold;
+}
+
+.styled-table th, 
+.styled-table td {
+    border: 2px solid black;
+    padding: 10px; 
+}
+
+.styled-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#LBU {
+    max-width: 1000px;
+    margin: auto;
+    overflow-wrap: break-word;
+}
+
+#LBU table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+#LBU table th, 
+#LBU table td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal; /* Ensures text wraps */
+}
+
 /************************************************************************************
  MEDIA QUERIES
  ************************************************************************************/
