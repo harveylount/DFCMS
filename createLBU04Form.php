@@ -7,6 +7,18 @@ if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
     header ('location:loginForm.php');
 }
 
+// If evidence is not a computer device redirects
+$query = "SELECT EvidenceType FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
+                $stmt = $connection->prepare($query);
+                $stmt->bind_param("ss", $identifier, $evidenceID);  
+                $stmt->execute();
+                $results = $stmt->get_result();
+
+                if ($row['EvidenceType'] !== "Computer") {
+                    header('Location: viewEvidenceExhibit.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
+                    exit();
+                }
+
 $identifier = intval($_GET['identifier']);  
 $evidenceID = intval($_GET['EvidenceID']);  
 
