@@ -228,6 +228,35 @@ header, #LBU, #sidebar, nav {
     white-space: normal; /* Ensures text wraps */
 }
 
+.LBU03-x {
+    width: 10px; 
+    text-align: center; 
+    padding: 5px;
+    white-space: nowrap;
+}
+
+.LBU03-time {
+    width: 100px; 
+    text-align: center; 
+    padding: 5px;
+    white-space: nowrap;
+}
+
+.LBU03-actioner {
+    width: 200px; 
+    text-align: center; 
+    padding: 5px;
+    white-space: nowrap;
+}
+
+.LBU03-removed {
+    background-color: #ffa8a8;
+    color: black;
+    
+    font-weight: bold;
+}
+
+
 /************************************************************************************
  MEDIA QUERIES
  ************************************************************************************/

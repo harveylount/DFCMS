@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<?php
+include 'SqlConnection.php';
+include 'timezoneFunction.php'; 
+
+
+if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
+    header ('location:loginForm.php');
+}
+
+$identifier = intval($_GET['identifier']);  // Sanitized input to prevent SQL injection
+$evidenceID = intval($_GET['EvidenceID']);  
+$LBU03id = intval($_GET['LBU03id']);  
+
+if (!isset($_SESSION['txtRemoveActionM'])) {
+    $_SESSION['txtRemoveActionM']='';
+}
+
+
+$query = "SELECT Username FROM lbu03 WHERE Identifier = ? AND EvidenceID = ? AND LBU03id = ?";
+$stmt = $connection->prepare($query);
+$stmt->bind_param("sss", $identifier, $evidenceID, $LBU03id);  
+$stmt->execute();
+$stmt->bind_result($actionerUsername);
+$stmt->fetch();
+mysqli_stmt_close($stmt);
+
+if ($_SESSION['userId'] != $actionerUsername) {
+    header ('location:viewLBU03.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
+    exit();
+}
+
+?>
+ 
+
+<head>
+
+    <link href="./index.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .tall-input {
+            height: 50px;
+            width: 254px;
+        }
+    </style>
+
+    <title>Remove LBU03 Action</title>
+
+</head>
+
+<body>
+
+    <div id="pagewrap">
+
+        <div id="logout-bar">
+            <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
+            <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
+            <a href="logoutFunction.php" id="logout-button">Logout</a>
+        </div>
+
+        <header>
+
+            <h1>DFCMS</h1>
+
+            <h2> a Digital Forensics Case Management System </h2>
+
+        </header>
+
+        <div id="navcase-bar">
+            <a href="<?php echo "viewEvidenceExhibit.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Evidence Overview</a>
+            <a href="<?php echo "viewLBU01.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU01</a>
+            <a href="<?php echo "viewLBU03.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU03</a>
+            <?php include 'lbu04notComputerFunction.php'; ?>
+            <a href="<?php echo "viewLBU05.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU05</a>
+            <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier"?>" id="navcase-button">LBU06</a>
+        </div>
+
+        <section id="content">
+
+            <h2>Remove an Exhibit Continuity Action (LBU03)</h2>
+
+            <form method="post" action="removeLBU03EntryInsert.php?identifier=<?php echo "$identifier"?>&EvidenceID=<?php echo "$evidenceID"?>&LBU03id=<?php echo "$LBU03id"?>">
+                <fieldset class="field-set width">
+
+                    <legend>
+                    Enter remove action details
+                    </legend>
+
+                    </br>
+                    <!-- Action field -->
+                    <label for="txtRemoveAction">Remove action reason:</label><br />
+                    <textarea name="txtRemoveAction" class="tall-input" required><?php 
+                        if(isset($_SESSION['txtRemoveActionF'])) {
+                            echo $_SESSION['txtRemoveActionF'];
+                            unset($_SESSION['txtRemoveActionF']);
+                        }
+                    ?></textarea><p class="error-message"><?php echo $_SESSION['txtRemoveActionM']; unset($_SESSION['txtRemoveActionM']);?></p> <br /><br />
+
+                    Actioner: <?php echo $_SESSION['fullName'];?> </br></br>
+
+
+                    <input type="submit" value="Submit" name="subEvent" />
+                    <input type="reset" value="Clear" />
+
+                </fieldset>
+                
+            </form>
+
+        </section>
+
+        <footer>
+
+            <h4>Harvey Lount c3654483</h4>
+
+        </footer>
+
+    </div>
+
+</body>
+
+</html>

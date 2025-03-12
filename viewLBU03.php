@@ -47,7 +47,7 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier"?>" id="navcase-button">LBU06</a>
         </div>
 
-        <section id="content">
+        <section id="LBU">
 
             <div id="navcase-bar">
                 <a href="<?php echo "createLBU03EntryForm.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Create Entry</a>
@@ -67,9 +67,9 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
                         // Display ExhibitRef and Title (this will appear only once)
                         echo "<h2>" . $row['ExhibitRef'] . " - Exhibit Continuity Form (LBU03)</h2>";
 
-                        echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                        echo "<tr><td><b>Case Reference:</b></td><td>" . $row['CaseReference'] . "</td></tr>";
-                        echo "<tr><td><b>Exhibit Reference:</b></td><td>" . $row['ExhibitRef'] . "</td></tr>";
+                        echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                        echo "<tr><td class='lbu-dark'>Case Reference</td><td>" . $row['CaseReference'] . "</td></tr>";
+                        echo "<tr><td class='lbu-dark'>Exhibit Reference</td><td>" . $row['ExhibitRef'] . "</td></tr>";
                         echo "</table>";
                         echo "<br/>";
 
@@ -78,12 +78,18 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
                     }
 
                     // Now loop through all results to display the dynamic content (Timestamp, Action, Actioner)
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><th><b>Timestamp</b></th><th><b>Action</b></th><th><b>Actioner</b></th></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><th class='lbu-dark LBU03-time'>Timestamp</th><th class='lbu-dark'>Action</th><th class='lbu-dark LBU03-actioner'>Actioner</th><th class='lbu-dark LBU03-x'>X</th><th class='lbu-dark'>Removed Reason</th></tr>";
 
                     // Loop through all the rows to display dynamic content
                     while ($row = mysqli_fetch_assoc($results)) {
-                        echo "<tr><td>" . $row['Timestamp'] . "</td><td>" . $row['Action'] . "</td><td>" . $row['FullName'] . " (" . $row['Username'] . ")</td></tr>";
+                        if (isset($row['Removed']) && $row['Removed'] === "Removed") {
+                            echo "<tr class='LBU03-removed'><td>" . $row['Timestamp'] . "</td><td>" . $row['Action'] . "</td><td>" . $row['FullName'] . "<br>(" . $row['Username'] . ")</td>
+                            <td></td> <td>" . $row['RemovedReason'] . "</td></tr>";
+                        } else {
+                        echo "<tr><td>" . $row['Timestamp'] . "</td><td>" . $row['Action'] . "</td><td>" . $row['FullName'] . "<br>(" . $row['Username'] . ")</td>
+                            <td><a href='removeLBU03EntryForm.php?identifier=" . urlencode($identifier) . "&EvidenceID=" . urlencode($evidenceID) . "&LBU03id=" . urlencode($row['LBU03id']) . "' id='navcase-button'>X</a></td></tr>";
+                        }
                     }
 
                     echo "</table>";
