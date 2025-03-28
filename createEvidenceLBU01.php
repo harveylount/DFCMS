@@ -70,7 +70,7 @@ $_SESSION['receivedByCompany']=$byCompany;
 </br></br>
 
 <!-- Received From field -->
-<label for="txtReceivedFrom">Received From (FULL NAME): *</label><br />
+<label for="txtReceivedFrom">Received From /<br /> Dispatched By (FULL NAME): *</label><br />
 <input type="text" name="txtReceivedFrom" size="32" value="<?php 
     if(isset($_SESSION['txtReceivedFromF'])) {
         echo $_SESSION['txtReceivedFromF'];
@@ -79,7 +79,7 @@ $_SESSION['receivedByCompany']=$byCompany;
 ?>" required/><p class="error-message"><?php echo $_SESSION['txtReceivedFromM']; unset($_SESSION['txtReceivedFromM']);?></p><br /><br />
 
 <!-- Received From Rank field -->
-<label for="txtReceivedFromRank">Received From (RANK / TITLE): *</label><br />
+<label for="txtReceivedFromRank">Received From /<br /> Dispatched By (RANK / TITLE): *</label><br />
                  <input type="text" name="txtReceivedFromRank" size="32" value="<?php 
     if(isset($_SESSION['txtReceivedFromRankF'])) {
         echo $_SESSION['txtReceivedFromRankF'];
@@ -87,23 +87,32 @@ $_SESSION['receivedByCompany']=$byCompany;
     }
 ?>" required/><p class="error-message"><?php echo $_SESSION['txtReceivedFromRankM']; unset($_SESSION['txtReceivedFromRankM']);?></p><br /><br />
 
-Received From Timestamp: <?php echo ($_SESSION['timestampDisplay']);?></br></br>
+Received From /<br /> Dispatched By Timestamp: <?php echo ($_SESSION['timestampDisplay']);?></br></br>
 
 <!-- Signature Canvas for Received From -->
-<label for="signature">Received From Signature: *</label><br>
+<label for="signature">Received From /<br /> Dispatched By Signature: *</label><br>
 <canvas id="signature-canvas-from" class="signature-box"></canvas><br>
 <button type="button" id="clear-btn-from">Clear</button><br><br>
 <!-- Hidden field to store signature data -->
 <input type="hidden" name="signature_data_from" id="signature-data-from">
 
 <!-- Received From Company field -->
-<label for="txtReceivedFromCompany">Received From Company: *</label><br />
+<label for="txtReceivedFromCompany">Received From /<br /> Dispatched By Company: *</label><br />
 <input type="text" name="txtReceivedFromCompany" size="32" value="<?php 
     if(isset($_SESSION['txtReceivedFromCompanyF'])) {
         echo $_SESSION['txtReceivedFromCompanyF'];
         unset($_SESSION['txtReceivedFromCompanyF']);
     }
 ?>" required/><p class="error-message"><?php echo $_SESSION['txtReceivedFromCompanyM']; unset($_SESSION['txtReceivedFromCompanyM']);?></p><br /><br />
+
+<!-- Received From Email field -->
+<label for="txtDispatchByEmail">Email destination for LBU02 form:</label><br />
+<input type="text" name="txtDispatchByEmail" size="32" value="<?php 
+    if(isset($_SESSION['txtDispatchByEmailF'])) {
+        echo $_SESSION['txtDispatchByEmailF'];
+        unset($_SESSION['txtDispatchByEmailF']);
+    }
+?>"/><p class="error-message"><?php echo $_SESSION['txtDispatchByEmailM']; unset($_SESSION['txtDispatchByEmailM']);?></p> [For External Dispatcher only]<br /><br />
 
 </br></br>
 

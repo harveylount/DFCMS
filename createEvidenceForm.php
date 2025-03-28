@@ -13,7 +13,7 @@ $unsetMsg = [
     'txtExhibitReferenceM', 'txtManufacturerM', 'txtModelM', 'txtSerialM', 
     'txtStorageM', 'txtOSM', 'txtCPUM', 'txtRAMM', 'txtMACM', 'txtIPM', 
     'txtFirmwareM', 'txtPeripheralM', 'txtNetworkM', 'txtLocationM', 'txtReceivedFromM',
-    'txtReceivedFromRankM', 'txtReceivedFromCompanyM', 'txtSealNumberM'
+    'txtReceivedFromRankM', 'txtReceivedFromCompanyM', 'txtSealNumberM', 'txtDispatchByEmailM'
 ];
 
 foreach ($unsetMsg as $msg) {
@@ -65,7 +65,6 @@ foreach ($unsetMsg as $msg) {
             <a href="<?php echo "createEvidenceForm.php?identifier=$identifier" ?>" id="navcase-button">Computers & Laptops</a>
             <a href="<?php echo "createEvidenceMobileForm.php?identifier=$identifier" ?>" id="navcase-button">Mobile Devices</a>
             <a href="<?php echo "createEvidenceExternalForm.php?identifier=$identifier" ?>" id="navcase-button">External Storage</a>
-            <a href="<?php echo "createEvidenceNetworkForm.php?identifier=$identifier" ?>" id="navcase-button">Network Devices</a>
         </div>
 
         <section id="content">

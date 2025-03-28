@@ -1,9 +1,13 @@
 <?php
 include 'SqlConnection.php';
+include 'timezoneFunction.php'; 
 
 $identifier = intval($_GET['identifier']);
 
 if (isset($_POST['subEvent'])) {
+    $fullName = $_SESSION['fullName'];
+    $username = $_SESSION['userId'];
+
     $evidenceType = 'ExternalStorage';
     $exhibitReference=$_POST['txtExhibitReference'];
     $seizedTime = $_SESSION['timestampDatabase'];
@@ -16,9 +20,11 @@ if (isset($_POST['subEvent'])) {
     $signatureDataFrom = $_POST['signature_data_from'];
     $receivedFromCompany=$_POST['txtReceivedFromCompany'];
     $receivedBy=$_SESSION['receivedBy'];
-    $receivedByRank=$_POST['signature_data_by'];
-    $signatureDataBy=$_SESSION['receivedByRank'];
+    $signatureDataBy=$_POST['signature_data_by'];
+    $receivedByRank=$_SESSION['receivedByRank'];
     $receivedByCompany=$_SESSION['receivedByCompany'];
+
+    $dispatchedByEmail = $_POST['txtDispatchByEmail'];
 
 
     $deviceType=$_POST['deviceType'];
@@ -38,6 +44,7 @@ if (isset($_POST['subEvent'])) {
     $_SESSION['txtReceivedFromF']=$receivedFrom;
     $_SESSION['txtReceivedFromRankF']=$receivedFromRank;
     $_SESSION['txtReceivedFromCompanyF']=$receivedFromCompany;
+    $_SESSION['txtDispatchByEmailF']=$dispatchedByEmail;
 
 
     $_SESSION['txtManufacturerF']=$manufacturer;
@@ -89,6 +96,18 @@ if (isset($_POST['subEvent'])) {
         $_SESSION['txtReceivedFromCompanyM']='Maximum string length of 40 characters';
     }
 
+
+    if (isset($_POST['txtDispatchByEmail']) && !empty($_POST['txtDispatchByEmail'])) {
+
+        if (filter_var($dispatchedByEmail, FILTER_VALIDATE_EMAIL)) {
+            $dispatchedByEmailCheck = true;
+        } else {
+            $dispatchedByEmailCheck = false;
+            $_SESSION['txtDispatchByEmailM'] = 'Not a valid email address';
+        }
+    } else {
+        $dispatchedByEmailCheck = true;
+    }
 
 
     if (preg_match('/^.{0,20}$/', $manufacturer)) {
@@ -143,13 +162,13 @@ if (isset($_POST['subEvent'])) {
 
     $initialDescription = implode(', ', [$deviceType, $manufacturer, $model, $serial, $storage, $interface, $fileSystem, $encryption]);
 
-    if ($exhibitReferenceCheck && $sealNumberCheck && $locationCheck && $receivedFromCheck && $receivedFromRankCheck && $receivedFromCompanyCheck && $manufacturerCheck && $modelCheck && $serialCheck && $storageCheck && $encryptionCheck) {
+    if ($exhibitReferenceCheck && $sealNumberCheck && $locationCheck && $receivedFromCheck && $receivedFromRankCheck && $receivedFromCompanyCheck && $dispatchedByEmailCheck && $manufacturerCheck && $modelCheck && $serialCheck && $storageCheck && $encryptionCheck) {
         
         $session_vars = [
             'txtExhibitReferenceF', 'txtSealNumberF', 'txtLocationF', 
             'txtReceivedFromF', 'txtReceivedFromRankF', 'txtReceivedFromCompanyF',
             'txtManufacturerF', 'txtModelF', 'txtSerialF', 
-            'txtStorageF', 'interfaceTypeF', 'fileSystemTypeF', 'txtEncryptionF'];
+            'txtStorageF', 'interfaceTypeF', 'fileSystemTypeF', 'txtEncryptionF', 'txtDispatchByEmailF'];
         foreach ($session_vars as $var) {
             unset($_SESSION[$var]);
         }
@@ -164,33 +183,77 @@ if (isset($_POST['subEvent'])) {
         mysqli_stmt_close($stmt);
 
         $query = "INSERT INTO evidence 
-                (Identifier, CaseReference, EvidenceType, ExhibitRef, SeizedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, Model, SerialNumber, Storage, InterfaceType, FileSystem, EncryptionType)
+                (Identifier, CaseReference, EvidenceType, ExhibitRef, SeizedByName, SeizedByUsername, SeizedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, Model, SerialNumber, Storage, InterfaceType, FileSystem, EncryptionType)
                 VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "sssssssssssssss", $identifier, $caseReference, $evidenceType, $exhibitReference, $seizedTime, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $storage, $interface, $fileSystem, $encryption);
+        mysqli_stmt_bind_param($stmt, "sssssssssssssssss", $identifier, $caseReference, $evidenceType, $exhibitReference, $fullName, $username, $seizedTime, $status, $sealNumber, $deviceType, $manufacturer, $model, $serial, $storage, $interface, $fileSystem, $encryption);
         mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        
+        $sqlEvidenceID = "SELECT EvidenceID FROM evidence WHERE Identifier = ? AND CaseReference = ? AND EvidenceType = ? AND SeizedByUsername = ? AND SeizedTime = ?";
+        $stmt = $connection->prepare($sqlEvidenceID);
+        $stmt->bind_param("sssss", $identifier, $caseReference, $evidenceType, $username, $seizedTime);
+        $stmt->execute();
+        $stmt->bind_result($evidenceID);
+        $stmt->fetch();
         mysqli_stmt_close($stmt);
 
 
         if (!empty($signatureDataFrom) && !empty($signatureDataBy)) {
             
             $querySignature = "INSERT INTO lbu01
-                (Identifier, CaseReference, ExhibitRef, Location, ReceivedFromName, ReceivedFromRank, ReceivedFromTime, ReceivedFromSig, ReceivedFromCompany, 
+                (Identifier, CaseReference, EvidenceID, ExhibitRef, Location, ReceivedFromName, ReceivedFromRank, ReceivedFromTime, ReceivedFromSig, ReceivedFromCompany, 
                 ReceivedByName, ReceivedByRank, ReceivedByTime, ReceivedBySig, ReceivedByCompany, InitialSealNumber, InitialDescription) 
                 VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             // Prepare and bind the parameters
             $stmtSignature = mysqli_prepare($connection, $querySignature);
 
-            mysqli_stmt_bind_param($stmtSignature, "ssssssssssssssss", $identifier, $caseReference, $exhibitReference, $location, $receivedFrom, $receivedFromRank, $timestamp, $signatureDataFrom, $receivedFromCompany, $receivedBy, $receivedByRank, $timestamp, $signatureDataBy, $receivedByCompany, $sealNumber, $initialDescription);
+            mysqli_stmt_bind_param($stmtSignature, "sssssssssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $location, $receivedFrom, $receivedFromRank, $timestamp, $signatureDataFrom, $receivedFromCompany, $receivedBy, $receivedByRank, $timestamp, $signatureDataBy, $receivedByCompany, $sealNumber, $initialDescription);
             
             mysqli_stmt_execute($stmtSignature);
             mysqli_stmt_close($stmtSignature);
             
         }
+        
+
+        if (isset($_POST['txtDispatchByEmail']) && !empty($_POST['txtDispatchByEmail'])) {
+
+            $externalBoolean = "true";
+            $emailTimestamp = date('Y-m-d H:i:s');
+
+            $queryLBU02 = "INSERT INTO lbu02
+                (Identifier, CaseReference, EvidenceID, ExhibitRef, Location, DispatchedByName, DispatchedByRank, DispatchedByTime, DispatchedBySig, DispatchedByCompany, 
+                ReceivedByName, ReceivedByRank, ReceivedByTime, ReceivedBySig, ReceivedByCompany, InitialSealNumber, InitialDescription, ExternalBoolean, ExternalEmail, EmailTimestamp) 
+                VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            // Prepare and bind the parameters
+            $stmtSignature = mysqli_prepare($connection, $queryLBU02);
+            mysqli_stmt_bind_param($stmtSignature, "ssssssssssssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $location, $receivedFrom, $receivedFromRank, $timestamp, $signatureDataFrom, $receivedFromCompany, $receivedBy, $receivedByRank, $timestamp, $signatureDataBy, $receivedByCompany, $sealNumber, $initialDescription, $externalBoolean, $dispatchedByEmail, $emailTimestamp);
+            mysqli_stmt_execute($stmtSignature);
+            mysqli_stmt_close($stmtSignature);
+
+        } else {
+            $externalBoolean = "false";
+
+            $queryLBU02 = "INSERT INTO lbu02
+                (Identifier, CaseReference, EvidenceID, ExhibitRef, Location, DispatchedByName, DispatchedByRank, DispatchedByTime, DispatchedBySig, DispatchedByCompany, 
+                ReceivedByName, ReceivedByRank, ReceivedByTime, ReceivedBySig, ReceivedByCompany, InitialSealNumber, InitialDescription, ExternalBoolean) 
+                VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            // Prepare and bind the parameters
+            $stmtSignature = mysqli_prepare($connection, $queryLBU02);
+            mysqli_stmt_bind_param($stmtSignature, "ssssssssssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $location, $receivedFrom, $receivedFromRank, $timestamp, $signatureDataFrom, $receivedFromCompany, $receivedBy, $receivedByRank, $timestamp, $signatureDataBy, $receivedByCompany, $sealNumber, $initialDescription, $externalBoolean);
+            mysqli_stmt_execute($stmtSignature);
+            mysqli_stmt_close($stmtSignature);
+        }
+
         
         $unset_sessions = ['timestampDatabase', 'receivedBy', 'receivedByRank', 'receivedByCompany',
         'timestampDisplay', 'receivedBy', 'receivedByRank', 'receivedByCompany',];
