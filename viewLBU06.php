@@ -44,7 +44,7 @@ $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injec
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier" ?>" id="navcase-button">Crime Scene Reports</a>
         </div>
 
-        <section id="content">
+        <section id="LBU">
 
             <p>
             <?php
@@ -54,17 +54,23 @@ $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injec
                 $stmt->execute();
                 $results = $stmt->get_result();
 
-                while ($row = mysqli_fetch_assoc($results)) {
-                    echo "<h2>" . $row['CaseReference'] . " - Crime Scene Report (LBU06)</h2>";
+                echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>DFCMS</td> 
+                    <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'LBU06 - Crime Scene Report' . "</td></tr>"; 
+                echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Page 1 of 1' . "</td></tr>";
+                echo "</table>";
+                echo "<br/>";
 
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><td><b>SOCO Name:</b></td><td>" . $row['SocoName'] . " (" . $row['SocoUsername'] . ")</td> <td><b>Case Reference:</b></td><td>" . $row['CaseReference'] . "</td></tr>";
-                    echo "<tr><td><b>SOCO Number:</b></td><td>" . $row['SocoNumber'] . "</td> <td><b>Date Scene Examined:</b></td><td>" . $row['DateSceneExamined'] . "</td></tr>";
+                while ($row = mysqli_fetch_assoc($results)) {
+
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>SOCO Name</td><td>" . $row['SocoName'] . " (" . $row['SocoUsername'] . ")</td> <td class='lbu-high'>Case Reference:</td><td>" . $row['CaseReference'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>SOCO Number</td><td>" . $row['SocoNumber'] . "</td> <td class='lbu-high'>Date Scene Examined:</td><td>" . $row['DateSceneExamined'] . "</td></tr>";
                     echo "</table><br/>";
                     
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><td><b>Time Arrived:</b></td><td>" . $row['SceneArriveTime'] . "</td></tr>";
-                    echo "<tr><td><b>Time Concluded:</b></td><td>" . $row['SceneConcluded'] . "</td></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>Time Arrived</td><td>" . $row['SceneArriveTime'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Time Concluded</td><td>" . $row['SceneConcluded'] . "</td></tr>";
                     echo "</table><br/>";
 
                     // Includes Generative AI. Reference: R - START
@@ -82,8 +88,8 @@ $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injec
                     $rowCount = max(count($othersOnScene), count($othersTimeIn), count($othersTimeOut));
 
                     // Display Others on Scene table
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><th>Others on the Scene</th> <th>Time In</th> <th>Time Out</th></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><th class='lbu-dark'>Others on the Scene</th> <th class='lbu-dark'>Time In</th> <th class='lbu-dark'>Time Out</th></tr>";
 
                     if ($rowCount > 0) {
                         for ($i = 0; $i < $rowCount; $i++) {
@@ -100,21 +106,21 @@ $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injec
 
                     echo "</table><br/>";
 
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><th><b>Type of Crime:</b></th><td>" . $row['TypeOfCrime'] . "</td></tr>";
-                    echo "<tr><th><b>Location of Crime:</b></th><td>" . $row['LocationOfCrime'] . "</td></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>Type of Crime</td><td>" . $row['TypeOfCrime'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Location of Crime</td><td>" . $row['LocationOfCrime'] . "</td></tr>";
                     echo "</table></br>";
 
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><th><b>Examination Notes:</b></th></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><th class='lbu-dark'>Examination Notes</th></tr>";
                     echo "<tr><td>" . $row['ExaminationNotes'] . "</td></tr>";
                     echo "</table></br>";
 
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><th><b>Evidence Collected</b></th> <th><b>Number</b></th> <th><b>Location of Item Stored</b></th></tr>";
-                    echo "<tr><td><b>Photographs of Scene</b></td> <td>" . $row['NumberOfPhotos'] . "</td> <td>" . $row['LocationOfPhotos'] . "</td> </tr>";
-                    echo "<tr><td><b>Sketches of Scene</b></td> <td>" . $row['NumberOfSketches'] . "</td> <td>" . $row['LocationOfSketches'] . "</td></tr>";
-                    echo "<tr><td><b>Items for Forensic Examination Scene</td> <td colspan='2'>" . $row['NumberOfItems'] . "</td></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><th class='lbu-dark'>Evidence Collected</th> <th class='lbu-dark'>Number of Items</th> <th class='lbu-dark'>Location of Item Stored</th></tr>";
+                    echo "<tr><td class='lbu-high'>Photographs of Scene</td> <td>" . $row['NumberOfPhotos'] . "</td> <td>" . $row['LocationOfPhotos'] . "</td> </tr>";
+                    echo "<tr><td class='lbu-high'>Sketches of Scene</td> <td>" . $row['NumberOfSketches'] . "</td> <td>" . $row['LocationOfSketches'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Items for Forensic Examination Scene</td> <td colspan='2'>" . $row['NumberOfItems'] . "</td></tr>";
                     echo "</table></br>";
 
                     // Includes Modified Generative AI. Reference: R - START
@@ -141,13 +147,13 @@ $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injec
 
                     if ($rowCountDisclosure > 0) {
                         for ($i = 0; $i < $rowCountDisclosure; $i++) {
-                            echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                            echo "<tr><th>Disclosure of Evidence</th> <th>Details</th> </tr>";
-                            echo "<tr> <td>Exhibit number</td> <td>" . ($disclosureExhibit[$i] ?? 'N/A') . "</td> </tr>";
-                            echo "<tr> <td>Evidence seized</td> <td>" . ($evidenceSeized[$i] ?? 'N/A') . "</td> </tr>";
-                            echo "<tr> <td>Handed or sent by</td><td>" . ($handedSentBy[$i] ?? 'N/A') . "</td> </tr>";
-                            echo "<tr> <td>To</td><td>" . ($toPersonOrLocation[$i] ?? 'N/A') . "</td> </tr>";
-                            echo "<tr> <td>Timestamp</td><td>" . ($disclosureTimestamp[$i] ?? 'N/A') . "</td> </tr>";
+                            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                            echo "<tr><th class='lbu-dark'>Disclosure of Evidence</th> <th class='lbu-dark'>Details</th> </tr>";
+                            echo "<tr> <td class='lbu-high'>Exhibit number</td> <td>" . ($disclosureExhibit[$i] ?? 'N/A') . "</td> </tr>";
+                            echo "<tr> <td class='lbu-high'>Evidence seized</td> <td>" . ($evidenceSeized[$i] ?? 'N/A') . "</td> </tr>";
+                            echo "<tr> <td class='lbu-high'>Handed or Sent By</td><td>" . ($handedSentBy[$i] ?? 'N/A') . "</td> </tr>";
+                            echo "<tr> <td class='lbu-high'>Handed or Sent To</td><td>" . ($toPersonOrLocation[$i] ?? 'N/A') . "</td> </tr>";
+                            echo "<tr> <td class='lbu-high'>Timestamp</td><td>" . ($disclosureTimestamp[$i] ?? 'N/A') . "</td> </tr>";
                             echo "</table></br>";
                         }
                     } else {
@@ -155,8 +161,8 @@ $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injec
                     }
                     // Includes Modified Generative AI. Reference: R - END
 
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><td><b>SOCO Signature</b></td><td><img src='" . $row['SocoSig'] . "' alt='Signature'></td></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>SOCO Signature</td><td><img src='" . $row['SocoSig'] . "' alt='Signature'></td></tr>";
                     echo "</table>";
 
 
