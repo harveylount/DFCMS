@@ -300,15 +300,17 @@ if (isset($_POST['subEvent'])) {
             $externalBoolean = "true";
             $emailTimestamp = date('Y-m-d H:i:s');
 
+            include 'LBU02mailFunction.php';
+
             $queryLBU02 = "INSERT INTO lbu02
                 (Identifier, CaseReference, EvidenceID, ExhibitRef, Location, DispatchedByName, DispatchedByRank, DispatchedByTime, DispatchedBySig, DispatchedByCompany, 
-                ReceivedByName, ReceivedByRank, ReceivedByTime, ReceivedBySig, ReceivedByCompany, InitialSealNumber, InitialDescription, ExternalBoolean, ExternalEmail, EmailTimestamp) 
+                ReceivedByName, ReceivedByRank, ReceivedByTime, ReceivedBySig, ReceivedByCompany, InitialSealNumber, InitialDescription, ExternalBoolean, ExternalEmail, EmailTimestamp, PDFMD5Hash, PDFSHA1Hash) 
                 VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             // Prepare and bind the parameters
             $stmtSignature = mysqli_prepare($connection, $queryLBU02);
-            mysqli_stmt_bind_param($stmtSignature, "ssssssssssssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $location, $receivedFrom, $receivedFromRank, $timestamp, $signatureDataFrom, $receivedFromCompany, $receivedBy, $receivedByRank, $timestamp, $signatureDataBy, $receivedByCompany, $sealNumber, $initialDescription, $externalBoolean, $dispatchedByEmail, $emailTimestamp);
+            mysqli_stmt_bind_param($stmtSignature, "ssssssssssssssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $location, $receivedFrom, $receivedFromRank, $timestamp, $signatureDataFrom, $receivedFromCompany, $receivedBy, $receivedByRank, $timestamp, $signatureDataBy, $receivedByCompany, $sealNumber, $initialDescription, $externalBoolean, $dispatchedByEmail, $emailTimestamp, $md5Hash, $sha1Hash);
             mysqli_stmt_execute($stmtSignature);
             mysqli_stmt_close($stmtSignature);
 
@@ -326,6 +328,7 @@ if (isset($_POST['subEvent'])) {
             mysqli_stmt_bind_param($stmtSignature, "ssssssssssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $location, $receivedFrom, $receivedFromRank, $timestamp, $signatureDataFrom, $receivedFromCompany, $receivedBy, $receivedByRank, $timestamp, $signatureDataBy, $receivedByCompany, $sealNumber, $initialDescription, $externalBoolean);
             mysqli_stmt_execute($stmtSignature);
             mysqli_stmt_close($stmtSignature);
+
         }
         
         $unset_sessions = ['timestampDatabase', 'receivedBy', 'receivedByRank', 'receivedByCompany',

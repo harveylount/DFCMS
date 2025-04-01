@@ -1,3 +1,4 @@
+<!-- Modified Generative AI output. Reference: G, N, T - START -->
 <script>
     var canvasFrom = document.getElementById('signature-canvas-from');
     var ctxFrom = canvasFrom.getContext('2d');
@@ -9,11 +10,22 @@
     var paintingBy = false;
     var signatureDataBy = document.getElementById('signature-data-by');
 
-    // Set canvas sizes
-    canvasFrom.width = 400;
-    canvasFrom.height = 200;
-    canvasBy.width = 400;
-    canvasBy.height = 200;
+    // Set canvas sizes and initialize white background
+    function initCanvas(canvas, ctx) {
+        canvas.width = 400;
+        canvas.height = 200;
+        // Fill with white background
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Set black for drawing
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+    }
+
+    // Initialize both canvases
+    initCanvas(canvasFrom, ctxFrom);
+    initCanvas(canvasBy, ctxBy);
 
     // Start position for Received From signature
     function startPositionFrom(e) {
@@ -28,10 +40,6 @@
 
     function drawFrom(e) {
         if (!paintingFrom) return;
-
-        ctxFrom.lineWidth = 2;
-        ctxFrom.lineCap = 'round';
-        ctxFrom.strokeStyle = 'black';
 
         // Get the canvas position relative to the viewport
         var rect = canvasFrom.getBoundingClientRect();
@@ -62,10 +70,6 @@
     function drawBy(e) {
         if (!paintingBy) return;
 
-        ctxBy.lineWidth = 2;
-        ctxBy.lineCap = 'round';
-        ctxBy.strokeStyle = 'black';
-
         // Get the canvas position relative to the viewport
         var rect = canvasBy.getBoundingClientRect();
         var offsetX = e.clientX - rect.left;
@@ -81,13 +85,23 @@
     canvasBy.addEventListener('mouseup', endPositionBy);
     canvasBy.addEventListener('mousemove', drawBy);
 
-    // Clear buttons for both canvases
+    // Clear buttons for both canvases (now clears to white)
     document.getElementById('clear-btn-from').addEventListener('click', function() {
-        ctxFrom.clearRect(0, 0, canvasFrom.width, canvasFrom.height);
+        ctxFrom.fillStyle = 'white';
+        ctxFrom.fillRect(0, 0, canvasFrom.width, canvasFrom.height);
+        // Reset drawing settings
+        ctxFrom.strokeStyle = 'black';
+        ctxFrom.lineWidth = 2;
+        ctxFrom.lineCap = 'round';
     });
 
     document.getElementById('clear-btn-by').addEventListener('click', function() {
-        ctxBy.clearRect(0, 0, canvasBy.width, canvasBy.height);
+        ctxBy.fillStyle = 'white';
+        ctxBy.fillRect(0, 0, canvasBy.width, canvasBy.height);
+        // Reset drawing settings
+        ctxBy.strokeStyle = 'black';
+        ctxBy.lineWidth = 2;
+        ctxBy.lineCap = 'round';
     });
 
     // Validate form to ensure signatures are drawn
@@ -98,7 +112,8 @@
         var isEmptyFrom = true;
 
         for (var i = 0; i < pixelsFrom.length; i += 4) {
-            if (pixelsFrom[i + 3] > 0) {
+            // Check if pixel is not white (considering anti-aliasing)
+            if (pixelsFrom[i] < 255 || pixelsFrom[i+1] < 255 || pixelsFrom[i+2] < 255) {
                 isEmptyFrom = false;
                 break;
             }
@@ -109,7 +124,7 @@
         var isEmptyBy = true;
 
         for (var i = 0; i < pixelsBy.length; i += 4) {
-            if (pixelsBy[i + 3] > 0) {
+            if (pixelsBy[i] < 255 || pixelsBy[i+1] < 255 || pixelsBy[i+2] < 255) {
                 isEmptyBy = false;
                 break;
             }
@@ -120,10 +135,11 @@
             return false;
         }
 
-        // Set hidden inputs with Base64 data for both signatures
-        signatureDataFrom.value = canvasFrom.toDataURL();
-        signatureDataBy.value = canvasBy.toDataURL();
+        // Set hidden inputs with Base64 data for both signatures as JPG
+        signatureDataFrom.value = canvasFrom.toDataURL('image/jpeg');
+        signatureDataBy.value = canvasBy.toDataURL('image/jpeg');
 
         return true;
     }
 </script>
+<!-- Modified Generative AI output. Reference: G, N, T - END -->
