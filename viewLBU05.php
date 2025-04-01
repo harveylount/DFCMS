@@ -48,7 +48,7 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier"?>" id="navcase-button">LBU06</a>
         </div>
 
-        <section id="content">
+        <section id="LBU">
 
             <div id="navcase-bar">
                 <a href="<?php echo "createLBU05EntryInForm.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Create Entry</a>
@@ -68,12 +68,33 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
                     $stmtFirstRow->execute();
                     $resultFirstRow = $stmtFirstRow->get_result();
 
+                    $query = "SELECT CaseReference, ExhibitRef FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
+                    $stmt = $connection->prepare($query);
+                    $stmt->bind_param("ss", $identifier, $evidenceID);  
+                    $stmt->execute();
+                    $results = $stmt->get_result();
+                    $rowRef = mysqli_fetch_assoc($results);
+                    $stmt->close();
+
+                    echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                    echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>DFCMS</td> 
+                            <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'LBU05 - Exhibit Log Book' . "</td></tr>"; 
+                    echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Page 1 of 1' . "</td></tr>";
+                    echo "</table>";
+                    echo "<br/>";
+
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-dark'>Case Reference</td><td>" . $rowRef['CaseReference'] . "</td></tr>";
+                    echo "<tr><td class='lbu-dark'>Exhibit Reference</td><td>" . $rowRef['ExhibitRef'] . "</td></tr>";
+                    echo "</table>";
+                    echo "<br/>";
+
                     if ($resultFirstRow->num_rows > 0) {
                         $rowFirst = $resultFirstRow->fetch_assoc();
                         
                         // Display the first row in the first table
-                        echo '<table border="1" cellpadding="10" cellspacing="0" style="width: 100%;">';
-                        echo '<thead><tr><th>Timestamp In</th><th>New Location</th><th>Seal Number</th><th>Actioner</th></tr></thead>';
+                        echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                        echo '<thead><tr><th class="lbu-high">Timestamp In</th><th class="lbu-high">New Location</th><th class="lbu-high">Seal Number</th><th class="lbu-high">Actioner</th></tr></thead>';
                         echo '<tbody>';
                         echo '<tr>';
                         echo '<td>' . ($rowFirst['TimestampIn'] ?? 'N/A') . '</td>';
@@ -106,18 +127,18 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
 
                     if ($resultRows->num_rows > 0) {
                         // Start displaying the table for joined "Out" and "In" rows
-                        echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                        echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                         echo '<thead>
                         <tr>
-                        <th>Timestamp Out</th>
-                        <th>Original Location</th>
-                        <th>Reason Out</th>
-                        <th>Seal Number Out</th>
-                        <th>Actioner Out</th>
-                        <th>Timestamp In</th>
-                        <th>New Location</th>
-                        <th>Seal Number In</th>
-                        <th>Actioner In</th>
+                        <th class="lbu-high">Timestamp Out</th>
+                        <th class="lbu-high">Original Location</th>
+                        <th class="lbu-high">Reason Out</th>
+                        <th class="lbu-high">Seal Number Out</th>
+                        <th class="lbu-high">Actioner Out</th>
+                        <th class="lbu-high">Timestamp In</th>
+                        <th class="lbu-high">New Location</th>
+                        <th class="lbu-high">Seal Number In</th>
+                        <th class="lbu-high">Actioner In</th>
                         </tr>
                         </thead>';
                         echo '<tbody>';
