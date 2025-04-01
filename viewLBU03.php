@@ -66,7 +66,12 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
                     // Fetch the first row for static content (ExhibitRef and CaseReference)
                     if ($row = mysqli_fetch_assoc($results)) {
                         // Display ExhibitRef and Title (this will appear only once)
-                        echo "<h2>" . $row['ExhibitRef'] . " - Exhibit Continuity Form (LBU03)</h2>";
+                        echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                        echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>DFCMS</td> 
+                                <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'LBU03 - Exhibit Continuity Form' . "</td></tr>"; 
+                        echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Page 1 of 1' . "</td></tr>";
+                        echo "</table>";
+                        echo "<br/>";
 
                         echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                         echo "<tr><td class='lbu-dark'>Case Reference</td><td>" . $row['CaseReference'] . "</td></tr>";
