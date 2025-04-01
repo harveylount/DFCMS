@@ -91,7 +91,12 @@ $evidenceID = intval($_GET['EvidenceID']);
 
                 while ($row = mysqli_fetch_assoc($results)) {
 
-                    echo "<h2>" . $row['ExhibitRef'] . " - Computer Exhibit Detail Form (LBU04)</h2>";
+                    echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                    echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>DFCMS</td> 
+                            <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'LBU04 - Computer Exhibit Detail Form' . "</td></tr>"; 
+                    echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Page 1 of 1' . "</td></tr>";
+                    echo "</table>";
+                    echo "<br/>";
 
                     echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                     echo "<tr><td class='lbu-dark'>Case Reference</td><td>" . $row['CaseReference'] . "</td></tr>";
