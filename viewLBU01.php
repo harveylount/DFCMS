@@ -16,7 +16,7 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
 
     <link href="./index.css" rel="stylesheet" type="text/css" />
 
-    <title>Evidence Exhibit</title>
+    <title>LBU01</title>
 
 </head>
 
@@ -48,7 +48,7 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier"?>" id="navcase-button">LBU06</a>
         </div>
 
-        <section id="content">
+        <section id="LBU">
 
             <p>
                 <?php
@@ -59,35 +59,44 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
                 $results = $stmt->get_result();
         
                 while ($row = mysqli_fetch_assoc($results)) {
-                    echo "<h2>" . $row['ExhibitRef'] . " - Exhibit Receipt Form (LBU01)</h2>";
-                    
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><td><b>Case Reference:</b></td><td>" . $row['CaseReference'] . "</td></tr>";
-                    echo "<tr><td><b>Location:</b></td><td>" . $row['Location'] . "</td></tr>";
+
+                    echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                        echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>DFCMS</td> 
+                                <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'LBU01 - Exhibit Dispatch Form' . "</td></tr>"; 
+                        echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Page 1 of 1' . "</td></tr>";
+                        echo "</table>";
+                        echo "<br/>";
+
+                        echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>Case Reference</td><td>" . $row['CaseReference'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Location</td><td>" . $row['Location'] . "</td></tr>";
                     echo "</table>";
                     echo "<br/>";
 
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><td><b>Received From Rank:</b></td><td>" . $row['ReceivedFromRank'] . "</td></tr>";
-                    echo "<tr><td><b>Received From:</b></td><td>" . $row['ReceivedFromName'] . "</td></tr>";
-                    echo "<tr><td><b>Company:</b></td><td>" . $row['ReceivedFromCompany'] . "</td></tr>";
-                    echo "<tr><td><b>Timestamp:</b></td><td>" . $row['ReceivedFromTime'] . "</td></tr>";
-                    echo "<tr><td><b>Signature:</b></td><td><img src='" . $row['ReceivedFromSig'] . "' alt='Signature'></td></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>Received From Rank</td><td>" . $row['ReceivedFromRank'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Received From</td><td>" . $row['ReceivedFromName'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Company</td><td>" . $row['ReceivedFromCompany'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Timestamp</td><td>" . $row['ReceivedFromTime'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Signature</td><td><img src='" . $row['ReceivedFromSig'] . "' alt='Signature'></td></tr>";
                     echo "</table>";
                     echo "<br/>";
 
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><td><b>Received By Rank:</b></td><td>" . $row['ReceivedByRank'] . "</td></tr>";
-                    echo "<tr><td><b>Received By:</b></td><td>" . $row['ReceivedByName'] . "</td></tr>";
-                    echo "<tr><td><b>Company:</b></td><td>" . $row['ReceivedByCompany'] . "</td></tr>";
-                    echo "<tr><td><b>Timestamp:</b></td><td>" . $row['ReceivedByTime'] . "</td></tr>";
-                    echo "<tr><td><b>Signature:</b></td><td><img src='" . $row['ReceivedBySig'] . "' alt='Signature'></td></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>Received By Rank</td><td>" . $row['ReceivedByRank'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Received By</td><td>" . $row['ReceivedByName'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Company</td><td>" . $row['ReceivedByCompany'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Timestamp</td><td>" . $row['ReceivedByTime'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Signature</td><td><img src='" . $row['ReceivedBySig'] . "' alt='Signature'></td></tr>";
                     echo "</table>";
                     echo "<br/>";
 
-                    echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                    echo "<tr><th><b>Exhibit Number:</b></th><th><b>Seal Number:</b></th><th><b>Description:</b></th></tr>";
-                    echo "<tr><td>" . $row['ExhibitRef'] . "</td><td>" . $row['InitialSealNumber'] . "</td><td>" . $row['InitialDescription'] . "</td></tr>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>Exhibit Number</td><td>" . $row['ExhibitRef'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Seal Number</td><td>" . $row['InitialSealNumber'] . "</td></tr>";
+
+                    echo "<tr><th class='lbu-dark' colspan='2'>Initial Description</th></tr>";
+                    echo "<tr><td colspan='2'>" . $row['InitialDescription'] . "</td></tr>";
                     echo "</table>";
 
 
