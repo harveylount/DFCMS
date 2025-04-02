@@ -1,7 +1,12 @@
 <?php
 
-    $query = "SELECT * FROM cases";
-    $results = mysqli_query($connection, $query);
+    $username=$_SESSION['userId'];
+
+    $query = "SELECT * FROM cases WHERE FIND_IN_SET(?, REPLACE(Investigator, ' ', '')) > 0";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $results = $stmt->get_result();
 
     echo '<style>';
     echo 'table { border-collapse: collapse; }'; 
