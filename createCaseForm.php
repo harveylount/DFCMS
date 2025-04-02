@@ -12,6 +12,9 @@ if (!isset($_SESSION['txtCaseReferenceM'])) {
 if (!isset($_SESSION['txtCaseNameM'])) {
     $_SESSION['txtCaseNameM']='';
 }
+if (!isset($_SESSION['txtcaseReferenceExistsM'])) {
+    $_SESSION['txtcaseReferenceExistsM']='';
+}
 
 // Returns to index page if user role is not set
 if (!isset($_SESSION['userRole'])) {
@@ -77,7 +80,7 @@ $maxDate = date('Y-m-d', strtotime('+5 years'));
                             echo $_SESSION['txtCaseReferenceF'];
                             unset($_SESSION['txtCaseReferenceF']);
                         }
-                    ?>" required/><?php echo $_SESSION['txtCaseReferenceM']; unset($_SESSION['txtCaseReferenceM']);?><br /><br />
+                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtCaseReferenceM']; unset($_SESSION['txtCaseReferenceM']);?></p><br /><br />
 
                     <!-- Case name field -->
                     <label for="txtCaseName">Case Name: </label><br />
@@ -86,11 +89,16 @@ $maxDate = date('Y-m-d', strtotime('+5 years'));
                             echo $_SESSION['txtCaseNameF'];
                             unset($_SESSION['txtCaseNameF']);
                         }
-                    ?>" required/><?php echo $_SESSION['txtCaseNameM']; unset($_SESSION['txtCaseNameM']);?><br /><br />
+                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtCaseNameM']; unset($_SESSION['txtCaseNameM']);?></p><br /><br />
 
                     <!-- Case deadline date field -->
                     <label for="dateDeadline">Deadline date:</label><br />
-                    <input type="date" id="dateDeadline" name="dateDeadline" min="<?php echo $currentDate; ?>" max="<?php echo $maxDate; ?>" required> <br /><br />
+                    <input type="date" id="dateDeadline" name="dateDeadline" min="<?php echo $currentDate; ?>" max="<?php echo $maxDate; ?>" value="<?php
+                    if(isset($_SESSION['txtDateDeadlineF'])) {
+                        echo $_SESSION['txtDateDeadlineF'];
+                        unset($_SESSION['txtDateDeadlineF']);
+                    }
+                    ?>" required> <br /><br />
 
                     <label for="timezone">Select Case Timezone:</label><br />
                     <select name="timezone" id="timezone">
@@ -157,6 +165,10 @@ $maxDate = date('Y-m-d', strtotime('+5 years'));
                         <option value="Europe/Zurich">Europe/Zurich</option>
                     </select>
                     </br></br>
+
+                    <p class="error-message">
+                        <?php echo $_SESSION['txtcaseReferenceExistsM']; unset($_SESSION['txtcaseReferenceExistsM']);?>
+                    </p> </br></br>
 
                     <input type="submit" value="Submit" name="subEvent" />
                     <input type="reset" value="Clear" />
