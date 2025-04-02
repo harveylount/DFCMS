@@ -9,6 +9,11 @@ if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
 
 $identifier = intval($_GET['identifier']);
 
+if (!isset($_SESSION['txtExhibitReferenceExistsM'])) {
+    $_SESSION['txtExhibitReferenceExistsM']='';
+}
+
+
 $unsetMsg = [
     'txtExhibitReferenceM', 'txtDeviceM', 'txtManufacturerM', 'txtModelM', 'txtSerialM', 
     'txtIMEIM', 'txtSIMM', 'txtNumberM', 'txtMACM', 'txtStorageM', 'txtOSM', 

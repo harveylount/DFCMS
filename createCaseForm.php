@@ -167,7 +167,7 @@ $maxDate = date('Y-m-d', strtotime('+5 years'));
                     </br></br>
 
                     <p class="error-message">
-                        <?php echo $_SESSION['txtcaseReferenceExistsM']; unset($_SESSION['txtcaseReferenceExistsM']);?>
+                    <?php echo $_SESSION['txtcaseReferenceExistsM']; unset($_SESSION['txtcaseReferenceExistsM']);?>
                     </p> </br></br>
 
                     <input type="submit" value="Submit" name="subEvent" />

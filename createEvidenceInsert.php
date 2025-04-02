@@ -65,6 +65,19 @@ if (isset($_POST['subEvent'])) {
     $_SESSION['txtPeripheralF']=$peripheral;
     $_SESSION['txtNetworkF']=$network;
 
+    $sql = "SELECT ExhibitRef FROM evidence WHERE Identifier = ? AND ExhibitRef = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->bind_param("ss", $identifier, $exhibitReference);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        $stmt->close();
+        $_SESSION['txtExhibitReferenceExistsM'] = 'Exhibit Reference already exists';
+        header('Location: createEvidenceForm.php?identifier=' . $identifier);
+        exit();
+    }
+
 
     if (preg_match('/^.{1,10}$/', $exhibitReference)) {
         $exhibitReferenceCheck = true;

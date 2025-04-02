@@ -47,7 +47,7 @@ $_SESSION['receivedByCompany']=$byCompany;
         echo $_SESSION['txtExhibitReferenceF'];
         unset($_SESSION['txtExhibitReferenceF']);
     }
-?>" required/><p class="error-message"><?php echo $_SESSION['txtExhibitReferenceM']; unset($_SESSION['txtExhibitReferenceM']);?></p><br /><br />
+?>" required/><p class="error-message"><?php echo $_SESSION['txtExhibitReferenceExistsM']; unset($_SESSION['txtExhibitReferenceExistsM']); echo $_SESSION['txtExhibitReferenceM']; unset($_SESSION['txtExhibitReferenceM']);?></p><br /><br />
 
 <!-- Seal Number field -->
 <label for="txtSealNumber">Seal Number: *</label><br />
