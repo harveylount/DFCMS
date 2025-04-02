@@ -11,6 +11,7 @@
 </style>
 
 <?php
+include 'checkUserAddedToCaseFunction.php'; 
 include 'timezoneFunction.php'; 
 
 $_SESSION['timestampDatabase'] = date('Y-m-d H:i:s');

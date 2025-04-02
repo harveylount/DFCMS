@@ -10,6 +10,7 @@ if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
 
+include 'checkUserAddedToCaseFunction.php'; 
 
 $sql = "SELECT CaseReference FROM evidence WHERE Identifier = ?";
 $stmt = $connection->prepare($sql);

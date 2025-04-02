@@ -7,6 +7,8 @@ if(!isset($_SESSION['userId'])){
 $identifier = intval($_GET['identifier']);  
 $evidenceID = intval($_GET['EvidenceID']);  
 
+include 'checkUserAddedToCaseFunction.php'; 
+
                 // If evidence is not a computer device redirects
                 $query = "SELECT EvidenceType FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
                 $stmt = $connection->prepare($query);

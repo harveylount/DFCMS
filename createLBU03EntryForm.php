@@ -12,6 +12,8 @@ if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
 $identifier = intval($_GET['identifier']);  // Sanitized input to prevent SQL injection
 $evidenceID = intval($_GET['EvidenceID']);  
 
+include 'checkUserAddedToCaseFunction.php'; 
+
 if (!isset($_SESSION['txtActionM'])) {
     $_SESSION['txtActionM']='';
 }

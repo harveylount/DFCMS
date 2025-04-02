@@ -13,6 +13,8 @@ $identifier = intval($_GET['identifier']);  // Sanitized input to prevent SQL in
 $evidenceID = intval($_GET['EvidenceID']);  
 $LBU03id = intval($_GET['LBU03id']);  
 
+include 'checkUserAddedToCaseFunction.php'; 
+
 if (!isset($_SESSION['txtRemoveActionM'])) {
     $_SESSION['txtRemoveActionM']='';
 }

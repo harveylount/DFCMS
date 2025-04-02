@@ -5,6 +5,8 @@ if(!isset($_SESSION['userId'])){
 }
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
+
+include 'checkUserAddedToCaseFunction.php'; 
 ?> 
 
 <!DOCTYPE html>

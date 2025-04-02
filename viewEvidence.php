@@ -6,6 +6,8 @@ if(!isset($_SESSION['userId'])){
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
 
+include 'checkUserAddedToCaseFunction.php'; 
+
 $query2 = "SELECT CaseReference FROM cases WHERE Identifier = $identifier";
     $results2 = mysqli_query($connection, $query2);
     $caseReferenceRow = mysqli_fetch_assoc($results2);

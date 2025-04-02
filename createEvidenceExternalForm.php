@@ -9,6 +9,8 @@ if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
 
 $identifier = intval($_GET['identifier']);
 
+include 'checkUserAddedToCaseFunction.php'; 
+
 if (!isset($_SESSION['txtExhibitReferenceExistsM'])) {
     $_SESSION['txtExhibitReferenceExistsM']='';
 }

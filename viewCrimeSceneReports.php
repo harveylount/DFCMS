@@ -6,11 +6,13 @@ if(!isset($_SESSION['userId'])){
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
 
-$query2 = "SELECT CaseReference FROM cases WHERE Identifier = $identifier";
-                    $results2 = mysqli_query($connection, $query2);
+include 'checkUserAddedToCaseFunction.php'; 
 
-                    $caseReferenceRow = mysqli_fetch_assoc($results2);
-                    $caseReference = $caseReferenceRow['CaseReference'] ?? 'No Case Reference';
+$query2 = "SELECT CaseReference FROM cases WHERE Identifier = $identifier";
+$results2 = mysqli_query($connection, $query2);
+
+$caseReferenceRow = mysqli_fetch_assoc($results2);
+$caseReference = $caseReferenceRow['CaseReference'] ?? 'No Case Reference';
 ?> 
 
 <!DOCTYPE html>

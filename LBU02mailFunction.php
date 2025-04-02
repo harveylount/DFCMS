@@ -1,4 +1,6 @@
 <?php
+include 'checkUserAddedToCaseFunction.php'; 
+
 require_once('vendor/autoload.php');
 
 $pdf = new TCPDF();

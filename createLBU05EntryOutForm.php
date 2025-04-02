@@ -11,6 +11,8 @@ if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
 $identifier = intval($_GET['identifier']);  
 $evidenceID = intval($_GET['EvidenceID']);  
 
+include 'checkUserAddedToCaseFunction.php'; 
+
 $sql = "SELECT * FROM LBU05 WHERE Identifier = ? AND EvidenceID = ? ORDER BY LBU05id DESC LIMIT 1";
 $stmt = $connection->prepare($sql);
 $stmt->bind_param("ii", $identifier, $evidenceID);

@@ -11,6 +11,8 @@ if(!isset($_SESSION['userId'])){ // Doesn't allow unauthenticated user access
 $identifier = intval($_GET['identifier']);  
 $evidenceID = intval($_GET['EvidenceID']);  
 
+include 'checkUserAddedToCaseFunction.php'; 
+
 if (!isset($_SESSION['txtOriginalLocationM'])) {
     $_SESSION['txtOriginalLocationM']='';
 }
