@@ -8,6 +8,12 @@ $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL
 
 include 'checkUserAddedToCaseFunction.php'; 
 
+$sql = "DELETE FROM casenotesbackup WHERE Identifier = ? AND Timestamp1 < NOW() - INTERVAL 7 DAY;";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("s", $identifier);
+$stmt->execute();
+mysqli_stmt_close($stmt);
+
 $sql = "SELECT CaseReference, Notes, NotesEditorFullName, NotesEditorUsername, NotesEditedTimestamp FROM cases WHERE Identifier = ?";
 $stmt = $connection->prepare($sql);
 $stmt->bind_param("s", $identifier);
