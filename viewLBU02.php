@@ -48,6 +48,7 @@ include 'checkUserAddedToCaseFunction.php';
             <?php include 'lbu04notComputerFunction.php'; ?>
             <a href="<?php echo "viewLBU05.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">LBU05</a>
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier"?>" id="navcase-button">LBU06</a>
+            <a href="<?php echo "viewExhibitNotes.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Notes</a>
         </div>
 
         <section id="LBU">
