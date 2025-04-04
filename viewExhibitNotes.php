@@ -9,15 +9,9 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
 
 include 'checkUserAddedToCaseFunction.php'; 
 
-// CHANGE LATER
-// CHANGE LATER
-// CHANGE LATER
-// CHANGE LATER
-// CHANGE LATER
-// CHANGE LATER
-$sql = "DELETE FROM casenotesbackup WHERE Identifier = ? AND Timestamp1 < NOW() - INTERVAL 7 DAY;";
+$sql = "DELETE FROM exhibitnotesbackup WHERE Identifier = ? AND EvidenceID = ? AND Timestamp1 < NOW() - INTERVAL 7 DAY;";
 $stmt = $connection->prepare($sql);
-$stmt->bind_param("s", $identifier);
+$stmt->bind_param("ss", $identifier, $evidenceID);
 $stmt->execute();
 mysqli_stmt_close($stmt);
 
