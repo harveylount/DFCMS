@@ -65,23 +65,34 @@ if ($roleCheck != "Administrator") {
             <p>
                 <?php
                     echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
-                    echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Admin Page</td> </tr>";
+                    echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Set User Role & Rank</td> </tr>";
                     echo "</table>";
-                    echo "<br/></br>";
-                    
-                    if(isset($_SESSION['adminPageMessage'])) {
-                        echo $_SESSION['adminPageMessage'] . "</br>";
-                        unset($_SESSION['adminPageMessage']);
-                    }
-                    if(isset($_SESSION['adminPageMessage2'])) {
-                        echo $_SESSION['adminPageMessage2'];
-                        unset($_SESSION['adminPageMessage2']);
+                    echo "<br/>";    
+
+                    $user_query = "SELECT ID, Username, FullName, Role FROM users WHERE Username != 'admin'";
+                    $stmt = $connection->prepare($user_query);
+                    $stmt->execute();
+                    $user_result = $stmt->get_result();
+
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><th class='lbu-dark'>User</th><th class='lbu-dark' style='width: 300px;'>Role</th><th class='lbu-dark' style='width: 100px;'></th></tr>";
+
+                    if ($user_result->num_rows > 0) {
+                        while ($user = $user_result->fetch_assoc()) {
+    
+                        echo "<tr><td>" . $user['FullName'] . " (" . $user['Username'] . ")" . "</td><td>" . $user['Role'] . "</td><td><a href='adminSetRoleUserList.php?user=" . urlencode($user['ID']) . "' id='navcase-button'>Update User</a></td></tr>";
+    
+                            
+                        }
+                        echo "</table>";
+                        echo "<br/>";
+                    } else {
+                        echo "No investigators available";
                     }
 
                 ?>
 
                 
-                </form>
             </p>
 
         </section>
