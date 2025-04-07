@@ -1,5 +1,6 @@
 <?php
 include 'sqlConnection.php'; 
+include 'timezoneFunction.php'; 
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
@@ -8,6 +9,12 @@ $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL
 $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection
 
 include 'checkUserAddedToCaseFunction.php'; 
+
+$sql = "DELETE FROM exhibitinfobackup WHERE Identifier = ? AND EvidenceID = ? AND Timestamp1 < NOW() - INTERVAL 10 SECOND;";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("ss", $identifier, $evidenceID);
+$stmt->execute();
+mysqli_stmt_close($stmt);
 ?> 
 
 <!DOCTYPE html>
@@ -51,10 +58,17 @@ include 'checkUserAddedToCaseFunction.php';
             <a href="<?php echo "viewExhibitNotes.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Notes</a>
         </div>
 
-        <section id="content">
+        <section id="LBU">
 
             <p>
                 <?php
+
+                    echo '<div id="navcase-bar">
+                        <a href="editExhibitInfoForm.php?identifier=' . urlencode($identifier) . '&EvidenceID= ' . urlencode($evidenceID) . '" id="navcase-button">Edit Exhibit Information</a>
+                        <a href="listexhibitinfobackup.php?identifier=' . urlencode($identifier) . '&EvidenceID= ' . urlencode($evidenceID) . '" id="navcase-button">Exhibit Information Backups</a>
+                        </div>';
+                    echo "<br/>";
+
                     include 'displayEvidenceInfo.php';
                 ?>
             </p>

@@ -3,7 +3,7 @@ if (isset($_GET['identifier'])) {
 
     $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
     $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection
-
+    
     // SQL query to get the evidence type
     $sqlCaseRef = "SELECT EvidenceType FROM evidence WHERE EvidenceID = ?";
     $stmt = $connection->prepare($sqlCaseRef);
@@ -22,26 +22,42 @@ if (isset($_GET['identifier'])) {
         $results = $stmt->get_result();
 
         while ($row = mysqli_fetch_assoc($results)) {
-            echo "<h2>Exhibit   " . $row['ExhibitRef'] . "  Information</h2>";
-            echo "<table border='1' cellpadding='10' cellspacing='0'>";
-            echo "<tr><td><b>Case Reference:</b></td><td>" . $row['CaseReference'] . "</td></tr>";
-            echo "<tr><td><b>Seized Time:</b></td><td>" . $row['SeizedTime'] . "</td></tr>";
-            echo "<tr><td><b>Edited Time:</b></td><td>" . $row['EditedTime'] . "</td></tr>";
-            echo "<tr><td><b>Evidence Status:</b></td><td>" . $row['EvidenceStatus'] . "</td></tr>";
-            echo "<tr><td><b>Current Seal Number:</b></td><td>" . $row['CurrentSeal'] . "</td></tr>";
-            echo "<tr><td><b>Device Type:</b></td><td>" . $row['DeviceType'] . "</td></tr>";
-            echo "<tr><td><b>Manufacturer:</b></td><td>" . $row['Manufacturer'] . "</td></tr>";
-            echo "<tr><td><b>Device Model:</b></td><td>" . $row['Model'] . "</td></tr>";
-            echo "<tr><td><b>Serial Number:</b></td><td>" . $row['SerialNumber'] . "</td></tr>";
-            echo "<tr><td><b>Storage Capacity:</b></td><td>" . $row['Storage'] . "</td></tr>";
-            echo "<tr><td><b>Operating System:</b></td><td>" . $row['OS'] . "</td></tr>";
-            echo "<tr><td><b>CPU:</b></td><td>" . $row['CPU'] . "</td></tr>";
-            echo "<tr><td><b>RAM:</b></td><td>" . $row['RAM'] . "</td></tr>";
-            echo "<tr><td><b>MAC Address:</b></td><td>" . $row['MAC'] . "</td></tr>";
-            echo "<tr><td><b>IP:</b></td><td>" . $row['IP'] . "</td></tr>";
-            echo "<tr><td><b>Firmware:</b></td><td>" . $row['Firmware'] . "</td></tr>";
-            echo "<tr><td><b>Peripheral Devices:</b></td><td>" . $row['Peripheral'] . "</td></tr>";
-            echo "<tr><td><b>Network Information:</b></td><td>" . $row['Network'] . "</td></tr>";
+
+            echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+            echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>DFCMS</td> 
+                    <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Exhibit Information' . "</td></tr>"; 
+            echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Page 1 of 1' . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-dark'>Case Reference</td><td>" . $row['CaseReference'] . "</td></tr>";
+            echo "<tr><td class='lbu-dark'>Exhibit Reference</td><td>" . $row['ExhibitRef'] . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-high'>Seized Time</td><td>" . $row['SeizedTime'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Edited Time</td><td>" . $row['EditedTime'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Evidence Status</td><td>" . $row['EvidenceStatus'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Current Seal Number</td><td>" . $row['CurrentSeal'] . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-high'>Device Type</td><td>" . $row['DeviceType'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Manufacturer</td><td>" . $row['Manufacturer'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Device Model</td><td>" . $row['Model'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Serial Number</td><td>" . $row['SerialNumber'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Storage Capacity</td><td>" . $row['Storage'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Operating System</td><td>" . $row['OS'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>CPU</td><td>" . $row['CPU'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>RAM</td><td>" . $row['RAM'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>MAC Address</td><td>" . $row['MAC'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>IP</td><td>" . $row['IP'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Firmware</td><td>" . $row['Firmware'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Peripheral Devices</td><td>" . $row['Peripheral'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Network Information</td><td>" . $row['Network'] . "</td></tr>";
             echo "</table>";
 
 
@@ -57,29 +73,44 @@ if (isset($_GET['identifier'])) {
         $results = $stmt->get_result();
 
         while ($row = mysqli_fetch_assoc($results)) {
-            echo "<h2>Exhibit   " . $row['ExhibitRef'] . "  Information</h2>";
-            echo "<table border='1' cellpadding='10' cellspacing='0'>";
-            echo "<tr><td><b>Exhibit Reference:</b></td><td>" . $row['ExhibitRef'] . "</td></tr>";
-            echo "<tr><td><b>Case Reference:</b></td><td>" . $row['CaseReference'] . "</td></tr>";
-            echo "<tr><td><b>Seized Time:</b></td><td>" . $row['SeizedTime'] . "</td></tr>";
-            echo "<tr><td><b>Edited Time:</b></td><td>" . $row['EditedTime'] . "</td></tr>";
-            echo "<tr><td><b>Evidence Status:</b></td><td>" . $row['EvidenceStatus'] . "</td></tr>";
-            echo "<tr><td><b>Current Seal Number:</b></td><td>" . $row['CurrentSeal'] . "</td></tr>";
-            echo "<tr><td><b>Device Type:</b></td><td>" . $row['DeviceType'] . "</td></tr>";
-            echo "<tr><td><b>Manufacturer:</b></td><td>" . $row['Manufacturer'] . "</td></tr>";
-            echo "<tr><td><b>Device Model:</b></td><td>" . $row['Model'] . "</td></tr>";
-            echo "<tr><td><b>Serial Number:</b></td><td>" . $row['SerialNumber'] . "</td></tr>";
-            echo "<tr><td><b>Storage Capacity:</b></td><td>" . $row['Storage'] . "</td></tr>";
-            echo "<tr><td><b>Operating System:</b></td><td>" . $row['OS'] . "</td></tr>";
-            echo "<tr><td><b>MAC Address:</b></td><td>" . $row['MAC'] . "</td></tr>";
-            echo "<tr><td><b>IMEI Number:</b></td><td>" . $row['IMEI'] . "</td></tr>";
-            echo "<tr><td><b>SIM Information:</b></td><td>" . $row['SIM'] . "</td></tr>";
-            echo "<tr><td><b>Phone Number Linked to SIM:</b></td><td>" . $row['PhoneNumber'] . "</td></tr>";
-            echo "<tr><td><b>Battery Health:</b></td><td>" . $row['BatteryHealth'] . "</td></tr>";
-            echo "<tr><td><b>Installed Apps:</b></td><td>" . $row['InstalledApps'] . "</td></tr>";
-            echo "<tr><td><b>Encryption Type:</b></td><td>" . $row['EncryptionType'] . "</td></tr>";
-            echo "<tr><td><b>Account Information:</b></td><td>" . $row['AccountInfo'] . "</td></tr>";
-            echo "<tr><td><b>Screen Lock:</b></td><td>" . $row['ScreenLock'] . "</td></tr>";
+            
+            echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+            echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>DFCMS</td> 
+                    <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Exhibit Information' . "</td></tr>"; 
+            echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Page 1 of 1' . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-dark'>Case Reference</td><td>" . $row['CaseReference'] . "</td></tr>";
+            echo "<tr><td class='lbu-dark'>Exhibit Reference</td><td>" . $row['ExhibitRef'] . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-high'>Seized Time</td><td>" . $row['SeizedTime'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Edited Time</td><td>" . $row['EditedTime'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Evidence Status</td><td>" . $row['EvidenceStatus'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Current Seal Number</td><td>" . $row['CurrentSeal'] . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-high'>Device Type</td><td>" . $row['DeviceType'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Manufacturer</td><td>" . $row['Manufacturer'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Device Model</td><td>" . $row['Model'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Serial Number</td><td>" . $row['SerialNumber'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Storage Capacity</td><td>" . $row['Storage'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Operating System</td><td>" . $row['OS'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>MAC Address</td><td>" . $row['MAC'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>IMEI Number</td><td>" . $row['IMEI'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>SIM Information</td><td>" . $row['SIM'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Phone Number Linked to SIM</td><td>" . $row['PhoneNumber'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Battery Health</td><td>" . $row['BatteryHealth'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Installed Apps</td><td>" . $row['InstalledApps'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Encryption Type</td><td>" . $row['EncryptionType'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Account Information</td><td>" . $row['AccountInfo'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Screen Lock</td><td>" . $row['ScreenLock'] . "</td></tr>";
             echo "</table>";
             
         }
@@ -93,21 +124,37 @@ if (isset($_GET['identifier'])) {
         $results = $stmt->get_result();
 
         while ($row = mysqli_fetch_assoc($results)) {
-            echo "<h2>Exhibit   " . $row['ExhibitRef'] . "  Information</h2>";
-            echo "<table border='1' cellpadding='10' cellspacing='0'>";
-            echo "<tr><td><b>Case Reference:</b></td><td>" . $row['CaseReference'] . "</td></tr>";
-            echo "<tr><td><b>Seized Time:</b></td><td>" . $row['SeizedTime'] . "</td></tr>";
-            echo "<tr><td><b>Edited Time:</b></td><td>" . $row['EditedTime'] . "</td></tr>";
-            echo "<tr><td><b>Evidence Status:</b></td><td>" . $row['EvidenceStatus'] . "</td></tr>";
-            echo "<tr><td><b>Current Seal Number:</b></td><td>" . $row['CurrentSeal'] . "</td></tr>";
-            echo "<tr><td><b>Device Type:</b></td><td>" . $row['DeviceType'] . "</td></tr>";
-            echo "<tr><td><b>Manufacturer:</b></td><td>" . $row['Manufacturer'] . "</td></tr>";
-            echo "<tr><td><b>Device Model:</b></td><td>" . $row['Model'] . "</td></tr>";
-            echo "<tr><td><b>Serial Number:</b></td><td>" . $row['SerialNumber'] . "</td></tr>";
-            echo "<tr><td><b>Storage Capacity:</b></td><td>" . $row['Storage'] . "</td></tr>";
-            echo "<tr><td><b>Encryption Type:</b></td><td>" . $row['EncryptionType'] . "</td></tr>";
-            echo "<tr><td><b>Interface Type:</b></td><td>" . $row['InterfaceType'] . "</td></tr>";
-            echo "<tr><td><b>File System:</b></td><td>" . $row['FileSystem'] . "</td></tr>";
+            
+            echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+            echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>DFCMS</td> 
+                    <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Exhibit Information' . "</td></tr>"; 
+            echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Page 1 of 1' . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-dark'>Case Reference</td><td>" . $row['CaseReference'] . "</td></tr>";
+            echo "<tr><td class='lbu-dark'>Exhibit Reference</td><td>" . $row['ExhibitRef'] . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-high'>Seized Time</td><td>" . $row['SeizedTime'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Edited Time</td><td>" . $row['EditedTime'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Evidence Status</td><td>" . $row['EvidenceStatus'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Current Seal Number</td><td>" . $row['CurrentSeal'] . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-high'>Device Type</td><td>" . $row['DeviceType'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Manufacturer</td><td>" . $row['Manufacturer'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Device Model</td><td>" . $row['Model'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Serial Number</td><td>" . $row['SerialNumber'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Storage Capacity</td><td>" . $row['Storage'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Encryption Type</td><td>" . $row['EncryptionType'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Interface Type</td><td>" . $row['InterfaceType'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>File System</td><td>" . $row['FileSystem'] . "</td></tr>";
             echo "</table>";
             
         }
