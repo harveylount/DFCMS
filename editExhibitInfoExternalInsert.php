@@ -129,9 +129,9 @@ if (isset($_POST['subEvent'])) {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
-        $query = "UPDATE evidence SET Manufacturer = ?, Model = ?, SerialNumber = ?, Storage = ?, EncryptionType = ?, InterfaceType = ?, FileSystem = ? WHERE EvidenceID = ?";
+        $query = "UPDATE evidence SET EditedTime = ?, EditedByFullName = ?, EditedByUsername = ?, Manufacturer = ?, Model = ?, SerialNumber = ?, Storage = ?, EncryptionType = ?, InterfaceType = ?, FileSystem = ? WHERE EvidenceID = ?";
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "sssssssi", $manufacturer, $model, $serial, $storage, $encryption, $interface, $fileSystem, $evidenceID);
+        mysqli_stmt_bind_param($stmt, "ssssssssssi", $timestamp, $fullName, $username, $manufacturer, $model, $serial, $storage, $encryption, $interface, $fileSystem, $evidenceID);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 

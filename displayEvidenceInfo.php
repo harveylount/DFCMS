@@ -14,7 +14,7 @@ if (isset($_GET['identifier'])) {
     mysqli_stmt_close($stmt);
 
     if($evidenceType === 'Computer') {
-        $query = "SELECT CaseReference, ExhibitRef, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
+        $query = "SELECT EditedTime, EditedByFullName, EditedByUsername, CaseReference, ExhibitRef, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
         Model, SerialNumber, Storage, OS, CPU, RAM, MAC, IP, Firmware, Peripheral, Network FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
         $stmt = $connection->prepare($query);
         $stmt->bind_param("ss", $identifier, $evidenceID);  
@@ -38,9 +38,14 @@ if (isset($_GET['identifier'])) {
 
             echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
             echo "<tr><td class='lbu-high'>Seized Time</td><td>" . $row['SeizedTime'] . "</td></tr>";
-            echo "<tr><td class='lbu-high'>Edited Time</td><td>" . $row['EditedTime'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Evidence Status</td><td>" . $row['EvidenceStatus'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Current Seal Number</td><td>" . $row['CurrentSeal'] . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-high'>Recent Information Editor</td><td>" . $row['EditedByFullName'] . " (" . $row['EditedByUsername'] . ")" . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Information Edited Timestamp</td><td>" . $row['EditedTime'] . "</td></tr>";
             echo "</table>";
             echo "<br/>";
 
@@ -65,7 +70,7 @@ if (isset($_GET['identifier'])) {
         $stmt->close();
 
     } else if($evidenceType === 'Mobile') {
-        $query = "SELECT CaseReference, ExhibitRef, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
+        $query = "SELECT EditedTime, EditedByFullName, EditedByUsername, CaseReference, ExhibitRef, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
         Model, SerialNumber, Storage, OS, MAC, IMEI, SIM, PhoneNumber, BatteryHealth, InstalledApps, EncryptionType, AccountInfo, ScreenLock FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
         $stmt = $connection->prepare($query);
         $stmt->bind_param("ss", $identifier, $evidenceID);  
@@ -89,9 +94,14 @@ if (isset($_GET['identifier'])) {
 
             echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
             echo "<tr><td class='lbu-high'>Seized Time</td><td>" . $row['SeizedTime'] . "</td></tr>";
-            echo "<tr><td class='lbu-high'>Edited Time</td><td>" . $row['EditedTime'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Evidence Status</td><td>" . $row['EvidenceStatus'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Current Seal Number</td><td>" . $row['CurrentSeal'] . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-high'>Recent Information Editor</td><td>" . $row['EditedByFullName'] . " (" . $row['EditedByUsername'] . ")" . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Information Edited Timestamp</td><td>" . $row['EditedTime'] . "</td></tr>";
             echo "</table>";
             echo "<br/>";
 
@@ -116,7 +126,7 @@ if (isset($_GET['identifier'])) {
         }
         $stmt->close();
     } else if($evidenceType === 'ExternalStorage') {
-        $query = "SELECT CaseReference, ExhibitRef, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
+        $query = "SELECT EditedTime, EditedByFullName, EditedByUsername, CaseReference, ExhibitRef, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
         Model, SerialNumber, Storage, EncryptionType, InterfaceType, FileSystem FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
         $stmt = $connection->prepare($query);
         $stmt->bind_param("ss", $identifier, $evidenceID);  
@@ -140,9 +150,14 @@ if (isset($_GET['identifier'])) {
 
             echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
             echo "<tr><td class='lbu-high'>Seized Time</td><td>" . $row['SeizedTime'] . "</td></tr>";
-            echo "<tr><td class='lbu-high'>Edited Time</td><td>" . $row['EditedTime'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Evidence Status</td><td>" . $row['EvidenceStatus'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Current Seal Number</td><td>" . $row['CurrentSeal'] . "</td></tr>";
+            echo "</table>";
+            echo "<br/>";
+
+            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+            echo "<tr><td class='lbu-high'>Recent Information Editor</td><td>" . $row['EditedByFullName'] . " (" . $row['EditedByUsername'] . ")" . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Information Edited Timestamp</td><td>" . $row['EditedTime'] . "</td></tr>";
             echo "</table>";
             echo "<br/>";
 
