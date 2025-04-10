@@ -52,16 +52,24 @@ $caseReference = $caseReferenceRow['CaseReference'] ?? 'No Case Reference';
                 <a href="<?php echo "viewCaseNotes.php?identifier=$identifier" ?>" id="navcase-button">Case Notes</a>
             </div>
 
-        <section id="content">
+        <section id="LBU">
 
-            <h2><?php echo $caseReference ?> - Crime Scene Reports</h2>
-
+            </br>
             <div id="navcase-bar">
                 <a href="<?php echo "createLBU06Form.php?identifier=$identifier" ?>" id="navcase-button">Create Crime Scene Report</a>
             </div>
 
+
+
             <p>
                 <?php
+
+                    echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                    echo "<tr><td rowspan='2' style='font-size: 46px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Crime Scene Reports</td> 
+                        <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Case Reference: ' . $caseReference . "</td></tr>"; 
+                    echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'></td></tr>";
+                    echo "</table>";
+                    echo "<br/>";
 
                     $query = "SELECT LBU06id, DateSceneExamined, SocoName, SocoUsername FROM LBU06 WHERE Identifier = $identifier";
                     $results = mysqli_query($connection, $query);

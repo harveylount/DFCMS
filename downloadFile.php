@@ -5,8 +5,18 @@ if(!isset($_SESSION['userId'])){
 }
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
-$evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection
-$fileID = intval($_GET['FileID']);  // Sanitize the input to prevent SQL injection
+if (isset($_GET['EvidenceID'])) {
+    $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection
+}
+if (isset($_GET['LBU06id'])) {
+    $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injection
+}
+if (isset($_GET['FileID'])) {
+    $fileID = intval($_GET['FileID']);  // Sanitize the input to prevent SQL injection
+}
+if (isset($_GET['SceneFileID'])) {
+    $fileID = intval($_GET['SceneFileID']);  // Sanitize the input to prevent SQL injection
+}
 
 include 'checkUserAddedToCaseFunction.php'; 
 
@@ -18,15 +28,26 @@ $stmt->bind_result($caseReference, $exhibitReference);
 $stmt->fetch();
 mysqli_stmt_close($stmt);
 
-$query = "SELECT UploadType FROM exhibituploadedfiles WHERE FileID = ? AND Identifier = ? AND EvidenceID = ?";
-$stmt = $connection->prepare($query);
-$stmt->bind_param("sss", $fileID, $identifier, $evidenceID);  
-$stmt->execute();
-$stmt->bind_result($uploadType);
-$stmt->fetch();
-mysqli_stmt_close($stmt);
 
-
+if (isset($_GET['EvidenceID'])) {
+    $query = "SELECT UploadType FROM exhibituploadedfiles WHERE FileID = ? AND Identifier = ? AND EvidenceID = ?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("sss", $fileID, $identifier, $evidenceID);  
+    $stmt->execute();
+    $stmt->bind_result($uploadType);
+    $stmt->fetch();
+    mysqli_stmt_close($stmt);
+} else if (isset($_GET['LBU06id'])) {
+    $query = "SELECT UploadType FROM sceneuploadedfiles WHERE SceneFileID = ? AND Identifier = ? AND LBU06id = ?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("sss", $fileID, $identifier, $LBU06id);  
+    $stmt->execute();
+    $stmt->bind_result($uploadType);
+    $stmt->fetch();
+    mysqli_stmt_close($stmt);
+} else {
+    header('Location: index.php');
+}
 
 
 
@@ -82,48 +103,76 @@ function formatBytes($bytes, $precision = 2) {
             <p>
             <?php
 
-$sql = "SELECT FileName, FileType, FileContent FROM exhibituploadedfiles WHERE Identifier = ? AND EvidenceID = ? AND FileID = ?";
-$stmt = $connection->prepare($sql);
-$stmt->bind_param("sss", $identifier, $evidenceID, $fileID);
+                if (in_array($uploadType, ["Image", "ExhibitPhoto"])) {
+                    $sql = "SELECT FileName, FileType, FileContent FROM exhibituploadedfiles WHERE Identifier = ? AND EvidenceID = ? AND FileID = ?";
+                    $stmt = $connection->prepare($sql);
+                    $stmt->bind_param("sss", $identifier, $evidenceID, $fileID);
+                    $stmt->execute();
+                    $stmt->store_result();
 
-// Execute the query
-$stmt->execute();
+                    if ($stmt->num_rows === 1) {
+                        $stmt->bind_result($fileName, $fileType, $fileContent);
+                        $stmt->fetch();
+                        
+                        // Clear any previous output
+                        if (ob_get_level()) {
+                            ob_end_clean();
+                        }
+                        
+                        // Disable compression (if enabled in output buffer settings)
+                        if (function_exists('apache_setenv')) {
+                            @apache_setenv('no-gzip', '1');
+                        }
 
-// Store the result to access num_rows
-$stmt->store_result();
+                        // Set headers for the file download
+                        header('Content-Description: File Transfer');
+                        header("Content-Type: $fileType");
+                        header('Content-Disposition: attachment; filename="' . basename($fileName) . '"');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate');
+                        header('Pragma: public');
+                        header('Content-Length: ' . strlen($fileContent));
 
-// Check if a row was returned
-if ($stmt->num_rows === 1) {
-    // Bind the result to variables
-    $stmt->bind_result($fileName, $fileType, $fileContent);
-    $stmt->fetch();
-    
-    // Clear any previous output
-    if (ob_get_level()) {
-        ob_end_clean();
-    }
-    
-    // Disable compression (if enabled in output buffer settings)
-    if (function_exists('apache_setenv')) {
-        @apache_setenv('no-gzip', '1');
-    }
+                        echo $fileContent;
+                        exit;
+                    }
+                } else if (in_array($uploadType, ["ScenePhoto", "SceneSketch"])) {
+                    $sql = "SELECT FileName, FileType, FileContent FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND SceneFileID = ?";
+                    $stmt = $connection->prepare($sql);
+                    $stmt->bind_param("sss", $identifier, $LBU06id, $fileID);
+                    $stmt->execute();
+                    $stmt->store_result();
 
-    // Set headers for the file download
-    header('Content-Description: File Transfer');
-    header("Content-Type: $fileType");
-    header('Content-Disposition: attachment; filename="' . basename($fileName) . '"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . strlen($fileContent));
+                    if ($stmt->num_rows === 1) {
+                        $stmt->bind_result($fileName, $fileType, $fileContent);
+                        $stmt->fetch();
+                        
+                        // Clear any previous output
+                        if (ob_get_level()) {
+                            ob_end_clean();
+                        }
+                        
+                        // Disable compression (if enabled in output buffer settings)
+                        if (function_exists('apache_setenv')) {
+                            @apache_setenv('no-gzip', '1');
+                        }
 
-    // Output the file content
-    echo $fileContent;
-    exit;
-} else {
-    // No matching file found
-    echo "❌ File not found.";
-}
+                        // Set headers for the file download
+                        header('Content-Description: File Transfer');
+                        header("Content-Type: $fileType");
+                        header('Content-Disposition: attachment; filename="' . basename($fileName) . '"');
+                        header('Expires: 0');
+                        header('Cache-Control: must-revalidate');
+                        header('Pragma: public');
+                        header('Content-Length: ' . strlen($fileContent));
+
+                        echo $fileContent;
+                        exit;
+                    }
+                } else {
+                    header('Location: viewEvidenceExhibit.php?identifier=' . $identifier);
+                    exit();
+                }
 
                     
             ?>

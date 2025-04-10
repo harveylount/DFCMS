@@ -50,6 +50,13 @@ include 'checkUserAddedToCaseFunction.php';
         <section id="LBU">
 
             <p>
+
+            <div id="navcase-bar">
+                <a href="<?php echo "listScenePhotoFiles.php?identifier=" . $identifier . "&LBU06id=" . $LBU06id ?>" id="navcase-button">Crime Scene Files</a>
+            </div>
+
+            </br>
+
             <?php
                 $query = "SELECT * FROM lbu06 WHERE Identifier = ? AND LBU06id = ?";
                 $stmt = $connection->prepare($query);
