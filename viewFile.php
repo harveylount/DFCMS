@@ -97,7 +97,7 @@ function formatBytes($bytes, $precision = 2) {
                     echo "</table>";
                     echo "<br/>";
 
-                    $sql = "SELECT UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes FROM exhibituploadedfiles WHERE Identifier = ? AND EvidenceID = ? AND FileID = ?";
+                    $sql = "SELECT UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash FROM exhibituploadedfiles WHERE Identifier = ? AND EvidenceID = ? AND FileID = ?";
                     $stmt = $connection->prepare($sql);
                     $stmt->bind_param("sss", $identifier, $evidenceID, $fileID);
                     $stmt->execute();
@@ -114,6 +114,8 @@ function formatBytes($bytes, $precision = 2) {
                     echo "<tr><td class='lbu-high'>Filename</td><td>" . $row['FileName'] . "</td></tr>";
                     echo "<tr><td class='lbu-high'>File Type</td><td>" . $row['FileType'] . "</td></tr>";
                     echo "<tr><td class='lbu-high'>File Size</td><td>" . formatBytes($row['FileSize']) . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File MD5 Hash</td><td>" . $row['MD5Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File SHA1 Hash</td><td>" . $row['SHA1Hash'] . "</td></tr>";
                     echo "</table>";
                     echo "<br/>";
 
@@ -146,7 +148,7 @@ function formatBytes($bytes, $precision = 2) {
                     echo "</table>";
                     echo "<br/>";
 
-                    $sql = "SELECT UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes FROM exhibituploadedfiles WHERE Identifier = ? AND EvidenceID = ? AND FileID = ?";
+                    $sql = "SELECT UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash FROM exhibituploadedfiles WHERE Identifier = ? AND EvidenceID = ? AND FileID = ?";
                     $stmt = $connection->prepare($sql);
                     $stmt->bind_param("sss", $identifier, $evidenceID, $fileID);
                     $stmt->execute();
@@ -161,8 +163,10 @@ function formatBytes($bytes, $precision = 2) {
 
                     echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                     echo "<tr><td class='lbu-high'>Filename</td><td>" . $row['FileName'] . "</td></tr>";
-                    echo "<tr><td class='lbu-high'>File Type By</td><td>" . $row['FileType'] . " (" . $row['UploaderUsername'] . ")" . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File Type</td><td>" . $row['FileType'] . "</td></tr>";
                     echo "<tr><td class='lbu-high'>File Size</td><td>" . formatBytes($row['FileSize']) . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File MD5 Hash</td><td>" . $row['MD5Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File SHA1 Hash</td><td>" . $row['SHA1Hash'] . "</td></tr>";
                     echo "</table>";
                     echo "<br/>";
 

@@ -31,6 +31,8 @@ if (isset($_POST['subImageEvent'])) {
             $filetype = $_FILES['file']['type'];
             $filesize = $_FILES['file']['size'];
             $filecontent = file_get_contents($_FILES['file']['tmp_name']); // Read the file content
+            $MD5Hash = md5($filecontent);
+            $SHA1Hash = sha1($filecontent);
             
             $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
             
@@ -51,8 +53,8 @@ if (isset($_POST['subImageEvent'])) {
                 unset($_SESSION['txtNotesF']);
                 unset($_SESSION['txtNotesM']);
 
-                $stmt = $connection->prepare("INSERT INTO exhibituploadedfiles (Identifier, EvidenceID, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssssssssssss", $identifier, $evidenceID, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes);
+                $stmt = $connection->prepare("INSERT INTO exhibituploadedfiles (Identifier, EvidenceID, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssssssssssssss", $identifier, $evidenceID, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes, $MD5Hash, $SHA1Hash);
                 if ($stmt->execute()) {
                     header('Location: listImageFIles.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
                     exit();
@@ -100,6 +102,8 @@ if (isset($_POST['subImageEvent'])) {
             $filetype = $_FILES['file']['type'];
             $filesize = $_FILES['file']['size'];
             $filecontent = file_get_contents($_FILES['file']['tmp_name']); // Read the file content
+            $MD5Hash = md5($filecontent);
+            $SHA1Hash = sha1($filecontent);
             
             $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
             
@@ -120,8 +124,8 @@ if (isset($_POST['subImageEvent'])) {
                 unset($_SESSION['txtNotesF']);
                 unset($_SESSION['txtNotesM']);
 
-                $stmt = $connection->prepare("INSERT INTO exhibituploadedfiles (Identifier, EvidenceID, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssssssssssss", $identifier, $evidenceID, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes);
+                $stmt = $connection->prepare("INSERT INTO exhibituploadedfiles (Identifier, EvidenceID, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssssssssssssss", $identifier, $evidenceID, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes, $MD5Hash, $SHA1Hash);
                 if ($stmt->execute()) {
                     header('Location: listExhibitPhotoFIles.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
                     exit();
@@ -169,6 +173,8 @@ if (isset($_POST['subImageEvent'])) {
             $filetype = $_FILES['file']['type'];
             $filesize = $_FILES['file']['size'];
             $filecontent = file_get_contents($_FILES['file']['tmp_name']); // Read the file content
+            $MD5Hash = md5($filecontent);
+            $SHA1Hash = sha1($filecontent);
             
             $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
             
@@ -189,8 +195,8 @@ if (isset($_POST['subImageEvent'])) {
                 unset($_SESSION['txtNotesF']);
                 unset($_SESSION['txtNotesM']);
 
-                $stmt = $connection->prepare("INSERT INTO sceneuploadedfiles (Identifier, LBU06id, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssssssssssss", $identifier, $LBU06id, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes);
+                $stmt = $connection->prepare("INSERT INTO sceneuploadedfiles (Identifier, LBU06id, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssssssssssssss", $identifier, $LBU06id, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes, $MD5Hash, $SHA1Hash);
                 if ($stmt->execute()) {
                     header('Location: listScenePhotoFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
                     exit();
@@ -238,6 +244,8 @@ if (isset($_POST['subImageEvent'])) {
             $filetype = $_FILES['file']['type'];
             $filesize = $_FILES['file']['size'];
             $filecontent = file_get_contents($_FILES['file']['tmp_name']); // Read the file content
+            $MD5Hash = md5($filecontent);
+            $SHA1Hash = sha1($filecontent);
             
             $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
             
@@ -258,8 +266,8 @@ if (isset($_POST['subImageEvent'])) {
                 unset($_SESSION['txtNotesF']);
                 unset($_SESSION['txtNotesM']);
 
-                $stmt = $connection->prepare("INSERT INTO sceneuploadedfiles (Identifier, LBU06id, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssssssssssss", $identifier, $LBU06id, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes);
+                $stmt = $connection->prepare("INSERT INTO sceneuploadedfiles (Identifier, LBU06id, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssssssssssssss", $identifier, $LBU06id, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes, $MD5Hash, $SHA1Hash);
                 if ($stmt->execute()) {
                     header('Location: listSceneSketchFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
                     exit();

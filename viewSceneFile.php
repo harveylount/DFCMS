@@ -85,7 +85,7 @@ function formatBytes($bytes, $precision = 2) {
                 if ($uploadType == "ScenePhoto") {
 
                     echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
-                    echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>View Exhibit Photo</td> 
+                    echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>View Scene Photo</td> 
                         <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Case Reference: ' . $caseReference . "</td></tr>"; 
                     echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'></td></tr>";
                     echo "</table>";
@@ -96,7 +96,7 @@ function formatBytes($bytes, $precision = 2) {
                     echo "</table>";
                     echo "<br/>";
 
-                    $sql = "SELECT UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND SceneFileID = ?";
+                    $sql = "SELECT UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND SceneFileID = ?";
                     $stmt = $connection->prepare($sql);
                     $stmt->bind_param("sss", $identifier, $LBU06id, $fileID);
                     $stmt->execute();
@@ -111,8 +111,10 @@ function formatBytes($bytes, $precision = 2) {
 
                     echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                     echo "<tr><td class='lbu-high'>Filename</td><td>" . $row['FileName'] . "</td></tr>";
-                    echo "<tr><td class='lbu-high'>File Type By</td><td>" . $row['FileType'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File Type</td><td>" . $row['FileType'] . "</td></tr>";
                     echo "<tr><td class='lbu-high'>File Size</td><td>" . formatBytes($row['FileSize']) . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File MD5 Hash</td><td>" . $row['MD5Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File SHA1 Hash</td><td>" . $row['SHA1Hash'] . "</td></tr>";
                     echo "</table>";
                     echo "<br/>";
 
@@ -139,7 +141,7 @@ function formatBytes($bytes, $precision = 2) {
                 if ($uploadType == "SceneSketch") {
 
                     echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
-                    echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>View Exhibit Photo</td> 
+                    echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>View Scene Sketch</td> 
                         <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Case Reference: ' . $caseReference . "</td></tr>"; 
                     echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'></td></tr>";
                     echo "</table>";
@@ -150,7 +152,7 @@ function formatBytes($bytes, $precision = 2) {
                     echo "</table>";
                     echo "<br/>";
 
-                    $sql = "SELECT UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND SceneFileID = ?";
+                    $sql = "SELECT UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND SceneFileID = ?";
                     $stmt = $connection->prepare($sql);
                     $stmt->bind_param("sss", $identifier, $LBU06id, $fileID);
                     $stmt->execute();
@@ -165,8 +167,10 @@ function formatBytes($bytes, $precision = 2) {
 
                     echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                     echo "<tr><td class='lbu-high'>Filename</td><td>" . $row['FileName'] . "</td></tr>";
-                    echo "<tr><td class='lbu-high'>File Type By</td><td>" . $row['FileType'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File Type</td><td>" . $row['FileType'] . "</td></tr>";
                     echo "<tr><td class='lbu-high'>File Size</td><td>" . formatBytes($row['FileSize']) . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File MD5 Hash</td><td>" . $row['MD5Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File SHA1 Hash</td><td>" . $row['SHA1Hash'] . "</td></tr>";
                     echo "</table>";
                     echo "<br/>";
 
