@@ -72,6 +72,7 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
             <a href="<?php echo "viewEvidence.php?identifier=$identifier" ?>" id="navcase-button">Evidence</a>
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier" ?>" id="navcase-button">Crime Scene Reports</a>
             <a href="<?php echo "viewCaseNotes.php?identifier=$identifier" ?>" id="navcase-button">Case Notes</a>
+            <?php include 'displayCaseAdminButtonFunction.php'; ?>
         </div>
 
         <section id="content">
