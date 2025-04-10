@@ -156,6 +156,30 @@ if (isset($_POST['subImageEvent'])) {
 
 } else if (isset($_POST['subScenePhotoEvent'])) {
 
+    // Check if number of uploaded photos is equal to or more than specified amount
+    $query = "SELECT NumberOfPhotos FROM lbu06 WHERE Identifier = ? AND LBU06id = ?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("ss", $identifier, $LBU06id);  
+    $stmt->execute();
+    $stmt->bind_result($setNumberOfPhotos);
+    $stmt->fetch();
+    mysqli_stmt_close($stmt);
+
+    $query = "SELECT COUNT(*) AS photoCount FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = 'ScenePhoto'"; 
+    $stmt = $connection->prepare($query);  
+    $stmt->bind_param("ss", $identifier, $LBU06id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $scenePhotoCount = $row['photoCount'];
+    $stmt->close();
+
+    if ($scenePhotoCount >= $setNumberOfPhotos) {
+        $_SESSION['countErrorMessage']="Cannot upload more scene photos, specified number in report reached";
+        header('Location: listScenePhotoFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
+        exit();
+    }
+
     $fullName = $_SESSION['fullName'];
     $username = $_SESSION['userId'];
     $timestamp = date('Y-m-d H:i:s');
@@ -226,6 +250,30 @@ if (isset($_POST['subImageEvent'])) {
     }
 
 } else if (isset($_POST['subSceneSketchEvent'])) {
+
+    // Check if number of uploaded sketches is equal to or more than specified amount
+    $query = "SELECT NumberOfSketches FROM lbu06 WHERE Identifier = ? AND LBU06id = ?";
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("ss", $identifier, $LBU06id);  
+    $stmt->execute();
+    $stmt->bind_result($setNumberOfSketches);
+    $stmt->fetch();
+    mysqli_stmt_close($stmt);
+
+    $query = "SELECT COUNT(*) AS sketchesCount FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = 'SceneSketch'"; 
+    $stmt = $connection->prepare($query);  
+    $stmt->bind_param("ss", $identifier, $LBU06id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $sceneSketchCount = $row['sketchCount'];
+    $stmt->close();
+
+    if ($sceneSketchCount >= $setNumberOfSketch) {
+        $_SESSION['countErrorMessage']="Cannot upload more scene sketches, specified number in report reached";
+        header('Location: listSceneSketchFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
+        exit();
+    }
 
     $fullName = $_SESSION['fullName'];
     $username = $_SESSION['userId'];

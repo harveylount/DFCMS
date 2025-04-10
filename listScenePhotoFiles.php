@@ -105,7 +105,11 @@ $query = "SELECT CaseReference FROM cases WHERE Identifier = ?";
 
                 echo "</table>";
                 echo "<br/>";
-
+                
+                if (isset($_SESSION['countErrorMessage'])) {
+                    echo '<p class="error-message">' . $_SESSION['countErrorMessage'] . '</p>';
+                    unset($_SESSION['countErrorMessage']);
+                }
         
             ?>
 

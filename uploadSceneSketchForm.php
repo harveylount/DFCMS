@@ -9,13 +9,29 @@ $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injec
 
 include 'checkUserAddedToCaseFunction.php'; 
 
-$query = "SELECT NumberOfPhotos FROM lbu06 WHERE Identifier = ? AND LBU06id = ?";
-                $stmt = $connection->prepare($query);
-                $stmt->bind_param("ss", $identifier, $LBU06id);  
-                $stmt->execute();
-                $stmt->bind_result($numberOfPhotos);
-                $stmt->fetch();
-                mysqli_stmt_close($stmt);
+// Check if number of uploaded sketches is equal to or more than specified amount
+$query = "SELECT NumberOfSketches FROM lbu06 WHERE Identifier = ? AND LBU06id = ?";
+$stmt = $connection->prepare($query);
+$stmt->bind_param("ss", $identifier, $LBU06id);  
+$stmt->execute();
+$stmt->bind_result($setNumberOfSketches);
+$stmt->fetch();
+mysqli_stmt_close($stmt);
+
+$query = "SELECT COUNT(*) AS sketchesCount FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = 'SceneSketch'"; 
+$stmt = $connection->prepare($query);  
+$stmt->bind_param("ss", $identifier, $LBU06id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$sceneSketchCount = $row['sketchCount'];
+$stmt->close();
+
+if ($sceneSketchCount >= $setNumberOfSketch) {
+    $_SESSION['countErrorMessage']="Cannot upload more scene sketches, specified number in report reached";
+    header('Location: listSceneSketchFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
+    exit();
+}
 
 ?> 
 

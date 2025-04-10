@@ -9,13 +9,29 @@ $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injec
 
 include 'checkUserAddedToCaseFunction.php'; 
 
+// Check if number of uploaded photos is equal to or more than specified amount
 $query = "SELECT NumberOfPhotos FROM lbu06 WHERE Identifier = ? AND LBU06id = ?";
-                $stmt = $connection->prepare($query);
-                $stmt->bind_param("ss", $identifier, $LBU06id);  
-                $stmt->execute();
-                $stmt->bind_result($numberOfPhotos);
-                $stmt->fetch();
-                mysqli_stmt_close($stmt);
+$stmt = $connection->prepare($query);
+$stmt->bind_param("ss", $identifier, $LBU06id);  
+$stmt->execute();
+$stmt->bind_result($setNumberOfPhotos);
+$stmt->fetch();
+mysqli_stmt_close($stmt);
+
+$query = "SELECT COUNT(*) AS photoCount FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = 'ScenePhoto'"; 
+$stmt = $connection->prepare($query);  
+$stmt->bind_param("ss", $identifier, $LBU06id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$scenePhotoCount = $row['photoCount'];
+$stmt->close();
+
+if ($scenePhotoCount >= $setNumberOfPhotos) {
+    $_SESSION['countErrorMessage']="Cannot upload more scene photos, specified number in report reached";
+    header('Location: listScenePhotoFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
+    exit();
+}
 
 ?> 
 
