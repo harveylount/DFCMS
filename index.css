@@ -94,10 +94,19 @@ header, #LBU, #sidebar, nav {
 /* Style for the logout bar */
 #logout-bar {
     background-color: #f1f1f1;
-    padding: 10px 20px;
-    text-align: right; /* Aligns the content to the right */
+    padding: 2px 20px;
     border-top: 2px solid #000;
     border-bottom: 2px solid #000;
+    
+    display: flex;
+    justify-content: space-between; /* back on left, others on right */
+    align-items: center;
+}
+
+#logout-bar .left-group,
+#logout-bar .right-group {
+    display: flex;
+    align-items: center;
 }
 
 #logout-bar span {
@@ -106,22 +115,29 @@ header, #LBU, #sidebar, nav {
     color: #333;
 }
 
-#logout-bar #username, #logout-bar #role {
+#logout-bar #username,
+#logout-bar #role {
     font-weight: bold;
 }
 
-#logout-bar #logout-button {
+#logout-bar a.logout-button {
     padding: 8px 16px;
     background-color: #007BFF;
     color: white;
     text-decoration: none;
     border-radius: 5px;
     font-size: 16px;
+    margin-left: 0px;
 }
 
-#logout-bar #logout-button:hover {
+#logout-bar a.logout-button:hover {
     background-color: #0056b3;
 }
+
+.left-group .logout-button {
+    margin-right: 10px; /* space between the buttons */
+}
+
 
 /* Style for the create case bar */
 #createcase-bar {

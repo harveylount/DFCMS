@@ -46,9 +46,15 @@ if ($_SESSION['userId'] != $leadInvestigator) {
     <div id="pagewrap">
 
         <div id="logout-bar">
-            <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
-            <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
-            <a href="logoutFunction.php" id="logout-button">Logout</a>
+            <div class="left-group">
+                <a href="index.php" class="logout-button">← Cases</a>
+                <a href="<?php echo "viewCase.php?identifier=" . $identifier ?>" class="logout-button">← Case</a>
+            </div>
+            <div class="right-group">
+                <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
+                <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
+                <a href="logoutFunction.php" class="logout-button">Logout</a>
+            </div>
         </div>
 
         <header>

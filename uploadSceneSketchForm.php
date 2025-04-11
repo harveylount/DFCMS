@@ -18,7 +18,7 @@ $stmt->bind_result($setNumberOfSketches);
 $stmt->fetch();
 mysqli_stmt_close($stmt);
 
-$query = "SELECT COUNT(*) AS sketchesCount FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = 'SceneSketch'"; 
+$query = "SELECT COUNT(*) AS sketchCount FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = 'SceneSketch'"; 
 $stmt = $connection->prepare($query);  
 $stmt->bind_param("ss", $identifier, $LBU06id);
 $stmt->execute();
@@ -27,11 +27,12 @@ $row = $result->fetch_assoc();
 $sceneSketchCount = $row['sketchCount'];
 $stmt->close();
 
-if ($sceneSketchCount >= $setNumberOfSketch) {
+if ($sceneSketchCount >= $setNumberOfSketches) {
     $_SESSION['countErrorMessage']="Cannot upload more scene sketches, specified number in report reached";
     header('Location: listSceneSketchFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
     exit();
 }
+
 
 ?> 
 
@@ -59,9 +60,15 @@ if ($sceneSketchCount >= $setNumberOfSketch) {
     <div id="pagewrap">
 
         <div id="logout-bar">
-            <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
-            <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
-            <a href="logoutFunction.php" id="logout-button">Logout</a>
+            <div class="left-group">
+                <a href="index.php" class="logout-button">← Cases</a>
+                <a href="<?php echo "viewLBU06.php?identifier=" . $identifier . "&LBU06id=" . $LBU06id ?>" class="logout-button">← Scene Report</a>
+            </div>
+            <div class="right-group">
+                <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
+                <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
+                <a href="logoutFunction.php" class="logout-button">Logout</a>
+            </div>
         </div>
 
         <header>

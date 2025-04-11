@@ -32,16 +32,22 @@ mysqli_stmt_close($stmt);
 
     <div id="pagewrap">
 
-        <div id="logout-bar">
+    <div id="logout-bar">
+        <div class="left-group">
+            <!-- <a href="adminPage.php" class="logout-button">Back</a> -->
+        </div>
+        <div class="right-group">
             <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
             <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
             <?php
                 if ($roleCheck == "Administrator") {
-                    echo '<a href="adminPage.php" id="logout-button">Admin Page</a>';
-                } 
+                    echo '<a href="adminPage.php" class="logout-button">Admin Page</a>';
+                }
             ?>
-            <a href="logoutFunction.php" id="logout-button">Logout</a>
+            <a href="logoutFunction.php" class="logout-button">Logout</a>
         </div>
+    </div>
+
 
         <header>
 

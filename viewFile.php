@@ -59,9 +59,17 @@ function formatBytes($bytes, $precision = 2) {
     <div id="pagewrap">
 
         <div id="logout-bar">
-            <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
-            <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
-            <a href="logoutFunction.php" id="logout-button">Logout</a>
+            <div class="left-group">
+                <a href="index.php" class="logout-button">← Cases</a>
+
+                <a href="<?php echo "viewEvidenceExhibit.php?identifier=" . $identifier . "&EvidenceID=" . $evidenceID ?>" class="logout-button">← Exhibit</a>
+                
+            </div>
+            <div class="right-group">
+                <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
+                <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
+                <a href="logoutFunction.php" class="logout-button">Logout</a>
+            </div>
         </div>
 
         <header>

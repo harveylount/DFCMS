@@ -260,7 +260,7 @@ if (isset($_POST['subImageEvent'])) {
     $stmt->fetch();
     mysqli_stmt_close($stmt);
 
-    $query = "SELECT COUNT(*) AS sketchesCount FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = 'SceneSketch'"; 
+    $query = "SELECT COUNT(*) AS sketchCount FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = 'SceneSketch'"; 
     $stmt = $connection->prepare($query);  
     $stmt->bind_param("ss", $identifier, $LBU06id);
     $stmt->execute();
@@ -269,7 +269,7 @@ if (isset($_POST['subImageEvent'])) {
     $sceneSketchCount = $row['sketchCount'];
     $stmt->close();
 
-    if ($sceneSketchCount >= $setNumberOfSketch) {
+    if ($sceneSketchCount >= $setNumberOfSketches) {
         $_SESSION['countErrorMessage']="Cannot upload more scene sketches, specified number in report reached";
         header('Location: listSceneSketchFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
         exit();

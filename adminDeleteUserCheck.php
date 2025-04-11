@@ -42,9 +42,13 @@ $user = intval($_GET['user']);
     <div id="pagewrap">
 
         <div id="logout-bar">
-            <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
-            <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
-            <a href="logoutFunction.php" id="logout-button">Logout</a>
+            <div class="left-group">
+            </div>
+            <div class="right-group">
+                <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
+                <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
+                <a href="logoutFunction.php" class="logout-button">Logout</a>
+            </div>
         </div>
 
         <header>
