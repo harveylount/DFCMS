@@ -3,6 +3,21 @@ include 'sqlConnection.php';
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
+
+
+$sql = "SELECT Role FROM users WHERE Username = ?";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$stmt->bind_result($roleCheck);
+$stmt->fetch();
+mysqli_stmt_close($stmt);
+
+
+
+
+
+
 ?> 
 
 <!DOCTYPE html>
@@ -24,6 +39,11 @@ if(!isset($_SESSION['userId'])){
         <div id="logout-bar">
             <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
             <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
+            <?php
+                if ($roleCheck = "Administrator") {
+                    echo '<a href="adminPage.php" id="logout-button">Admin Page</a>';
+                } 
+            ?>
             <a href="logoutFunction.php" id="logout-button">Logout</a>
         </div>
 
@@ -35,17 +55,22 @@ if(!isset($_SESSION['userId'])){
 
         </header>
 
-        <section id="content">
+        <section id="LBU">
 
-            <h2>Cases</h2>
-
-            <div id="createcase-bar">
-                <?php
+            <?php
+                echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Cases</td> 
+                        <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'></td></tr>"; 
+                echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'></td></tr>";
+                echo "</table>";
+                echo "<br/>";
+        
                 if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'Lead Investigator') {
-                    echo '<a href="createCaseForm.php" id="createcase-button">Create Case</a>';
+                    echo '<div id="createcase-bar">
+                            <a href="createCaseForm.php" id="createcase-button">Create Case</a>
+                        </div>';
                 }
-                ?>
-            </div>
+            ?>
 
             <p>
                 <?php

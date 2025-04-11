@@ -8,20 +8,16 @@
     $stmt->execute();
     $results = $stmt->get_result();
 
-    echo '<style>';
-    echo 'table { border-collapse: collapse; }'; 
-    echo 'td, th { border: 1px solid black; padding: 5px; }';
-    echo '</style>';
+    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
 
-    echo '<table>';
     echo '<tr>'; // Start of the title row
-    echo '<th>Case Reference</th>';
-    echo '<th>Case Name</th>';
-    echo '<th>Lead Investigator</th>';
-    echo '<th>Timestamp Created</th>';
-    echo '<th>Deadline Date</th>';
-    echo '<th>Status</th>';
-    echo '<th></th>';
+    echo '<th class="lbu-dark">Case Reference</th>';
+    echo '<th class="lbu-dark">Case Name</th>';
+    echo '<th class="lbu-dark">Lead Investigator</th>';
+    echo '<th class="lbu-dark">Timestamp Created</th>';
+    echo '<th class="lbu-dark">Deadline Date</th>';
+    echo '<th class="lbu-dark">Status</th>';
+    echo '<th class="lbu-dark"></th>';
     echo '</tr>'; // End of the title row
     
     while ($row = mysqli_fetch_assoc($results)) {

@@ -106,7 +106,6 @@ function formatBytes($bytes, $precision = 1) {
                 echo "</table>";
                 echo "<br/>";
 
-        
             ?>
 
 
