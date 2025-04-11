@@ -35,14 +35,21 @@ if (!isset($_SESSION['txtPasswordR'])) {
 
         
 
-        <section id="content">
+        <section id="LBU">
 
-            <h2>Login</h2>
+            <?php
+            echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+            echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Login Page</td> 
+                    <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'></td></tr>"; 
+            echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'></td></tr>";
+            echo "</table>";
+            echo "<br/>";
+            ?>
 
             <form method="post" action="loginInsert.php">
                 <fieldset class="field-set width">
                     <legend>
-                    New User Details
+                    Enter User Details
                     </legend>
                     <label for="txtUsername">Username: </label><br />
                     <input type="text" name="txtUsername" value="<?php 
