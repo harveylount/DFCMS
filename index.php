@@ -3,7 +3,7 @@ include 'sqlConnection.php';
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
-
+$username = $_SESSION['userId'];
 
 $sql = "SELECT Role FROM users WHERE Username = ?";
 $stmt = $connection->prepare($sql);
@@ -12,10 +12,6 @@ $stmt->execute();
 $stmt->bind_result($roleCheck);
 $stmt->fetch();
 mysqli_stmt_close($stmt);
-
-
-
-
 
 
 ?> 
@@ -40,7 +36,7 @@ mysqli_stmt_close($stmt);
             <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
             <span id="role">Role: <?php echo $_SESSION['userRole']; ?></span>
             <?php
-                if ($roleCheck = "Administrator") {
+                if ($roleCheck == "Administrator") {
                     echo '<a href="adminPage.php" id="logout-button">Admin Page</a>';
                 } 
             ?>
