@@ -14,7 +14,7 @@ if (isset($_GET['identifier'])) {
     mysqli_stmt_close($stmt);
 
     if($evidenceType === 'Computer') {
-        $query = "SELECT EditedTime, EditedByFullName, EditedByUsername, CaseReference, ExhibitRef, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
+        $query = "SELECT EditedTime, EditedByFullName, EditedByUsername, CaseReference, ExhibitRef, CurrentLocation, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
         Model, SerialNumber, Storage, OS, CPU, RAM, MAC, IP, Firmware, Peripheral, Network FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
         $stmt = $connection->prepare($query);
         $stmt->bind_param("ss", $identifier, $evidenceID);  
@@ -40,6 +40,7 @@ if (isset($_GET['identifier'])) {
             echo "<tr><td class='lbu-high'>Seized Time</td><td>" . $row['SeizedTime'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Evidence Status</td><td>" . $row['EvidenceStatus'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Current Seal Number</td><td>" . $row['CurrentSeal'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Current Location</td><td>" . $row['CurrentLocation'] . "</td></tr>";
             echo "</table>";
             echo "<br/>";
 
@@ -70,7 +71,7 @@ if (isset($_GET['identifier'])) {
         $stmt->close();
 
     } else if($evidenceType === 'Mobile') {
-        $query = "SELECT EditedTime, EditedByFullName, EditedByUsername, CaseReference, ExhibitRef, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
+        $query = "SELECT EditedTime, EditedByFullName, EditedByUsername, CaseReference, ExhibitRef, CurrentLocation, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
         Model, SerialNumber, Storage, OS, MAC, IMEI, SIM, PhoneNumber, BatteryHealth, InstalledApps, EncryptionType, AccountInfo, ScreenLock FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
         $stmt = $connection->prepare($query);
         $stmt->bind_param("ss", $identifier, $evidenceID);  
@@ -96,6 +97,7 @@ if (isset($_GET['identifier'])) {
             echo "<tr><td class='lbu-high'>Seized Time</td><td>" . $row['SeizedTime'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Evidence Status</td><td>" . $row['EvidenceStatus'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Current Seal Number</td><td>" . $row['CurrentSeal'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Current Location</td><td>" . $row['CurrentLocation'] . "</td></tr>";
             echo "</table>";
             echo "<br/>";
 
@@ -126,7 +128,7 @@ if (isset($_GET['identifier'])) {
         }
         $stmt->close();
     } else if($evidenceType === 'ExternalStorage') {
-        $query = "SELECT EditedTime, EditedByFullName, EditedByUsername, CaseReference, ExhibitRef, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
+        $query = "SELECT EditedTime, EditedByFullName, EditedByUsername, CaseReference, ExhibitRef, CurrentLocation, SeizedTime, EditedTime, EvidenceStatus, CurrentSeal, DeviceType, Manufacturer, 
         Model, SerialNumber, Storage, EncryptionType, InterfaceType, FileSystem FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
         $stmt = $connection->prepare($query);
         $stmt->bind_param("ss", $identifier, $evidenceID);  
@@ -152,6 +154,7 @@ if (isset($_GET['identifier'])) {
             echo "<tr><td class='lbu-high'>Seized Time</td><td>" . $row['SeizedTime'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Evidence Status</td><td>" . $row['EvidenceStatus'] . "</td></tr>";
             echo "<tr><td class='lbu-high'>Current Seal Number</td><td>" . $row['CurrentSeal'] . "</td></tr>";
+            echo "<tr><td class='lbu-high'>Current Location</td><td>" . $row['CurrentLocation'] . "</td></tr>";
             echo "</table>";
             echo "<br/>";
 

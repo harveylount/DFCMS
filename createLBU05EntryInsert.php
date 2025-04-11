@@ -47,22 +47,18 @@ if (isset($_POST['subEventLBU05In'])) {
         $stmt->fetch();
         mysqli_stmt_close($stmt); 
 
-
-
-
         $query = "INSERT INTO lbu05 
                 (Identifier, CaseReference, EvidenceID, ExhibitRef, TimestampIn, NewLocation, SealNumberIn, ActionerIn, ActionerInUsername, Validate)
                 VALUES
                 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
         $stmt = mysqli_prepare($connection, $query);
         mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $timestampInDatabase, $newLocation, $sealNumber, $fullName, $username, $validate);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
-        $querySealUpdate = "UPDATE evidence SET CurrentSeal = ? WHERE Identifier = ? AND EvidenceID = ?";
+        $querySealUpdate = "UPDATE evidence SET CurrentSeal = ?, CurrentLocation = ? WHERE Identifier = ? AND EvidenceID = ?";
         $stmt = mysqli_prepare($connection, $querySealUpdate);
-        mysqli_stmt_bind_param($stmt, "sii", $sealNumber, $identifier, $evidenceID);
+        mysqli_stmt_bind_param($stmt, "ssii", $sealNumber, $newLocation, $identifier, $evidenceID);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         
@@ -86,6 +82,7 @@ if (isset($_POST['subEventLBU05In'])) {
 if (isset($_POST['subEventLBU05Out'])) {
    
     $reasonOut=$_POST['txtReason'];
+    $tempLocation=$_POST['txtTempLocation'];
     $timestampOutDatabase=$_SESSION['timestampOutDatabaseLBU05'];
     $timestampOutDisplay=$_SESSION['timestampOutDisplayLBU05'];
     $fullName=$_SESSION['fullName'];
@@ -103,10 +100,18 @@ if (isset($_POST['subEventLBU05Out'])) {
         $_SESSION['txtReasonM']='Maximum string length of 30 characters';
     }
 
+    if (preg_match('/^.{1,50}$/', $tempLocation)) {
+        $tempLocationCheck = true;
+    } else {
+        $tempLocationCheck = false;
+        $_SESSION['txtTempLocationM']='Maximum string length of 50 characters';
+    }
 
-    if ($reasonCheck) {
+
+    if ($reasonCheck && $tempLocationCheck) {
         
         unset($_SESSION['txtReasonF']);
+        unset($_SESSION['txtTempLocationF']);
 
         // SQL query to get case reference
         $sqlCaseRef = "SELECT CaseReference, ExhibitRef, CurrentSeal FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
@@ -133,15 +138,20 @@ if (isset($_POST['subEventLBU05Out'])) {
 
 
         $query = "INSERT INTO lbu05 
-                (Identifier, CaseReference, EvidenceID, ExhibitRef, TimestampOut, OriginalLocation, ReasonOut, SealNumberOut, ActionerOut, ActionerOutUsername, Validate)
+                (Identifier, CaseReference, EvidenceID, ExhibitRef, TimestampOut, OriginalLocation, TempLocation, ReasonOut, SealNumberOut, ActionerOut, ActionerOutUsername, Validate)
                 VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "sssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $timestampOutDatabase, $originalLocation, $reasonOut, $currentSeal, $fullName, $username, $validate);
+        mysqli_stmt_bind_param($stmt, "ssssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $timestampOutDatabase, $originalLocation, $tempLocation, $reasonOut, $currentSeal, $fullName, $username, $validate);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
+        $query = "UPDATE evidence SET CurrentLocation = ? WHERE Identifier = ? AND EvidenceID = ?";
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "sii", $tempLocation, $identifier, $evidenceID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
         
         $unset_sessions = ['timestampOutDatabaseLBU05', 'timestampOutDisplayLBU05'];
         foreach ($unset_sessions as $sessionVar) {
@@ -195,8 +205,6 @@ if (isset($_POST['subEventLBU05FirstIn'])) {
         mysqli_stmt_close($stmt); 
 
 
-
-
         $query = "INSERT INTO lbu05 
                 (Identifier, CaseReference, EvidenceID, ExhibitRef, TimestampIn, NewLocation, SealNumberIn, ActionerIn, ActionerInUsername, Validate)
                 VALUES
@@ -204,6 +212,12 @@ if (isset($_POST['subEventLBU05FirstIn'])) {
 
         $stmt = mysqli_prepare($connection, $query);
         mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $timestampFirstInDatabase, $newLocation, $currentSeal, $fullName, $username, $validate);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        $querySealUpdate = "UPDATE evidence SET CurrentLocation = ? WHERE Identifier = ? AND EvidenceID = ?";
+        $stmt = mysqli_prepare($connection, $querySealUpdate);
+        mysqli_stmt_bind_param($stmt, "sii", $newLocation, $identifier, $evidenceID);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 

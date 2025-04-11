@@ -105,9 +105,16 @@ $_SESSION['timestampFirstInDisplayLBU05'] = date('d-m-Y H:i:s');
             <a href="<?php echo "listImageFiles.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Files</a>
         </div>
 
-        <section id="content">
+        <section id="LBU">
 
-            <h2>Create First Exhibit Movement In Record (LBU05)</h2>
+            <?php
+                echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                echo "<tr><td rowspan='2' style='font-size: 40px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Create First Exhibit Movement In Record (LBU05)</td> 
+                    <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px; width: 300px'>" . 'Case Reference: ' . $caseReference . "</td></tr>"; 
+                echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px; width: 300px'>" . 'Exhibit Reference: ' . $exhibitRef . "</td></tr>";
+                echo "</table>";
+                echo "<br/>";
+            ?>
 
             <form method="post" action="createLBU05EntryInsert.php?identifier=<?php echo "$identifier"?>&EvidenceID=<?php echo "$evidenceID"?>">
                 <fieldset class="field-set width">
@@ -123,17 +130,17 @@ $_SESSION['timestampFirstInDisplayLBU05'] = date('d-m-Y H:i:s');
                     Exhibit Timestamp In: <?php echo $_SESSION['timestampFirstInDisplayLBU05'];?> </br></br>
 
                     <!-- New location field -->
-                    <label for="txtFirstNewLocation">New Location:</label><br />
+                    <label for="txtFirstNewLocation">New Location *:</label><br />
                     <input type="text" name="txtFirstNewLocation" size="32" value="<?php 
                         if(isset($_SESSION['txtFirstNewLocationF'])) {
                             echo $_SESSION['txtFirstNewLocationF'];
                             unset($_SESSION['txtFirstNewLocationF']);
                         }
-                    ?>"/><p class="error-message"><?php echo $_SESSION['txtFirstNewLocationM']; unset($_SESSION['txtFirstNewLocationM']);?></p> <br /><br />
+                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtFirstNewLocationM']; unset($_SESSION['txtFirstNewLocationM']);?></p> <br /><br />
 
                     Seal Number: <?php echo $sealNumber;?> </br></br>
 
-                    Actioner: <?php echo $_SESSION['fullName'];?> </br></br>
+                    Actioner: <?php echo $_SESSION['fullName'] . " (" . $_SESSION['userId'] . ")";?> </br></br>
                     
 
                     <input type="submit" value="Submit" name="subEventLBU05FirstIn" />

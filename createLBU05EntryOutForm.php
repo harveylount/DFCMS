@@ -46,6 +46,9 @@ mysqli_stmt_close($stmt);
 if (!isset($_SESSION['txtReasonM'])) {
     $_SESSION['txtReasonM']='';
 }
+if (!isset($_SESSION['txtTempLocationM'])) {
+    $_SESSION['txtTempLocationM']='';
+}
 
 $sql = "SELECT CaseReference, ExhibitRef, CurrentSeal FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
 $stmt = $connection->prepare($sql);
@@ -109,7 +112,14 @@ $_SESSION['timestampOutDisplayLBU05'] = date('d-m-Y H:i:s');
 
         <section id="content">
 
-            <h2>Create an Exhibit Movement Out Record (LBU05)</h2>
+            <?php
+                echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                echo "<tr><td rowspan='2' style='font-size: 40px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Create an Exhibit Movement Out Record (LBU05)</td> 
+                    <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px; width: 300px'>" . 'Case Reference: ' . $caseReference . "</td></tr>"; 
+                echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px; width: 300px'>" . 'Exhibit Reference: ' . $exhibitRef . "</td></tr>";
+                echo "</table>";
+                echo "<br/>";
+            ?>
 
             <form method="post" action="createLBU05EntryInsert.php?identifier=<?php echo "$identifier"?>&EvidenceID=<?php echo "$evidenceID"?>">
                 <fieldset class="field-set width">
@@ -127,6 +137,15 @@ $_SESSION['timestampOutDisplayLBU05'] = date('d-m-Y H:i:s');
                     Original Location: <?php echo $originalLocation; ?> </br></br>
 
                     <!-- reason field -->
+                    <label for="txtTempLocation">Temporary Location: *</label><br />
+                    <input type="text" name="txtTempLocation" size="32" value="<?php 
+                        if(isset($_SESSION['txtTempLocationF'])) {
+                            echo $_SESSION['txtTempLocationF'];
+                            unset($_SESSION['txtTempLocationF']);
+                        }
+                    ?>" required/><p class="error-message"><?php echo $_SESSION['txtTempLocationM']; unset($_SESSION['txtTempLocationM']);?></p> <br /><br />
+
+                    <!-- reason field -->
                     <label for="txtReason">Reason: *</label><br />
                     <input type="text" name="txtReason" size="32" value="<?php 
                         if(isset($_SESSION['txtReasonF'])) {
@@ -135,10 +154,9 @@ $_SESSION['timestampOutDisplayLBU05'] = date('d-m-Y H:i:s');
                         }
                     ?>" required/><p class="error-message"><?php echo $_SESSION['txtReasonM']; unset($_SESSION['txtReasonM']);?></p> <br /><br />
 
-
                     Seal Number: <?php echo $sealNumber;?> </br></br>
 
-                    Actioner: <?php echo $_SESSION['fullName'];?> </br></br>
+                    Actioner: <?php echo $_SESSION['fullName'] . " (" . $_SESSION['userId'] . ")";?> </br></br>
                     
 
                     <input type="submit" value="Submit" name="subEventLBU05Out" />

@@ -116,7 +116,14 @@ $_SESSION['timestampInDisplayLBU05'] = date('d-m-Y H:i:s');
 
         <section id="content">
 
-            <h2>Create an Exhibit Movement In Record (LBU05)</h2>
+            <?php
+                echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                echo "<tr><td rowspan='2' style='font-size: 40px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Create an Exhibit Movement In Record (LBU05)</td> 
+                    <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px; width: 300px'>" . 'Case Reference: ' . $caseReference . "</td></tr>"; 
+                echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px; width: 300px'>" . 'Exhibit Reference: ' . $exhibitRef . "</td></tr>";
+                echo "</table>";
+                echo "<br/>";
+            ?>
 
             <form method="post" action="createLBU05EntryInsert.php?identifier=<?php echo "$identifier"?>&EvidenceID=<?php echo "$evidenceID"?>">
                 <fieldset class="field-set width">
@@ -149,7 +156,7 @@ $_SESSION['timestampInDisplayLBU05'] = date('d-m-Y H:i:s');
                         }
                     ?>" required/><p class="error-message"><?php echo $_SESSION['txtSealNumberM']; unset($_SESSION['txtSealNumberM']);?></p> <br /><br />
 
-                    Actioner: <?php echo $_SESSION['fullName'];?> </br></br>
+                    Actioner: <?php echo $_SESSION['fullName'] . " (" . $_SESSION['userId'] . ")";?> </br></br>
                     
 
                     <input type="submit" value="Submit" name="subEventLBU05In" />

@@ -62,7 +62,7 @@ include 'checkUserAddedToCaseFunction.php';
                 <?php
                     // Step 1: Fetch the first row (for the first table)
                     $sqlFirstRow = 
-                        "SELECT TimestampIn, NewLocation, SealNumberIn, ActionerIn, ActionerInUsername, Validate
+                        "SELECT TimestampIn, NewLocation, SealNumberIn, ActionerIn, ActionerInUsername, ActionerOutUsername, Validate
                         FROM LBU05 
                         WHERE Identifier = ? AND EvidenceID = ? 
                         ORDER BY LBU05id ASC LIMIT 1";
@@ -80,6 +80,17 @@ include 'checkUserAddedToCaseFunction.php';
                     $rowRef = mysqli_fetch_assoc($results);
                     $stmt->close();
 
+                    $sqlTempLocation = 
+                        "SELECT TempLocation
+                        FROM LBU05 
+                        WHERE Identifier = ? AND EvidenceID = ? 
+                        ORDER BY LBU05id DESC LIMIT 1";
+
+                    $stmtTempLocation = $connection->prepare($sqlTempLocation);
+                    $stmtTempLocation->bind_param("ii", $identifier, $evidenceID);
+                    $stmtTempLocation->execute();
+                    $resultTempLocation = $stmtTempLocation->get_result();
+
                     echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
                     echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>DFCMS</td> 
                             <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'LBU05 - Exhibit Log Book' . "</td></tr>"; 
@@ -93,6 +104,17 @@ include 'checkUserAddedToCaseFunction.php';
                     echo "</table>";
                     echo "<br/>";
 
+                    if ($resultTempLocation->num_rows > 0) {
+                        $rowTempLocation = $resultTempLocation->fetch_assoc();
+                        
+                        if (!empty($rowTempLocation['TempLocation'])) {
+                            echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                            echo "<tr><td class='lbu-high'>Temporary Location</td><td>" . $rowTempLocation['TempLocation'] . "</td></tr>";
+                            echo "</table>";
+                            echo "<br/>";
+                        }
+                    }
+
                     if ($resultFirstRow->num_rows > 0) {
                         $rowFirst = $resultFirstRow->fetch_assoc();
                         
@@ -104,7 +126,7 @@ include 'checkUserAddedToCaseFunction.php';
                         echo '<td>' . ($rowFirst['TimestampIn'] ?? 'N/A') . '</td>';
                         echo '<td>' . ($rowFirst['NewLocation'] ?? 'N/A') . '</td>';
                         echo '<td>' . ($rowFirst['SealNumberIn'] ?? 'N/A') . '</td>';
-                        echo '<td>' . ($rowFirst['ActionerIn'] ?? 'N/A') . '</td>';
+                        echo '<td>' . ($rowFirst['ActionerIn'] . " (" . $rowFirst['ActionerInUsername'] . ")" ?? 'N/A') . '</td>';
                         echo '</tr>';
                         echo '</tbody>';
                         echo '</table>';
@@ -119,7 +141,7 @@ include 'checkUserAddedToCaseFunction.php';
 
                     // Step 1: Fetch the rows (skip the first one, and join the rest)
                     $sqlRows = "SELECT TimestampOut, OriginalLocation, ReasonOut, SealNumberOut, ActionerOut, 
-                                TimestampIn, NewLocation, SealNumberIn, ActionerIn, Validate
+                                TimestampIn, NewLocation, SealNumberIn, ActionerIn, ActionerInUsername, ActionerOutUsername, Validate
                                 FROM LBU05 
                                 WHERE Identifier = ? AND EvidenceID = ? 
                                 ORDER BY LBU05id ASC"; // No limit here; we need all rows
@@ -159,7 +181,7 @@ include 'checkUserAddedToCaseFunction.php';
                                     echo '<td>' . ($prevRow['OriginalLocation'] ?? 'N/A') . '</td>';
                                     echo '<td>' . ($prevRow['ReasonOut'] ?? 'N/A') . '</td>';
                                     echo '<td>' . ($prevRow['SealNumberOut'] ?? 'N/A') . '</td>';
-                                    echo '<td>' . ($prevRow['ActionerOut'] ?? 'N/A') . '</td>';
+                                    echo '<td>' . ($prevRow['ActionerOut'] . " (" . $prevRow['ActionerOutUsername'] . ")"  ?? 'N/A') . '</td>';
                                     echo '<td colspan="4">No matching "In" row</td>';
                                     echo '</tr>';
                                     $prevRow = null; // Reset the previous row
@@ -176,12 +198,12 @@ include 'checkUserAddedToCaseFunction.php';
                                 echo '<td>' . ($prevRow['OriginalLocation'] ?? 'N/A') . '</td>';
                                 echo '<td>' . ($prevRow['ReasonOut'] ?? 'N/A') . '</td>';
                                 echo '<td>' . ($prevRow['SealNumberOut'] ?? 'N/A') . '</td>';
-                                echo '<td>' . ($prevRow['ActionerOut'] ?? 'N/A') . '</td>';
+                                echo '<td>' . ($prevRow['ActionerOut'] . " (" . $prevRow['ActionerOutUsername'] . ")" ?? 'N/A') . '</td>';
 
                                 echo '<td>' . ($row['TimestampIn'] ?? 'N/A') . '</td>';
                                 echo '<td>' . ($row['NewLocation'] ?? 'N/A') . '</td>';
                                 echo '<td>' . ($row['SealNumberIn'] ?? 'N/A') . '</td>';
-                                echo '<td>' . ($row['ActionerIn'] ?? 'N/A') . '</td>';
+                                echo '<td>' . ($row['ActionerIn'] . " (" . $row['ActionerInUsername'] . ")"  ?? 'N/A') . '</td>';
                                 echo '</tr>';
 
                                 $prevRow = null; // Reset the previous row for the next pair
@@ -195,7 +217,7 @@ include 'checkUserAddedToCaseFunction.php';
                             echo '<td>' . ($prevRow['OriginalLocation'] ?? 'N/A') . '</td>';
                             echo '<td>' . ($prevRow['ReasonOut'] ?? 'N/A') . '</td>';
                             echo '<td>' . ($prevRow['SealNumberOut'] ?? 'N/A') . '</td>';
-                            echo '<td>' . ($prevRow['ActionerOut'] ?? 'N/A') . '</td>';
+                            echo '<td>' . ($prevRow['ActionerOut'] . " (" . $prevRow['ActionerOutUsername'] . ")"  ?? 'N/A') . '</td>';
                             echo '<td colspan="4"></td>';
                             echo '</tr>';
                         }
