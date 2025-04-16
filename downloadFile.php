@@ -3,6 +3,7 @@ include 'sqlConnection.php';
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
+include 'timezoneFunction.php';
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
 if (isset($_GET['EvidenceID'])) {
@@ -20,11 +21,23 @@ if (isset($_GET['SceneFileID'])) {
 
 include 'checkUserAddedToCaseFunction.php'; 
 
-$query = "SELECT CaseReference, ExhibitRef FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
+$timestamp = date('Y-m-d H:i:s');
+$fullName = $_SESSION['fullName'];
+$username = $_SESSION['userId'];
+
+$query = "SELECT CaseReference FROM evidence WHERE Identifier = ?";
+$stmt = $connection->prepare($query);
+$stmt->bind_param("s", $identifier);  
+$stmt->execute();
+$stmt->bind_result($caseReference);
+$stmt->fetch();
+mysqli_stmt_close($stmt);
+
+$query = "SELECT ExhibitRef FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
 $stmt = $connection->prepare($query);
 $stmt->bind_param("ss", $identifier, $evidenceID);  
 $stmt->execute();
-$stmt->bind_result($caseReference, $exhibitReference);
+$stmt->bind_result($exhibitReference);
 $stmt->fetch();
 mysqli_stmt_close($stmt);
 
@@ -114,17 +127,14 @@ function formatBytes($bytes, $precision = 2) {
                         $stmt->bind_result($fileName, $fileType, $fileContent);
                         $stmt->fetch();
                         
-                        // Clear any previous output
                         if (ob_get_level()) {
                             ob_end_clean();
                         }
                         
-                        // Disable compression (if enabled in output buffer settings)
                         if (function_exists('apache_setenv')) {
                             @apache_setenv('no-gzip', '1');
                         }
 
-                        // Set headers for the file download
                         header('Content-Description: File Transfer');
                         header("Content-Type: $fileType");
                         header('Content-Disposition: attachment; filename="' . basename($fileName) . '"');
@@ -134,6 +144,26 @@ function formatBytes($bytes, $precision = 2) {
                         header('Content-Length: ' . strlen($fileContent));
 
                         echo $fileContent;
+
+                        // Audit Log
+                        if ($uploadType === "Image") {
+                            $action = "Downloaded an exhibit image file. Case Reference: " . $caseReference . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit File ID: " . $fileID . ".";
+                        }
+                        if ($uploadType === "ExhibitPhoto") {
+                            $action = "Downloaded an exhibit photo file. Case Reference: " . $caseReference . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit File ID: " . $fileID . ".";
+                        }
+
+                        $type = "Exhibit";
+
+                        $query = "INSERT INTO auditlog 
+                            (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, ExhibitFileID, Timestamp, ActionerFullName, ActionerUsername, Action)
+                            VALUES
+                            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        $stmt = mysqli_prepare($connection, $query);
+                        mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $fileID, $timestamp, $fullName, $username, $action);
+                        mysqli_stmt_execute($stmt);
+                        mysqli_stmt_close($stmt);
+
                         exit;
                     }
                 } else if (in_array($uploadType, ["ScenePhoto", "SceneSketch"])) {
@@ -147,17 +177,14 @@ function formatBytes($bytes, $precision = 2) {
                         $stmt->bind_result($fileName, $fileType, $fileContent);
                         $stmt->fetch();
                         
-                        // Clear any previous output
                         if (ob_get_level()) {
                             ob_end_clean();
                         }
                         
-                        // Disable compression (if enabled in output buffer settings)
                         if (function_exists('apache_setenv')) {
                             @apache_setenv('no-gzip', '1');
                         }
 
-                        // Set headers for the file download
                         header('Content-Description: File Transfer');
                         header("Content-Type: $fileType");
                         header('Content-Disposition: attachment; filename="' . basename($fileName) . '"');
@@ -167,6 +194,25 @@ function formatBytes($bytes, $precision = 2) {
                         header('Content-Length: ' . strlen($fileContent));
 
                         echo $fileContent;
+                        
+                        // Audit Log
+                        if ($uploadType === "ScenePhoto") {
+                            $action = "Downloaded a crime scene photo file. Case Reference: " . $caseReference . ". LBU06 ID: " . $LBU06id . ". Scene File ID: " . $fileID . ".";
+                        }
+                        if ($uploadType === "SceneSketch") {
+                            $action = "Downloaded a crime scene sketch file. Case Reference: " . $caseReference . ". LBU06 ID: " . $LBU06id . ". Scene File ID: " . $fileID . ".";
+                        }
+                        
+                        $type = "Case";
+
+                        $query = "INSERT INTO auditlog 
+                            (Identifier, CaseReference, EntryType, LBU06id, SceneFileID, Timestamp, ActionerFullName, ActionerUsername, Action)
+                            VALUES
+                            (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        $stmt = mysqli_prepare($connection, $query);
+                        mysqli_stmt_bind_param($stmt, "sssssssss", $identifier, $caseReference, $type, $LBU06id, $fileID, $timestamp, $fullName, $username, $action);
+                        mysqli_stmt_execute($stmt);
+                        mysqli_stmt_close($stmt);
                         exit;
                     }
                 } else {

@@ -1,5 +1,6 @@
 <?php
 include 'sqlConnection.php'; 
+include 'timezoneFunction.php';
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
@@ -37,7 +38,29 @@ include 'checkUserAddedToCaseFunction.php';
                     exit();
                 }
 
+$sql = "SELECT LBU04id, CaseReference, ExhibitRef from lbu04 WHERE Identifier = ? AND EvidenceID = ?";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("ss", $identifier, $evidenceID);  
+$stmt->execute();
+$stmt->bind_result($LBU04id, $caseReference, $exhibitReference);
+$stmt->fetch();
+mysqli_stmt_close($stmt);
 
+// Audit Log
+$action = "Viewed an LBU04 form. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". LBU04 ID: " . $LBU04id . ".";
+$type = "Exhibit";
+$timestamp = date('Y-m-d H:i:s');
+$fullName = $_SESSION['fullName'];
+$username = $_SESSION['userId'];
+
+$query = "INSERT INTO auditlog 
+    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, LBU04id, Timestamp, ActionerFullName, ActionerUsername, Action)
+    VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$stmt = mysqli_prepare($connection, $query);
+mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, $type, $LBU04id, $timestamp, $fullName, $username, $action);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
 
 ?> 
 

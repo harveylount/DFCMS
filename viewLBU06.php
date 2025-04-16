@@ -1,5 +1,7 @@
 <?php
 include 'sqlConnection.php'; 
+include 'timezoneFunction.php';
+
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
@@ -8,6 +10,30 @@ $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL
 $LBU06id = intval($_GET['LBU06id']);  // Sanitize the input to prevent SQL injection
 
 include 'checkUserAddedToCaseFunction.php'; 
+
+$sql = "SELECT LBU06id, CaseReference from lbu06 WHERE Identifier = ?";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("s", $identifier);  
+$stmt->execute();
+$stmt->bind_result($LBU06id, $caseReference);
+$stmt->fetch();
+mysqli_stmt_close($stmt);
+
+// Audit Log
+$action = "Viewed a LBU06 form. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". LBU06 ID: " . $LBU06id . ".";
+$type = "Case";
+$timestamp = date('Y-m-d H:i:s');
+$fullName = $_SESSION['fullName'];
+$username = $_SESSION['userId'];
+
+$query = "INSERT INTO auditlog 
+    (Identifier, CaseReference, EntryType, LBU06id, Timestamp, ActionerFullName, ActionerUsername, Action)
+    VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?)";
+$stmt = mysqli_prepare($connection, $query);
+mysqli_stmt_bind_param($stmt, "ssssssss", $identifier, $caseReference, $type, $LBU06id, $timestamp, $fullName, $username, $action);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
 ?> 
 
 <!DOCTYPE html>

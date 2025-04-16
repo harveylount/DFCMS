@@ -3,7 +3,6 @@ include 'SqlConnection.php';
 include 'timezoneFunction.php'; 
 
 $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL injection
-$evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection
 
 if (isset($_POST['subEvent'])) {
 
@@ -122,6 +121,28 @@ if (isset($_POST['subEvent'])) {
     $numberOfSceneSketches, $locationOfSceneSketches, $numberOfItemsForExamination, $disclosureExhibitNumberString, $disclosureEvidenceSeizedString, $disclosureHandedSentByString, $disclosureToPersonLocationString,
     $disclosureTimestampString, $signatureDataSoco);
 
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    $sql = "SELECT LBU06id from lbu06 WHERE Identifier = ? AND SocoName = ? AND SocoUsername = ? AND DateSceneExamined = ? AND SceneArriveTime = ? AND SceneConcluded = ?";
+    $stmt = $connection->prepare($sql);
+                $stmt->bind_param("ssssss", $identifier, $socoName, $socoUsername, $dateSceneExaminedDatabase, $timestampArrived, $timestampConcluded);  
+                $stmt->execute();
+                $stmt->bind_result($LBU06id);
+                $stmt->fetch();
+                mysqli_stmt_close($stmt);
+
+    // Audit Log
+    $action = "Created an LBU06 form. Case Reference: " . $caseReference . ". Case ID: " . $identifier . " LBU06-ID: " . $LBU06id . ".";
+    $type = "Case";
+
+    $query = "INSERT INTO auditlog 
+        (Identifier, CaseReference, EntryType, LBU06id, Timestamp, ActionerFullName, ActionerUsername, Action)
+        VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $stmt = mysqli_prepare($connection, $query);
+    mysqli_stmt_bind_param($stmt, "ssssssss", $identifier, $caseReference, $type, $LBU06id, $timestampConcluded, $socoName, $socoUsername, $action);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 

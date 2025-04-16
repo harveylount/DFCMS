@@ -126,6 +126,28 @@ if (isset($_POST['subEvent'])) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
 
+    $sql = "SELECT LBU04id from lbu04 WHERE Identifier = ? AND CaseReference = ? AND EvidenceID = ? AND ExhibitRef = ? AND CreateTimestamp = ?";
+        $stmt = $connection->prepare($sql);
+                $stmt->bind_param("sssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $timestamp);  
+                $stmt->execute();
+                $stmt->bind_result($LBU04id);
+                $stmt->fetch();
+                mysqli_stmt_close($stmt);
+
+        // Audit Log
+        $action = "Created an LBU04 entry. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". LBU04 ID: " . $LBU04id . ".";
+        $type = "Exhibit";
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, LBU04id, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $LBU04id, $timestamp, $actionerName, $actionerUsername, $action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
 
     header('Location: viewLBU04.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
     exit();

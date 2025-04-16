@@ -46,6 +46,14 @@ if (isset($_POST['subEvent'])) {
         $stmt->fetch();
         mysqli_stmt_close($stmt);
 
+    $query = "SELECT CaseReference, ExhibitRef FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "si", $identifier, $evidenceID);
+        $stmt->execute();
+        $stmt->bind_result($caseReference, $exhibitReference);
+        $stmt->fetch();
+        mysqli_stmt_close($stmt);
+
 
 
     if ($manufacturer == '') {
@@ -204,6 +212,20 @@ if (isset($_POST['subEvent'])) {
         $query = "UPDATE evidence SET EditedTime = ?, EditedByFullName = ?, EditedByUsername = ?, Manufacturer = ?, Model = ?, SerialNumber = ?, Storage = ?, OS = ?, CPU = ?, RAM = ?, MAC = ?, IP = ?, Firmware = ?, Peripheral = ?, Network = ? WHERE EvidenceID = ?";
         $stmt = mysqli_prepare($connection, $query);
         mysqli_stmt_bind_param($stmt, "sssssssssssssssi", $timestamp, $fullName, $username, $manufacturer, $model, $serial, $storage, $OS, $CPU, $RAM, $MAC, $IP, $firmware, $peripheral, $network, $evidenceID);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
+        // Audit Log
+        $action = "Updated exhibit information.";
+        $type = "Evidence";
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "sssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $timestamp, $fullName, $username, $action);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 

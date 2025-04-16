@@ -1,5 +1,6 @@
 <?php
 include 'sqlConnection.php'; 
+include 'timezoneFunction.php';
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
@@ -19,6 +20,23 @@ $stmt->fetch();
 mysqli_stmt_close($stmt);
 
 $formattedBackupNotes = nl2br($exhibitNotesBackup);
+
+// Audit Log
+$timestamp = date('Y-m-d H:i:s');
+$action = "Viewed backup exhibit note. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit Note Backup ID: " . $exhibitNotesBackupID . ".";
+$type = "Exhibit";
+$fullName = $_SESSION['fullName'];
+$username = $_SESSION['userId'];
+
+$query = "INSERT INTO auditlog 
+    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, ExhibitNotesBackupID, Timestamp, ActionerFullName, ActionerUsername, Action)
+    VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = mysqli_prepare($connection, $query);
+mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, $type, $exhibitNotesBackupID, $timestamp, $fullName, $username, $action);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
 ?> 
 
 <!DOCTYPE html>

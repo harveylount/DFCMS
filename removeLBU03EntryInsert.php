@@ -13,6 +13,14 @@ $stmt->bind_result($actionerUsername);
 $stmt->fetch();
 mysqli_stmt_close($stmt);
 
+$sql = "SELECT CaseReference, ExhibitRef FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->bind_param("ss", $identifier, $evidenceID);
+    $stmt->execute();
+    $stmt->bind_result($caseReference, $exhibitReference);
+    $stmt->fetch();
+    mysqli_stmt_close($stmt);
+
 if ($_SESSION['userId'] != $actionerUsername) {
     header ('location:viewLBU03.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
     exit();
@@ -44,6 +52,22 @@ if (isset($_POST['subEvent'])) {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         
+        // Audit Log
+        $action = "Removed an LBU03 entry. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". LBU03 ID: " . $LBU03id . ".";
+        $type = "Exhibit";
+        $fullName = $_SESSION['fullName'];
+        $username = $_SESSION['userId'];    
+
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, LBU03id, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $LBU03id, $timestampDatabaseLBU03, $fullName, $username, $action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
 
         header('Location: viewLBU03.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
         exit();

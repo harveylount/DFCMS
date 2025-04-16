@@ -6,9 +6,24 @@ $identifier = intval($_GET['identifier']);  // Sanitized input to prevent SQL in
 
 if (isset($_GET['EvidenceID'])) { 
     $evidenceID = intval($_GET['EvidenceID']);  
+
+    $sql = "SELECT CaseReference, ExhibitRef FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->bind_param("ss", $identifier, $evidenceID);
+    $stmt->execute();
+    $stmt->bind_result($caseReference, $exhibitReference);
+    $stmt->fetch();
+    mysqli_stmt_close($stmt);
 }
 if (isset($_GET['LBU06id'])) { 
     $LBU06id = intval($_GET['LBU06id']);  
+    $sql = "SELECT CaseReference FROM evidence WHERE Identifier = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->bind_param("s", $identifier);
+    $stmt->execute();
+    $stmt->bind_result($caseReference);
+    $stmt->fetch();
+    mysqli_stmt_close($stmt);
 }
 
 
@@ -56,6 +71,29 @@ if (isset($_POST['subImageEvent'])) {
                 $stmt = $connection->prepare("INSERT INTO exhibituploadedfiles (Identifier, EvidenceID, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->bind_param("ssssssssssssss", $identifier, $evidenceID, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes, $MD5Hash, $SHA1Hash);
                 if ($stmt->execute()) {
+
+                    // Audit Log
+                    $sqlFileID = "SELECT FileID FROM exhibituploadedfiles WHERE Identifier = ? AND EvidenceID = ? AND UploadType = ? AND SetName = ? AND FileName = ? AND FileSize = ?";
+                    $stmt = $connection->prepare($sqlFileID);
+                    $stmt->bind_param("ssssss", $identifier, $evidenceID, $type, $name, $filename, $filesize);
+                    $stmt->execute();
+                    $stmt->bind_result($fileID);
+                    $stmt->fetch();
+                    mysqli_stmt_close($stmt);
+
+                    $action = "Uploaded an exhibit image file. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit File ID: " . $fileID . ". Upload MD5 Hash: " . $MD5Hash . ". Upload SHA-1 Hash: " . $SHA1Hash . ".";
+                    $type = "Exhibit";
+
+                    $query = "INSERT INTO auditlog 
+                        (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, ExhibitFileID, MD5Hash, SHA1Hash, Timestamp, ActionerFullName, ActionerUsername, Action)
+                        VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $stmt = mysqli_prepare($connection, $query);
+                    mysqli_stmt_bind_param($stmt, "ssssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $fileID, $MD5Hash, $SHA1Hash, $timestamp, $fullName, $username, $action);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+
+
                     header('Location: listImageFIles.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
                     exit();
                 } else {
@@ -127,6 +165,29 @@ if (isset($_POST['subImageEvent'])) {
                 $stmt = $connection->prepare("INSERT INTO exhibituploadedfiles (Identifier, EvidenceID, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->bind_param("ssssssssssssss", $identifier, $evidenceID, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes, $MD5Hash, $SHA1Hash);
                 if ($stmt->execute()) {
+
+                    // Audit Log
+                    $sqlFileID = "SELECT FileID FROM exhibituploadedfiles WHERE Identifier = ? AND EvidenceID = ? AND UploadType = ? AND SetName = ? AND FileName = ? AND FileSize = ?";
+                    $stmt = $connection->prepare($sqlFileID);
+                    $stmt->bind_param("ssssss", $identifier, $evidenceID, $type, $name, $filename, $filesize);
+                    $stmt->execute();
+                    $stmt->bind_result($fileID);
+                    $stmt->fetch();
+                    mysqli_stmt_close($stmt);
+
+                    $action = "Uploaded an exhibit photo file. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit File ID: " . $fileID . ". Upload MD5 Hash: " . $MD5Hash . ". Upload SHA-1 Hash: " . $SHA1Hash . ".";
+                    $type = "Exhibit";
+
+                    $query = "INSERT INTO auditlog 
+                        (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, ExhibitFileID, MD5Hash, SHA1Hash, Timestamp, ActionerFullName, ActionerUsername, Action)
+                        VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $stmt = mysqli_prepare($connection, $query);
+                    mysqli_stmt_bind_param($stmt, "ssssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $fileID, $MD5Hash, $SHA1Hash, $timestamp, $fullName, $username, $action);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+
+
                     header('Location: listExhibitPhotoFIles.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
                     exit();
                 } else {
@@ -222,6 +283,28 @@ if (isset($_POST['subImageEvent'])) {
                 $stmt = $connection->prepare("INSERT INTO sceneuploadedfiles (Identifier, LBU06id, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->bind_param("ssssssssssssss", $identifier, $LBU06id, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes, $MD5Hash, $SHA1Hash);
                 if ($stmt->execute()) {
+
+                    // Audit Log
+                    $sqlFileID = "SELECT SceneFileID FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = ? AND SetName = ? AND FileName = ? AND FileSize = ?";
+                    $stmt = $connection->prepare($sqlFileID);
+                    $stmt->bind_param("ssssss", $identifier, $LBU06id, $type, $name, $filename, $filesize);
+                    $stmt->execute();
+                    $stmt->bind_result($fileID);
+                    $stmt->fetch();
+                    mysqli_stmt_close($stmt);
+
+                    $action = "Uploaded a crime scene photo file. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". LBU06 ID: " . $LBU06id . ". Scene File ID: " . $fileID . ". Upload MD5 Hash: " . $MD5Hash . ". Upload SHA-1 Hash: " . $SHA1Hash . ".";
+                    $type = "Case";
+
+                    $query = "INSERT INTO auditlog 
+                        (Identifier, CaseReference, EntryType, LBU06id, SceneFileID, MD5Hash, SHA1Hash, Timestamp, ActionerFullName, ActionerUsername, Action)
+                        VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $stmt = mysqli_prepare($connection, $query);
+                    mysqli_stmt_bind_param($stmt, "sssssssssss", $identifier, $caseReference, $type, $LBU06id, $fileID, $MD5Hash, $SHA1Hash, $timestamp, $fullName, $username, $action);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+
                     header('Location: listScenePhotoFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
                     exit();
                 } else {
@@ -317,6 +400,28 @@ if (isset($_POST['subImageEvent'])) {
                 $stmt = $connection->prepare("INSERT INTO sceneuploadedfiles (Identifier, LBU06id, UploadType, SetName, FileName, FileType, FileSize, FileContent, UploaderFullName, UploaderUsername, UploadTimestamp, Notes, MD5Hash, SHA1Hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 $stmt->bind_param("ssssssssssssss", $identifier, $LBU06id, $type, $name, $filename, $filetype, $filesize, $filecontent, $fullName, $username, $timestamp, $notes, $MD5Hash, $SHA1Hash);
                 if ($stmt->execute()) {
+
+                    // Audit Log
+                    $sqlFileID = "SELECT SceneFileID FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = ? AND SetName = ? AND FileName = ? AND FileSize = ?";
+                    $stmt = $connection->prepare($sqlFileID);
+                    $stmt->bind_param("ssssss", $identifier, $LBU06id, $type, $name, $filename, $filesize);
+                    $stmt->execute();
+                    $stmt->bind_result($fileID);
+                    $stmt->fetch();
+                    mysqli_stmt_close($stmt);
+
+                    $action = "Uploaded a crime scene sketch file. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". LBU06 ID: " . $LBU06id . ". Scene File ID: " . $fileID . ". Upload MD5 Hash: " . $MD5Hash . ". Upload SHA-1 Hash: " . $SHA1Hash . ".";
+                    $type = "Case";
+
+                    $query = "INSERT INTO auditlog 
+                        (Identifier, CaseReference, EntryType, LBU06id, SceneFileID, MD5Hash, SHA1Hash, Timestamp, ActionerFullName, ActionerUsername, Action)
+                        VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $stmt = mysqli_prepare($connection, $query);
+                    mysqli_stmt_bind_param($stmt, "sssssssssss", $identifier, $caseReference, $type, $LBU06id, $fileID, $MD5Hash, $SHA1Hash, $timestamp, $fullName, $username, $action);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+
                     header('Location: listSceneSketchFiles.php?identifier=' . $identifier . '&LBU06id=' . $LBU06id);
                     exit();
                 } else {

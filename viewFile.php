@@ -1,5 +1,7 @@
 <?php
 include 'sqlConnection.php'; 
+include 'timezoneFunction.php';
+
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
@@ -92,6 +94,22 @@ function formatBytes($bytes, $precision = 2) {
 
                 if ($uploadType == "Image") {
 
+                    // Audit Log
+                    $action = "Viewed an exhibit image file. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit File ID: " . $fileID . ".";
+                    $type = "Exhibit";
+                    $timestamp = date('Y-m-d H:i:s');
+                    $fullName = $_SESSION['fullName'];
+                    $username = $_SESSION['userId'];
+
+                    $query = "INSERT INTO auditlog 
+                        (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, ExhibitFileID, Timestamp, ActionerFullName, ActionerUsername, Action)
+                        VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $stmt = mysqli_prepare($connection, $query);
+                    mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $fileID, $timestamp, $fullName, $username, $action);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+
                     echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
                     echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>View Image File</td> 
                         <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Case Reference: ' . $caseReference . "</td></tr>"; 
@@ -142,6 +160,22 @@ function formatBytes($bytes, $precision = 2) {
                 }
 
                 if ($uploadType == "ExhibitPhoto") {
+
+                    // Audit Log
+                    $action = "Viewed an exhibit photo file. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit File ID: " . $fileID . ".";
+                    $type = "Exhibit";
+                    $timestamp = date('Y-m-d H:i:s');
+                    $fullName = $_SESSION['fullName'];
+                    $username = $_SESSION['userId'];
+
+                    $query = "INSERT INTO auditlog 
+                        (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, ExhibitFileID, Timestamp, ActionerFullName, ActionerUsername, Action)
+                        VALUES
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $stmt = mysqli_prepare($connection, $query);
+                    mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $fileID, $timestamp, $fullName, $username, $action);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
 
                     echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
                     echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>View Exhibit Photo</td> 

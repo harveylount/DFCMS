@@ -1,5 +1,6 @@
 <?php
 include 'sqlConnection.php'; 
+include 'timezoneFunction.php';
 if(!isset($_SESSION['userId'])){
     header ('location:loginForm.php');
 }
@@ -8,6 +9,30 @@ $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL
 $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL injection
 
 include 'checkUserAddedToCaseFunction.php'; 
+
+$sql = "SELECT LBU05id, CaseReference, ExhibitRef from lbu05 WHERE Identifier = ? AND EvidenceID = ?";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("ss", $identifier, $evidenceID);  
+$stmt->execute();
+$stmt->bind_result($LBU05id, $caseReference, $exhibitReference);
+$stmt->fetch();
+mysqli_stmt_close($stmt);
+
+// Audit Log
+$action = "Viewed an LBU05 form. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". LBU05 ID: " . $LBU05id . ".";
+$type = "Exhibit";
+$timestamp = date('Y-m-d H:i:s');
+$fullName = $_SESSION['fullName'];
+$username = $_SESSION['userId'];
+
+$query = "INSERT INTO auditlog 
+    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, LBU05id, Timestamp, ActionerFullName, ActionerUsername, Action)
+    VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$stmt = mysqli_prepare($connection, $query);
+mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, $type, $LBU05id, $timestamp, $fullName, $username, $action);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
 ?> 
 
 <!DOCTYPE html>

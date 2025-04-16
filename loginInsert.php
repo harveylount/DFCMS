@@ -1,6 +1,7 @@
 <?php
 include 'sqlConnection.php';
-session_start();
+date_default_timezone_set("Europe/London");
+$timestamp = date('Y-m-d H:i:s');
 
 $file = "encryptionkey.txt";
 if (file_exists($file)) {
@@ -47,15 +48,40 @@ if (file_exists($file)) {
                     if ($result) {
                         $row = mysqli_fetch_assoc($result); // Fetch the result as an associative array
                     
-                        if ($row) { // Check if the row contains data
-                            $_SESSION['userRole'] = $row['role']; // Store the role in the session
+                        if ($row) { 
+                            $_SESSION['userRole'] = $row['role']; 
                             $_SESSION['fullName'] = $row['FullName'];
                             $_SESSION['socoNumber'] = $row['SocoNumber'];
                     
                         } else {
-                            header('location:loginForm.php');// Handle case where no user is found
-
+                            header('location:loginForm.php');
+                            exit();
                         }
+
+                    $sql = "SELECT ID FROM users WHERE Username = ?";
+                    $stmt = $connection->prepare($sql);
+                    $stmt->bind_param("s", $_SESSION['userId']);
+                    $stmt->execute();
+                    $stmt->bind_result($userId);
+                    $stmt->fetch();
+                    mysqli_stmt_close($stmt);
+                    
+                    // Audit Log
+                    $fullName = $_SESSION['fullName'];
+                    $username = $_SESSION['userId'];
+                    $action = "User logged in. Full Name: " . $fullName . ". Username: " . $username . ". User ID: " . $userId;
+                    $type = "Auth";
+
+                    $query = "INSERT INTO auditlog 
+                        (UserID, EntryType, Timestamp, ActionerFullName, ActionerUsername, Action)
+                        VALUES
+                        (?, ?, ?, ?, ?, ?)";
+
+                    $stmt = mysqli_prepare($connection, $query);
+                    mysqli_stmt_bind_param($stmt, "ssssss", $userId, $type, $timestamp, $fullName, $username, $action);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+
                     }
 
                     header('location:index.php');
@@ -63,6 +89,23 @@ if (file_exists($file)) {
 
                 } else {
                     $_SESSION['message']='Login failed.';
+
+                    // Audit Log
+                    $action = "Login failed.";
+                    $type = "AuthFailed";
+                    $fullName = $_SESSION['fullName'];
+                    $username = $_SESSION['userId'];
+
+                    $query = "INSERT INTO auditlog 
+                        (EntryType, Timestamp, ActionerUsername, Action)
+                        VALUES
+                        (?, ?, ?, ?)";
+
+                    $stmt = mysqli_prepare($connection, $query);
+                    mysqli_stmt_bind_param($stmt, "ssss", $type, $timestamp, $fullName, $username, $action);
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+
                     header('location:loginForm.php');
                     exit();
                 }

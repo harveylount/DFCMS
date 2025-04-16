@@ -53,6 +53,14 @@ if (isset($_POST['subEvent'])) {
     $_SESSION['txtStorageF']=$storage;
     $_SESSION['txtEncryptionF']=$encryption;
 
+    $sql = "SELECT CaseReference FROM evidence WHERE Identifier = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->bind_param("s", $identifier);
+    $stmt->execute();
+    $stmt->bind_result($caseReference);
+    $stmt->fetch();
+    mysqli_stmt_close($stmt);
+
     $sql = "SELECT ExhibitRef FROM evidence WHERE Identifier = ? AND ExhibitRef = ?";
     $stmt = $connection->prepare($sql);
     $stmt->bind_param("ss", $identifier, $exhibitReference);
@@ -61,6 +69,21 @@ if (isset($_POST['subEvent'])) {
 
     if ($stmt->num_rows > 0) {
         $stmt->close();
+
+        // Audit Log
+        $action = "Failed to create an evidence exhibit. Case Reference: " . $caseReference . ".";
+        $type = "Exhibit";
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "sssssss", $identifier, $caseReference, $type, $timestamp, $fullName, $username, $action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
         $_SESSION['txtExhibitReferenceExistsM'] = 'Exhibit Reference already exists';
         header('Location: createEvidenceForm.php?identifier=' . $identifier);
         exit();
@@ -214,6 +237,19 @@ if (isset($_POST['subEvent'])) {
         $stmt->fetch();
         mysqli_stmt_close($stmt);
 
+        // Audit Log
+        $action = "Created an evidence exhibit. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ".";
+        $type = "Exhibit";
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "sssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $timestamp, $fullName, $username, $action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
 
         if (!empty($signatureDataFrom) && !empty($signatureDataBy)) {
             
@@ -230,6 +266,20 @@ if (isset($_POST['subEvent'])) {
             
             mysqli_stmt_execute($stmtSignature);
             mysqli_stmt_close($stmtSignature);
+
+            // Audit Log
+            $action = "Created an LBU01 form. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ".";
+            $type = "Exhibit";
+
+            $query = "INSERT INTO auditlog 
+                (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, Timestamp, ActionerFullName, ActionerUsername, Action)
+                VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $stmt = mysqli_prepare($connection, $query);
+            mysqli_stmt_bind_param($stmt, "sssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $timestamp, $fullName, $username, $action);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
             
         }
         
@@ -253,6 +303,20 @@ if (isset($_POST['subEvent'])) {
             mysqli_stmt_execute($stmtSignature);
             mysqli_stmt_close($stmtSignature);
 
+            // Audit Log
+            $action = "Created an LBU02 form. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ".";
+            $type = "Exhibit";
+
+            $query = "INSERT INTO auditlog 
+                (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, Timestamp, ActionerFullName, ActionerUsername, Action)
+                VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $stmt = mysqli_prepare($connection, $query);
+            mysqli_stmt_bind_param($stmt, "sssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $timestamp, $fullName, $username, $action);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+
         } else {
             $externalBoolean = "false";
 
@@ -267,6 +331,21 @@ if (isset($_POST['subEvent'])) {
             mysqli_stmt_bind_param($stmtSignature, "ssssssssssssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $location, $receivedFrom, $receivedFromRank, $timestamp, $signatureDataFrom, $receivedFromCompany, $receivedBy, $receivedByRank, $timestamp, $signatureDataBy, $receivedByCompany, $sealNumber, $initialDescription, $externalBoolean);
             mysqli_stmt_execute($stmtSignature);
             mysqli_stmt_close($stmtSignature);
+
+            // Audit Log
+            $action = "Created an LBU02 form. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ".";
+            $type = "Exhibit";
+
+            $query = "INSERT INTO auditlog 
+                (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, Timestamp, ActionerFullName, ActionerUsername, Action)
+                VALUES
+                (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $stmt = mysqli_prepare($connection, $query);
+            mysqli_stmt_bind_param($stmt, "sssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $timestamp, $fullName, $username, $action);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+            
         }
 
         

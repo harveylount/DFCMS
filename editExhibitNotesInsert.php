@@ -49,6 +49,20 @@ if (isset($_POST['subEvent'])) {
         mysqli_stmt_bind_param($stmt, "ssssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $oldExhibitNotes, $timestamp, $fullName, $username);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
+
+        // Audit Log
+        $action = "Updated exhibit note. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ".";
+        $type = "Exhibit";
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "sssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $timestamp, $fullName, $username, $action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
         
 
         header('Location: viewExhibitNotes.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);

@@ -18,6 +18,24 @@ $stmt->fetch();
 mysqli_stmt_close($stmt);
 
 $formattedBackupNotes = nl2br($caseNotesBackup);
+
+// Audit Log
+$action = "Viewed backup case note. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Case Notes Backup ID: " . $caseNotesBackupID . ".";
+$type = "Case";
+$timestamp = date('Y-m-d H:i:s');
+$fullName = $_SESSION['fullName'];
+$username = $_SESSION['userId'];
+
+
+$query = "INSERT INTO auditlog 
+    (Identifier, CaseReference, EntryType, CaseNotesBackupID, Timestamp, ActionerFullName, ActionerUsername, Action)
+    VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = mysqli_prepare($connection, $query);
+mysqli_stmt_bind_param($stmt, "ssssssss", $identifier, $caseReference, $caseNotesBackupID, $type, $timestamp, $fullName, $username, $action);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
 ?> 
 
 <!DOCTYPE html>

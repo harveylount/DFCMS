@@ -15,6 +15,31 @@ $stmt = $connection->prepare($sql);
 $stmt->bind_param("ss", $identifier, $evidenceID);
 $stmt->execute();
 mysqli_stmt_close($stmt);
+
+$sql = "SELECT CaseReference, ExhibitRef FROM evidence WHERE Identifier = ? AND EvidenceID = ?";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("ss", $identifier, $evidenceID);
+$stmt->execute();
+$stmt->bind_result($caseReference, $exhibitReference);
+$stmt->fetch();
+mysqli_stmt_close($stmt);
+
+// Audit Log
+$timestamp = date('Y-m-d H:i:s');
+$action = "Viewed exhibit information. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ".";
+$type = "Exhibit";
+$fullName = $_SESSION['fullName'];
+$username = $_SESSION['userId'];
+
+$query = "INSERT INTO auditlog 
+    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, Timestamp, ActionerFullName, ActionerUsername, Action)
+    VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+$stmt = mysqli_prepare($connection, $query);
+mysqli_stmt_bind_param($stmt, "sssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, $type, $timestamp, $fullName, $username, $action);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
 ?> 
 
 <!DOCTYPE html>

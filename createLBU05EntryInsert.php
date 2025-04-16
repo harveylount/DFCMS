@@ -67,6 +67,30 @@ if (isset($_POST['subEventLBU05In'])) {
             unset($_SESSION[$sessionVar]);
         }
 
+        $sql = "SELECT LBU05id from lbu05 WHERE Identifier = ? AND CaseReference = ? AND EvidenceID = ? AND ExhibitRef = ? AND TimestampIn = ? AND NewLocation = ? AND SealNumberIn = ?";
+        $stmt = $connection->prepare($sql);
+                $stmt->bind_param("sssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $timestampInDatabase, $newLocation, $sealNumber);  
+                $stmt->execute();
+                $stmt->bind_result($LBU05id);
+                $stmt->fetch();
+                mysqli_stmt_close($stmt);
+
+        // Audit Log
+        $action = "Created an LBU05 in entry. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". LBU05 ID: " . $LBU05id . ".";
+        $type = "Exhibit";
+        $fullName = $_SESSION['fullName'];
+        $username = $_SESSION['userId'];    
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, LBU05id, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $LBU05id, $timestampInDatabase, $fullName, $username, $action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
         header('Location: viewLBU05.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
         exit();
 
@@ -158,6 +182,30 @@ if (isset($_POST['subEventLBU05Out'])) {
             unset($_SESSION[$sessionVar]);
         }
 
+        $sql = "SELECT LBU05id from lbu05 WHERE Identifier = ? AND CaseReference = ? AND EvidenceID = ? AND ExhibitRef = ? AND TimestampOut = ? AND TempLocation = ? AND ReasonOut = ?";
+        $stmt = $connection->prepare($sql);
+                $stmt->bind_param("sssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $timestampOutDatabase, $tempLocation, $reasonOut);  
+                $stmt->execute();
+                $stmt->bind_result($LBU05id);
+                $stmt->fetch();
+                mysqli_stmt_close($stmt);
+
+        // Audit Log
+        $action = "Created an LBU05 out entry. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". LBU05 ID: " . $LBU05id . ".";
+        $type = "Exhibit";
+        $fullName = $_SESSION['fullName'];
+        $username = $_SESSION['userId'];    
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, LBU05id, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $LBU05id, $timestampOutDatabase, $fullName, $username, $action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+
         header('Location: viewLBU05.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
         exit();
 
@@ -226,6 +274,30 @@ if (isset($_POST['subEventLBU05FirstIn'])) {
         foreach ($unset_sessions as $sessionVar) {
             unset($_SESSION[$sessionVar]);
         }
+
+        $sql = "SELECT LBU05id from lbu05 WHERE Identifier = ? AND CaseReference = ? AND EvidenceID = ? AND ExhibitRef = ? AND TimestampIn = ? AND NewLocation = ?";
+        $stmt = $connection->prepare($sql);
+                $stmt->bind_param("ssssss", $identifier, $caseReference, $evidenceID, $exhibitReference, $timestampFirstInDatabase, $newLocation);  
+                $stmt->execute();
+                $stmt->bind_result($LBU05id);
+                $stmt->fetch();
+                mysqli_stmt_close($stmt);
+
+        // Audit Log
+        $action = "Created first LBU05 entry in. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". LBU05 ID: " . $LBU05id . ".";
+        $type = "Exhibit";
+        $fullName = $_SESSION['fullName'];
+        $username = $_SESSION['userId'];    
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, EvidenceID, ExhibitReference, LBU05id, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $type, $evidenceID, $exhibitReference, $LBU05id, $timestampInDatabase, $fullName, $username, $action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
 
         header('Location: viewLBU05.php?identifier=' . $identifier . '&EvidenceID=' . $evidenceID);
         exit();

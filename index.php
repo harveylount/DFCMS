@@ -69,6 +69,7 @@ mysqli_stmt_close($stmt);
         
                 if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'Lead Investigator') {
                     echo '<div id="createcase-bar">
+                            <a href="auditAuth.php" id="createcase-button">Authentication Audit</a>
                             <a href="createCaseForm.php" id="createcase-button">Create Case</a>
                         </div>';
                 }

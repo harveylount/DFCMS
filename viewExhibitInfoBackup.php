@@ -140,6 +140,24 @@ mysqli_stmt_close($stmt);
                 }
                 $stmt->close();
 
+                // Audit Log
+                $timestamp = date('Y-m-d H:i:s');
+                $action = "Viewed backup exhibit information. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit Info Backup ID: " . $ExhibitInfoBackupID . ".";
+                $type = "Exhibit";
+                $fullName = $_SESSION['fullName'];
+                $username = $_SESSION['userId'];
+
+                $query = "INSERT INTO auditlog 
+                    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, ExhibitInfoBackupID, Timestamp, ActionerFullName, ActionerUsername, Action)
+                    VALUES
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                $stmt = mysqli_prepare($connection, $query);
+                mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, $type, $ExhibitInfoBackupID, $timestamp, $fullName, $username, $action);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+
+
             } else if($evidenceType === 'Mobile') {
                 $query = "SELECT CaseReference, ExhibitRef, EvidenceType, Manufacturer, 
                 Model, SerialNumber, Storage, OS, MAC, IMEI, SIM, PhoneNumber, BatteryHealth, InstalledApps, EncryptionType, AccountInfo, ScreenLock, EditorOfBackupFullName, EditorOfBackupUsername, Timestamp1 FROM exhibitinfobackup WHERE ExhibitInfoBackupID = ? AND Identifier = ? AND EvidenceID = ?";
@@ -188,6 +206,24 @@ mysqli_stmt_close($stmt);
                     
                 }
                 $stmt->close();
+
+                // Audit Log
+                $timestamp = date('Y-m-d H:i:s');
+                $action = "Viewed backup exhibit information. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit Info Backup ID: " . $ExhibitInfoBackupID . ".";
+                $type = "Exhibit";
+                $fullName = $_SESSION['fullName'];
+                $username = $_SESSION['userId'];
+
+                $query = "INSERT INTO auditlog 
+                    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, ExhibitInfoBackupID, Timestamp, ActionerFullName, ActionerUsername, Action)
+                    VALUES
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                $stmt = mysqli_prepare($connection, $query);
+                mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, $type, $ExhibitInfoBackupID, $timestamp, $fullName, $username, $action);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+                
             } else if($evidenceType === 'ExternalStorage') {
                 $query = "SELECT CaseReference, ExhibitRef, EvidenceType, Manufacturer, 
                 Model, SerialNumber, Storage, EncryptionType, InterfaceType, FileSystem, EditorOfBackupFullName, EditorOfBackupUsername, Timestamp1 FROM exhibitinfobackup WHERE ExhibitInfoBackupID = ? AND Identifier = ? AND EvidenceID = ?";
@@ -229,6 +265,23 @@ mysqli_stmt_close($stmt);
                     
                 }
                 $stmt->close();
+
+                // Audit Log
+                $timestamp = date('Y-m-d H:i:s');
+                $action = "Viewed backup exhibit information. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". Exhibit Info Backup ID: " . $ExhibitInfoBackupID . ".";
+                $type = "Exhibit";
+                $fullName = $_SESSION['fullName'];
+                $username = $_SESSION['userId'];
+
+                $query = "INSERT INTO auditlog 
+                    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, ExhibitInfoBackupID, Timestamp, ActionerFullName, ActionerUsername, Action)
+                    VALUES
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                $stmt = mysqli_prepare($connection, $query);
+                mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, $type, $ExhibitInfoBackupID, $timestamp, $fullName, $username, $action);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
             }
             ?>
 

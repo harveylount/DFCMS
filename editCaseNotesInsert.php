@@ -48,6 +48,20 @@ if (isset($_POST['subEvent'])) {
         mysqli_stmt_bind_param($stmt, "ssssss", $identifier, $caseReference, $oldCaseNotes, $timestamp, $fullName, $username);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
+
+        // Audit Log
+        $action = "Updated case notes. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ".";
+        $type = "Case";
+
+        $query = "INSERT INTO auditlog 
+            (Identifier, CaseReference, EntryType, Timestamp, ActionerFullName, ActionerUsername, Action)
+            VALUES
+            (?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($connection, $query);
+        mysqli_stmt_bind_param($stmt, "sssssss", $identifier, $caseReference, $type, $timestamp, $fullName, $username, $action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
         
 
         header('Location: viewCaseNotes.php?identifier=' . $identifier);
