@@ -57,13 +57,27 @@ $query2 = "SELECT CaseReference FROM cases WHERE Identifier = $identifier";
                 <?php include 'displayCaseAdminButtonFunction.php'; ?>
             </div>
 
-        <section id="content">
+        <section id="LBU">
 
-            <h2><?php echo $caseReference ?> - View Evidence Exhibits</h2>
-
+            </br>
             <div id="navcase-bar">
                 <a href="<?php echo "createEvidenceForm.php?identifier=$identifier" ?>" id="navcase-button">Create Evidence</a>
             </div>
+            </br>
+
+            <?php
+                echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
+                echo "<tr><td rowspan='2' style='font-size: 50px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Case Information</td> 
+                    <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . '' . "</td></tr>"; 
+                echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . '' . "</td></tr>";
+                echo "</table>";
+                echo "<br/>";
+
+                echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                echo '<tr><td class="lbu-dark">Case Reference</td><td>' . $caseReference . '</td></tr>';
+                echo '</table>';
+                echo "<br/>";
+            ?>
 
             <p>
                 <?php include 'displayEvidence.php'; ?>

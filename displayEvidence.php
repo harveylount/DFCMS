@@ -15,16 +15,16 @@
 
     echo '<table>';
     echo '<tr>'; // Start of the title row
-    echo '<th>Evidence ID</th>';
-    echo '<th>Exhibit Reference</th>';
-    echo '<th>Case Reference</th>';
-    echo '<th>Seized Timestamp</th>';
-    echo '<th>Edited Timestamp</th>';
-    echo '<th>Device Type</th>';
-    echo '<th>Manufacturer</th>';
-    echo '<th>Model</th>';
-    echo '<th>Status</th>';
-    echo '<th></th>';
+    echo '<th class="lbu-dark">Evidence ID</th>';
+    echo '<th class="lbu-dark">Exhibit Reference</th>';
+    echo '<th class="lbu-dark">Case Reference</th>';
+    echo '<th class="lbu-dark">Seized Timestamp</th>';
+    echo '<th class="lbu-dark">Edited Timestamp</th>';
+    echo '<th class="lbu-dark">Device Type</th>';
+    echo '<th class="lbu-dark">Manufacturer</th>';
+    echo '<th class="lbu-dark">Model</th>';
+    echo '<th class="lbu-dark">Status</th>';
+    echo '<th class="lbu-dark"></th>';
     echo '</tr>'; // End of the title row
     
     while ($row = mysqli_fetch_assoc($results)) {

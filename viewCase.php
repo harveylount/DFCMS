@@ -78,7 +78,7 @@ mysqli_stmt_close($stmt);
             <?php include 'displayCaseAdminButtonFunction.php'; ?>
         </div>
 
-        <section id="content">
+        <section id="LBU">
 
             <p>
                 <?php

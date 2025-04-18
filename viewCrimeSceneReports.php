@@ -81,18 +81,14 @@ $caseReference = $caseReferenceRow['CaseReference'] ?? 'No Case Reference';
                     $query = "SELECT LBU06id, DateSceneExamined, SocoName, SocoUsername FROM LBU06 WHERE Identifier = $identifier";
                     $results = mysqli_query($connection, $query);
 
-                    echo "<style>";
-                    echo "table { border-collapse: collapse; }"; 
-                    echo "td, th { border: 1px solid black; padding: 5px; }";
-                    echo "</style>";
 
-                    echo "<table>";
+                    echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                     echo "<tr>";
-                    echo "<th>LBU06 ID</th>";
-                    echo "<th>Case Reference</th>";
-                    echo "<th>Date Examined</th>";
-                    echo "<th>SOCO</th>";
-                    echo "<th></th>";
+                    echo "<th class='lbu-dark'>LBU06 ID</th>";
+                    echo "<th class='lbu-dark'>Case Reference</th>";
+                    echo "<th class='lbu-dark'>Date Examined</th>";
+                    echo "<th class='lbu-dark'>SOCO</th>";
+                    echo "<th class='lbu-dark'></th>";
                     echo "</tr>";
 
                     while ($row = mysqli_fetch_assoc($results)) {
