@@ -5,7 +5,6 @@ if(!isset($_SESSION['userId'])){
 }
 
 $identifier = intval($_GET['identifier']); 
-$LBU06id = intval($_GET['LBU06id']); 
 
 include 'checkUserAddedToCaseFunction.php'; 
 
@@ -36,7 +35,7 @@ $query = "SELECT CaseReference FROM cases WHERE Identifier = ?";
 
     <link href="./index.css" rel="stylesheet" type="text/css" />
 
-    <title>Files</title>
+    <title>Reports</title>
 
 </head>
 
@@ -47,7 +46,7 @@ $query = "SELECT CaseReference FROM cases WHERE Identifier = ?";
         <div id="logout-bar">
             <div class="left-group">
                 <a href="index.php" class="logout-button">← Cases</a>
-                <a href="<?php echo "viewLBU06.php?identifier=" . $identifier . "&LBU06id=" . $LBU06id ?>" class="logout-button">← Scene Report</a>
+                <a href="<?php echo "viewCase.php?identifier=" . htmlspecialchars($identifier) ?>" class="logout-button">← Case</a>
             </div>
             <div class="right-group">
                 <span id="username">Username: <?php echo $_SESSION['userId']; ?></span>
@@ -65,49 +64,49 @@ $query = "SELECT CaseReference FROM cases WHERE Identifier = ?";
         </header>
 
         <div id="navcase-bar">
-            <a href="<?php echo "listScenePhotoFiles.php?identifier=" . $identifier . "&LBU06id=" . $LBU06id; ?>" id="navcase-button">Scene Photos</a>
-            <a href="<?php echo "listSceneSketchFiles.php?identifier=" . $identifier . "&LBU06id=" . $LBU06id; ?>" id="navcase-button">Scene Sketches</a>
+            <a href="<?php echo "viewCase.php?identifier=$identifier" ?>" id="navcase-button">Case Overview</a>
+            <a href="<?php echo "viewEvidence.php?identifier=$identifier" ?>" id="navcase-button">Evidence</a>
+            <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier" ?>" id="navcase-button">Crime Scene Reports</a>
+            <a href="<?php echo "viewCaseNotes.php?identifier=$identifier" ?>" id="navcase-button">Case Notes</a>
+            <a href="<?php echo "listReports.php?identifier=$identifier" ?>" id="navcase-button">Reports</a>
+            <?php include 'displayCaseAdminButtonFunction.php'; ?>
         </div>
 
         <section id="LBU">
+            </br>
+            <div id="navcase-bar">
+                <a href="<?php echo "generateReport.php?identifier=" . htmlspecialchars($identifier)?>" id="navcase-button">Generate Report</a>
+            </div>
 
             <p>
             <?php
 
-                echo '<div id="navcase-bar">
-                    <a href="uploadScenePhotoForm.php?identifier=' . $identifier . "&LBU06id=" . $LBU06id . '" id="navcase-button">Upload File</a>
-                    </div>';
-                echo "<br/>";
-
                 echo "<table cellpadding='10' cellspacing='0' style='width: 100%; border-collapse: collapse; border: 2px solid #5AAAFF;'>"; 
-                echo "<tr><td rowspan='2' style='font-size: 48px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Crime Scene Photos</td> 
+                echo "<tr><td rowspan='2' style='font-size: 48px; font-weight: bold; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white;'>Case Reports</td> 
                     <td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'>" . 'Case Reference: ' . $caseReference . "</td></tr>"; 
                 echo "<tr><td style='text-align: right; border: 2px solid #5AAAFF; background-color: #5AAAFF; color: white; font-weight: bold; font-size: 20px;'></td></tr>";
                 echo "</table>";
                 echo "<br/>";
 
                 echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                echo "<tr><th class='lbu-dark' style='width: 90px'>Scene File ID</th><th class='lbu-dark'>Identifier Name</th><th class='lbu-dark''>File Name</th><th class='lbu-dark' style='width: 90px'>File Type</th><th class='lbu-dark' style='width: 90px'>File Size</th><th class='lbu-dark' style='width: 90px';>Timestamp</th><th class='lbu-dark' style='width: 35px;'></th><th class='lbu-dark' style='width: 72px;'></th></tr>";
+                echo "<tr><th class='lbu-dark' style='width:10%';>Report ID</th><th class='lbu-dark' style='width:40%';>File Name</th><th class='lbu-dark' style='width:15%';>File Type</th><th class='lbu-dark' style='width:10%';>File Size</th><th class='lbu-dark' style='width:20%';>Timestamp</th><th class='lbu-dark' style='width:10%';></th></tr>";
 
-                $sql = "SELECT SceneFileID, Identifier, LBU06id, UploadType, SetName, FileName, FileType, FileSize, UploaderFullName, UploaderUsername, UploadTimestamp FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ?";
+                $sql = "SELECT ReportID, Identifier, FileName, FileType, FileSize, GeneratedByFullName, GeneratedByUsername, GeneratedTimestamp FROM reportfiles WHERE Identifier = ?";
                 $stmt = $connection->prepare($sql);
-                $stmt->bind_param("ss", $identifier, $LBU06id);
+                $stmt->bind_param("s", $identifier);
                 $stmt->execute();
                 $results = $stmt->get_result();
 
                 while ($row = $results->fetch_assoc()) {
-                    if ($row['UploadType'] == 'ScenePhoto') {
-                        echo '<tr>';
-                        echo '<td>' . $row['SceneFileID'] . '</td>';
-                        echo '<td>' . $row['SetName'] . '</td>';
-                        echo '<td>' . $row['FileName'] . '</td>';
-                        echo '<td>' . $row['FileType'] . '</td>';
-                        echo '<td>' . formatBytes($row['FileSize']) . '</td>';
-                        echo '<td>' . $row['UploadTimestamp'] . '</td>';
-                        echo '<td><a href="viewSceneFile.php?identifier=' . $row['Identifier'] . '&LBU06id=' . $row['LBU06id'] .  '&SceneFileID=' . $row['SceneFileID'] . '">View</a></td>';
-                        echo '<td><a href="downloadFile.php?identifier=' . $row['Identifier'] . '&LBU06id=' . $row['LBU06id'] .  '&SceneFileID=' . $row['SceneFileID'] . '">Download</a></td>';
-                        echo '</tr>';
-                    }
+                    echo '<tr>';
+                    echo '<td>' . $row['ReportID'] . '</td>';
+                    echo '<td>' . $row['FileName'] . '</td>';
+                    echo '<td>' . $row['FileType'] . '</td>';
+                    echo '<td>' . formatBytes($row['FileSize']) . '</td>';
+                    echo '<td>' . $row['GeneratedTimestamp'] . '</td>';
+                    echo '<td><a href="verifiedReport.php?identifier=' . $row['Identifier'] . '&ReportID=' . $row['ReportID'] .'">Download</a></td>';
+                    echo '</tr>';
+                    
                 }
 
                 echo "</table>";

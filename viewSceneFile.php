@@ -141,12 +141,31 @@ function formatBytes($bytes, $precision = 2) {
                     echo "</table>";
                     echo "<br/>";
 
+                    $fileContent = $row['FileContent'];
+                    $fileName = $row['FileName'];
+                    $fileType = $row['FileType'];
+
+                    $image_data = base64_encode($fileContent);
+                    $retrievedMD5Hash = md5($fileContent);
+                    $retrievedSHA1Hash = sha1($fileContent);
+                    $uploadedMD5Hash = $row['MD5Hash'];
+                    $uploadedSHA1Hash = $row['SHA1Hash'];
+                    if ($retrievedMD5Hash === $uploadedMD5Hash && $retrievedSHA1Hash === $uploadedSHA1Hash) {
+                        $hashResult = "✅ Hashes match. File integrity is verified.";
+                    } else {
+                        $hashResult = "❌ Hash mismatch. Verification failed.";
+                    }
+
                     echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>Crime Scene File ID</td><td>" . $fileID . "</td></tr>";
                     echo "<tr><td class='lbu-high'>Filename</td><td>" . $row['FileName'] . "</td></tr>";
                     echo "<tr><td class='lbu-high'>File Type</td><td>" . $row['FileType'] . "</td></tr>";
                     echo "<tr><td class='lbu-high'>File Size</td><td>" . formatBytes($row['FileSize']) . "</td></tr>";
-                    echo "<tr><td class='lbu-high'>File MD5 Hash</td><td>" . $row['MD5Hash'] . "</td></tr>";
-                    echo "<tr><td class='lbu-high'>File SHA1 Hash</td><td>" . $row['SHA1Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Uploaded File MD5 Hash</td><td>" . $row['MD5Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Uploaded File SHA1 Hash</td><td>" . $row['SHA1Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Retrieved File MD5 Hash</td><td>" . $retrievedMD5Hash . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Retrieved File SHA1 Hash</td><td>" . $retrievedSHA1Hash . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File Integrity Verification</td><td>" . $hashResult . "</td></tr>";
                     echo "</table>";
                     echo "<br/>";
 
@@ -156,12 +175,6 @@ function formatBytes($bytes, $precision = 2) {
                     echo "<tr><td>" . $formattedNotes . "</td></tr>";
                     echo "</table>";
                     echo "<br/>";
-
-                    $fileContent = $row['FileContent'];
-                    $fileName = $row['FileName'];
-                    $fileType = $row['FileType'];
-
-                    $image_data = base64_encode($fileContent);
 
                     echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                     echo "<tr><th class='lbu-dark'>Preview</th></tr>";
@@ -213,12 +226,31 @@ function formatBytes($bytes, $precision = 2) {
                     echo "</table>";
                     echo "<br/>";
 
+                    $fileContent = $row['FileContent'];
+                    $fileName = $row['FileName'];
+                    $fileType = $row['FileType'];
+
+                    $image_data = base64_encode($fileContent);
+                    $retrievedMD5Hash = md5($fileContent);
+                    $retrievedSHA1Hash = sha1($fileContent);
+                    $uploadedMD5Hash = $row['MD5Hash'];
+                    $uploadedSHA1Hash = $row['SHA1Hash'];
+                    if ($retrievedMD5Hash === $uploadedMD5Hash && $retrievedSHA1Hash === $uploadedSHA1Hash) {
+                        $hashResult = "✅ Hashes match. File integrity is verified.";
+                    } else {
+                        $hashResult = "❌ Hash mismatch. Verification failed.";
+                    }
+
                     echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
+                    echo "<tr><td class='lbu-high'>Crime Scene File ID</td><td>" . $fileID . "</td></tr>";
                     echo "<tr><td class='lbu-high'>Filename</td><td>" . $row['FileName'] . "</td></tr>";
                     echo "<tr><td class='lbu-high'>File Type</td><td>" . $row['FileType'] . "</td></tr>";
                     echo "<tr><td class='lbu-high'>File Size</td><td>" . formatBytes($row['FileSize']) . "</td></tr>";
-                    echo "<tr><td class='lbu-high'>File MD5 Hash</td><td>" . $row['MD5Hash'] . "</td></tr>";
-                    echo "<tr><td class='lbu-high'>File SHA1 Hash</td><td>" . $row['SHA1Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Uploaded File MD5 Hash</td><td>" . $row['MD5Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Uploaded File SHA1 Hash</td><td>" . $row['SHA1Hash'] . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Retrieved File MD5 Hash</td><td>" . $retrievedMD5Hash . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>Retrieved File SHA1 Hash</td><td>" . $retrievedSHA1Hash . "</td></tr>";
+                    echo "<tr><td class='lbu-high'>File Integrity Verification</td><td>" . $hashResult . "</td></tr>";
                     echo "</table>";
                     echo "<br/>";
 
@@ -228,12 +260,6 @@ function formatBytes($bytes, $precision = 2) {
                     echo "<tr><td>" . $formattedNotes . "</td></tr>";
                     echo "</table>";
                     echo "<br/>";
-
-                    $fileContent = $row['FileContent'];
-                    $fileName = $row['FileName'];
-                    $fileType = $row['FileType'];
-
-                    $image_data = base64_encode($fileContent);
 
                     echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
                     echo "<tr><th class='lbu-dark'>Preview</th></tr>";

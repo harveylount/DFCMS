@@ -18,21 +18,41 @@ $stmt->bind_result($LBU05id, $caseReference, $exhibitReference);
 $stmt->fetch();
 mysqli_stmt_close($stmt);
 
-// Audit Log
-$action = "Viewed an LBU05 form. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". LBU05 ID: " . $LBU05id . ".";
-$type = "Exhibit";
-$timestamp = date('Y-m-d H:i:s');
-$fullName = $_SESSION['fullName'];
-$username = $_SESSION['userId'];
+$sql = "SELECT LBU05id, CaseReference, ExhibitRef FROM lbu05 WHERE Identifier = ? AND EvidenceID = ?";
+$stmt = $connection->prepare($sql);
+$stmt->bind_param("ss", $identifier, $evidenceID);  
+$stmt->execute();
 
-$query = "INSERT INTO auditlog 
-    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, LBU05id, Timestamp, ActionerFullName, ActionerUsername, Action)
-    VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-$stmt = mysqli_prepare($connection, $query);
-mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, $type, $LBU05id, $timestamp, $fullName, $username, $action);
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+// Get the result set
+$results = $stmt->get_result();
+$row = $results->fetch_assoc();
+
+if ($row) {
+    // Pull values from the matched row
+    $LBU05id = $row['LBU05id'];
+    $caseRef = $row['CaseReference'];
+    $exhibitRef = $row['ExhibitRef'];
+
+    // Audit log
+    $action = "Viewed an LBU05 form. Case Reference: $caseRef. Case ID: $identifier. Exhibit Reference: $exhibitRef. Exhibit ID: $evidenceID. LBU05 ID: $LBU05id.";
+    $type = "Exhibit";
+    $timestamp = date('Y-m-d H:i:s');
+    $fullName = $_SESSION['fullName'];
+    $username = $_SESSION['userId'];
+
+    $query = "INSERT INTO auditlog 
+        (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, Timestamp, ActionerFullName, ActionerUsername, Action)
+        VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $insertStmt = $connection->prepare($query);
+    $insertStmt->bind_param("sssssssss", $identifier, $caseRef, $exhibitRef, $evidenceID, $type, $timestamp, $fullName, $username, $action);
+    $insertStmt->execute();
+    $insertStmt->close();
+}
+
+// Always close your original statement
+$stmt->close();
+
 ?> 
 
 <!DOCTYPE html>

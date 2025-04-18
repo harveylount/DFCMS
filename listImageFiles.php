@@ -89,7 +89,7 @@ function formatBytes($bytes, $precision = 1) {
                 echo "<br/>";
 
                 echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
-                echo "<tr><th class='lbu-dark'>Identifier Name</th><th class='lbu-dark''>File Name</th><th class='lbu-dark' style='width: 90px'>File Type</th><th class='lbu-dark' style='width: 90px'>File Size</th><th class='lbu-dark' style='width: 90px';>Timestamp</th><th class='lbu-dark' style='width: 35px;'></th><th class='lbu-dark' style='width: 72px;'></th></tr>";
+                echo "<tr><th class='lbu-dark' style='width: 90px'>Exhibit File ID</th><th class='lbu-dark'>Identifier Name</th><th class='lbu-dark''>File Name</th><th class='lbu-dark' style='width: 90px'>File Type</th><th class='lbu-dark' style='width: 90px'>File Size</th><th class='lbu-dark' style='width: 90px';>Timestamp</th><th class='lbu-dark' style='width: 35px;'></th><th class='lbu-dark' style='width: 72px;'></th></tr>";
 
                 $sql = "SELECT FileID, Identifier, EvidenceID, UploadType, SetName, FileName, FileType, FileSize, UploaderFullName, UploaderUsername, UploadTimestamp FROM exhibituploadedfiles WHERE Identifier = ? AND EvidenceID = ?";
                 $stmt = $connection->prepare($sql);
@@ -100,6 +100,7 @@ function formatBytes($bytes, $precision = 1) {
                 while ($row = $results->fetch_assoc()) {
                     if ($row['UploadType'] == 'Image') {
                         echo '<tr>';
+                        echo '<td>' . $row['FileID'] . '</td>';
                         echo '<td>' . $row['SetName'] . '</td>';
                         echo '<td>' . $row['FileName'] . '</td>';
                         echo '<td>' . $row['FileType'] . '</td>';
