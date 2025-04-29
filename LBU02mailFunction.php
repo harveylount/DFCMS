@@ -88,10 +88,8 @@ if ($externalBoolean === "true") {
     
 }
 
-$pdfContent = $pdf->output('', 'S'); // Output the PDF as a string (so can be sent by email)
-
+$pdfContent = $pdf->output('', 'S'); // Output the PDF as a string
 $md5Hash = md5($pdfContent);
-
 $sha1Hash = sha1($pdfContent);
 
 $to = $dispatchedByEmail;

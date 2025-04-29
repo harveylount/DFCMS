@@ -93,16 +93,16 @@ if (file_exists($file)) {
                     // Audit Log
                     $action = "Login failed.";
                     $type = "AuthFailed";
-                    $fullName = $_SESSION['fullName'];
-                    $username = $_SESSION['userId'];
+                    $fullName = $_POST['txtUsername'];
+                    $username = $_POST['txtUsername'];
 
                     $query = "INSERT INTO auditlog 
-                        (EntryType, Timestamp, ActionerUsername, Action)
+                        (EntryType, Timestamp, ActionerFullName, ActionerUsername, Action)
                         VALUES
-                        (?, ?, ?, ?)";
+                        (?, ?, ?, ?, ?)";
 
                     $stmt = mysqli_prepare($connection, $query);
-                    mysqli_stmt_bind_param($stmt, "ssss", $type, $timestamp, $fullName, $username, $action);
+                    mysqli_stmt_bind_param($stmt, "sssss", $type, $timestamp, $fullName, $username, $action);
                     mysqli_stmt_execute($stmt);
                     mysqli_stmt_close($stmt);
 

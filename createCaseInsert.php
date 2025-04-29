@@ -51,12 +51,12 @@ if (isset($_POST['subEvent'])) {
         unset($_SESSION['txtCaseNameF']);
 
         $query = "INSERT INTO cases 
-            (CaseReference, CaseName, LeadInvestigator, DateCreated, DeadlineDate, CaseStatus, Timezone)
+            (CaseReference, CaseName, LeadInvestigator, Investigator, DateCreated, DeadlineDate, CaseStatus, Timezone)
             VALUES
-            (?, ?, ?, ?, ?, ?, ?)";
+            (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "sssssss", $caseReference, $caseName, $investigator, $caseCreated, $dateDeadline, $CaseStatus, $timezone);
+        mysqli_stmt_bind_param($stmt, "ssssssss", $caseReference, $caseName, $investigator, $investigator, $caseCreated, $dateDeadline, $CaseStatus, $timezone);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 

@@ -51,7 +51,7 @@ if (isset($_POST['subImageEvent'])) {
             
             $fileExt = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
             
-            $allowedExtensions = ['e01', 'dd', 'img', 'iso', 'vmdk'];
+            
 
             if (strlen($notes) <= 1000) {
                 //continue code
@@ -61,6 +61,7 @@ if (isset($_POST['subImageEvent'])) {
                 exit();
             }
             
+            $allowedExtensions = ['e01', 'dd', 'img', 'iso', 'vmdk'];
             if (in_array($fileExt, $allowedExtensions)) {
 
                 unset($_SESSION['txtFileNameF']);

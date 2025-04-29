@@ -18,7 +18,8 @@ $stmt->bind_result($setNumberOfSketches);
 $stmt->fetch();
 mysqli_stmt_close($stmt);
 
-$query = "SELECT COUNT(*) AS sketchCount FROM sceneuploadedfiles WHERE Identifier = ? AND LBU06id = ? AND UploadType = 'SceneSketch'"; 
+$query = "SELECT COUNT(*) AS sketchCount FROM sceneuploadedfiles WHERE Identifier = ? AND 
+LBU06id = ? AND UploadType = 'SceneSketch'"; 
 $stmt = $connection->prepare($query);  
 $stmt->bind_param("ss", $identifier, $LBU06id);
 $stmt->execute();

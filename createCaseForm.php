@@ -81,17 +81,13 @@ $maxDate = date('Y-m-d', strtotime('+5 years'));
 
                     <!-- Case reference field -->
                     <label for="txtCaseReference">Case Reference: </label><br />
-                    <input type="text" name="txtCaseReference" value="<?php 
-                        if(isset($_SESSION['txtCaseReferenceF'])) {
-                            echo $_SESSION['txtCaseReferenceF'];
-                            unset($_SESSION['txtCaseReferenceF']);
-                        }
+                    <input type="text" name="txtCaseReference" value="<?php if(isset($_SESSION['txtCaseReferenceF'])) {
+                            echo $_SESSION['txtCaseReferenceF']; unset($_SESSION['txtCaseReferenceF']); }
                     ?>" required/><p class="error-message"><?php echo $_SESSION['txtCaseReferenceM']; unset($_SESSION['txtCaseReferenceM']);?></p><br /><br />
 
                     <!-- Case name field -->
                     <label for="txtCaseName">Case Name: </label><br />
-                    <input type="text" name="txtCaseName" value="<?php 
-                        if(isset($_SESSION['txtCaseNameF'])) {
+                    <input type="text" name="txtCaseName" value="<?php if(isset($_SESSION['txtCaseNameF'])) {
                             echo $_SESSION['txtCaseNameF'];
                             unset($_SESSION['txtCaseNameF']);
                         }

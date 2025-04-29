@@ -1071,19 +1071,16 @@ $html .= '</table><br>';
 $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Ln(0.5);
 
-mysqli_data_seek($results, 0);
-
 $html = '<table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse;">';
 $html .= '<tr><td style="width: 20%; font-weight: bold; background-color: #5AAAFF; color: white;">Timestamp</td><td style="width: 20%; font-weight: bold; background-color: #5AAAFF; color: white;">Action</td><td style="width: 30%; font-weight: bold; background-color: #5AAAFF; color: white;">Actioner</td><td style="width: 30%; font-weight: bold; background-color: #5AAAFF; color: white;">Removed Reason</td></tr>';
 
 if ($row = mysqli_fetch_assoc($results)) {
-    
+    mysqli_data_seek($results, 0);
 
     while ($row = mysqli_fetch_assoc($results)) {
         if (isset($row['Removed']) && $row['Removed'] === "Removed") {
             $html .= '<tr><td style="width: 20%; font-weight: bold; background-color: #ffa8a8;">' . $row['Timestamp'] . '</td><td style="width: 20%; font-weight: bold; background-color: #ffa8a8;">' . $row['Action'] . '</td><td style="width: 30%; font-weight: bold; background-color: #ffa8a8;">' . $row['FullName'] . '<br>(' . $row['Username'] . ')</td><td style="width: 30%; font-weight: bold; background-color: #ffa8a8;">' . $row['RemovedReason'] . '</td></tr>';
         } else {
-            $removeLink = 'removeLBU03EntryForm.php?identifier=' . urlencode($identifier) . '&EvidenceID=' . urlencode($evidenceID) . '&LBU03id=' . urlencode($row['LBU03id']);
             $html .= '<tr><td style="width: 20%;">' . $row['Timestamp'] . '</td><td style="width: 20%;">' . $row['Action'] . '</td><td style="width: 30%;">' . $row['FullName'] . '<br>(' . $row['Username'] . ')</td><td style="width: 30%;"></td></tr>';
         }
     }
@@ -1381,6 +1378,7 @@ if ($resultRows->num_rows > 0) {
     $html .= '<p>No Entries Found</p>';
 }
 $stmtRows->close();
+$pdf->writeHTML($html, true, false, true, false, '');
 
 //-------------------------------------------
 //
@@ -1640,8 +1638,8 @@ $MD5Hash = md5($filecontent);
 $SHA1Hash = sha1($filecontent);
 
 $stmt = $connection->prepare("INSERT INTO reportfiles 
-(Identifier, FileName, FileType, FileSize, FileContent, GeneratedByFullName, GeneratedByUsername, GeneratedTimestamp, MD5Hash, SHA1Hash) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+(Identifier, FileName, FileType, FileSize, FileContent, GeneratedByFullName, GeneratedByUsername, 
+GeneratedTimestamp, MD5Hash, SHA1Hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 $stmt->bind_param("ssssssssss", 
     $identifier, 

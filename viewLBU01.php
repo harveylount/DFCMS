@@ -19,18 +19,22 @@ $stmt->fetch();
 mysqli_stmt_close($stmt);
 
 // Audit Log
-$action = "Viewed an LBU01 form. Case Reference: " . $caseReference . ". Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". Exhibit ID: " . $evidenceID . ". LBU01 ID: " . $LBU01id . ".";
+$action = "Viewed an LBU01 form. Case Reference: " . $caseReference . ". 
+            Case ID: " . $identifier . ". Exhibit Reference: " . $exhibitReference . ". 
+            Exhibit ID: " . $evidenceID . ". LBU01 ID: " . $LBU01id . ".";
 $type = "Exhibit";
 $timestamp = date('Y-m-d H:i:s');
 $fullName = $_SESSION['fullName'];
 $username = $_SESSION['userId'];
 
 $query = "INSERT INTO auditlog 
-    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, LBU01id, Timestamp, ActionerFullName, ActionerUsername, Action)
+    (Identifier, CaseReference, ExhibitReference, EvidenceID, EntryType, LBU01id, Timestamp, 
+    ActionerFullName, ActionerUsername, Action)
     VALUES
     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = mysqli_prepare($connection, $query);
-mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, $type, $LBU01id, $timestamp, $fullName, $username, $action);
+mysqli_stmt_bind_param($stmt, "ssssssssss", $identifier, $caseReference, $exhibitReference, $evidenceID, 
+$type, $LBU01id, $timestamp, $fullName, $username, $action);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 ?> 

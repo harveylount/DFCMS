@@ -5,7 +5,7 @@ if (isset($_GET['identifier'])) {
 
     $query = "SELECT * FROM cases WHERE Identifier = ?";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param("i", $identifier);  // "i" for integer type parameter
+    $stmt->bind_param("i", $identifier); 
     $stmt->execute();
     $results = $stmt->get_result();
 
@@ -67,7 +67,6 @@ mysqli_stmt_close($stmt);
     echo "<br/>";
     
     while ($row = mysqli_fetch_assoc($results)) {
-
         echo "<table class='styled-table' border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
         echo '<tr><td class="lbu-high">Case Name</td><td>' . $row['CaseName'] . '</td></tr>';
         echo '<td class="lbu-high">Lead Investigator</td><td>' . $leadInvestigatorFullName . ' (' . $row['LeadInvestigator'] . ')</td></tr>';
@@ -76,7 +75,6 @@ mysqli_stmt_close($stmt);
         echo '<tr><td class="lbu-high">Case Deadline</td><td>' . $row['DeadlineDate'] . '</td></tr>';
         echo '<tr><td class="lbu-high">Case Timezone</td><td>' . $row['Timezone'] . '</td></tr>';
         echo '</table>';
-
     }
 
 } else {

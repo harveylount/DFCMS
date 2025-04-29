@@ -10,7 +10,7 @@ $evidenceID = intval($_GET['EvidenceID']);  // Sanitize the input to prevent SQL
 
 include 'checkUserAddedToCaseFunction.php'; 
 
-$sql = "DELETE FROM exhibitinfobackup WHERE Identifier = ? AND EvidenceID = ? AND Timestamp1 < NOW() - INTERVAL 10 SECOND;";
+$sql = "DELETE FROM exhibitinfobackup WHERE Identifier = ? AND EvidenceID = ? AND Timestamp1 < NOW() - INTERVAL 7 DAY;";
 $stmt = $connection->prepare($sql);
 $stmt->bind_param("ss", $identifier, $evidenceID);
 $stmt->execute();

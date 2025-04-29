@@ -38,11 +38,14 @@ if (isset($_POST['subEvent'])) {
     $_SESSION['txtNetworkF']=$network;
 
 
-    $query = "SELECT Manufacturer, Model, SerialNumber, Storage, OS, CPU, RAM, MAC, IP, Firmware, Peripheral, Network FROM evidence WHERE EvidenceID = ?";
+    $query = "SELECT Manufacturer, Model, SerialNumber, Storage, OS, CPU, RAM, MAC, IP, Firmware, 
+                Peripheral, Network FROM evidence WHERE EvidenceID = ?";
         $stmt = mysqli_prepare($connection, $query);
         mysqli_stmt_bind_param($stmt, "i", $evidenceID);
         $stmt->execute();
-        $stmt->bind_result($manufacturerBackup, $modelBackup, $serialBackup, $storageBackup, $OSBackup, $CPUBackup, $RAMBackup, $MACBackup, $IPBackup, $firmwareBackup, $peripheralBackup, $networkBackup);
+        $stmt->bind_result($manufacturerBackup, $modelBackup, $serialBackup, $storageBackup,
+                        $OSBackup, $CPUBackup, $RAMBackup, $MACBackup, $IPBackup, $firmwareBackup, 
+                        $peripheralBackup, $networkBackup);
         $stmt->fetch();
         mysqli_stmt_close($stmt);
 
@@ -200,8 +203,11 @@ if (isset($_POST['subEvent'])) {
         }
 
         $query = "INSERT INTO exhibitinfobackup 
-            (Identifier, EvidenceID, CaseReference, ExhibitRef, EvidenceType, Manufacturer, Model, SerialNumber, Storage, OS, CPU, RAM, MAC, IP, Firmware, Peripheral, Network, Timestamp1, EditorOfBackupFullName, EditorOfBackupUsername) 
-            SELECT Identifier, EvidenceID, CaseReference, ExhibitRef, EvidenceType, Manufacturer, Model, SerialNumber, Storage, OS, CPU, RAM, MAC, IP, Firmware, Peripheral, Network, ?, ?, ? 
+            (Identifier, EvidenceID, CaseReference, ExhibitRef, EvidenceType, Manufacturer, Model, SerialNumber, Storage, OS, 
+            CPU, RAM, MAC, IP, Firmware, Peripheral, Network, Timestamp1, EditorOfBackupFullName, EditorOfBackupUsername) 
+            
+            SELECT Identifier, EvidenceID, CaseReference, ExhibitRef, EvidenceType, Manufacturer, Model, 
+            SerialNumber, Storage, OS, CPU, RAM, MAC, IP, Firmware, Peripheral, Network, ?, ?, ? 
             FROM evidence WHERE EvidenceID = ?";
             
         $stmt = mysqli_prepare($connection, $query);
@@ -209,9 +215,12 @@ if (isset($_POST['subEvent'])) {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
-        $query = "UPDATE evidence SET EditedTime = ?, EditedByFullName = ?, EditedByUsername = ?, Manufacturer = ?, Model = ?, SerialNumber = ?, Storage = ?, OS = ?, CPU = ?, RAM = ?, MAC = ?, IP = ?, Firmware = ?, Peripheral = ?, Network = ? WHERE EvidenceID = ?";
+        $query = "UPDATE evidence SET EditedTime = ?, EditedByFullName = ?, EditedByUsername = ?, Manufacturer = ?, Model = ?, 
+        SerialNumber = ?, Storage = ?, OS = ?, CPU = ?, RAM = ?, MAC = ?, IP = ?, Firmware = ?, Peripheral = ?, Network = ? 
+        WHERE EvidenceID = ?";
         $stmt = mysqli_prepare($connection, $query);
-        mysqli_stmt_bind_param($stmt, "sssssssssssssssi", $timestamp, $fullName, $username, $manufacturer, $model, $serial, $storage, $OS, $CPU, $RAM, $MAC, $IP, $firmware, $peripheral, $network, $evidenceID);
+        mysqli_stmt_bind_param($stmt, "sssssssssssssssi", $timestamp, $fullName, $username, $manufacturer, $model, $serial, 
+        $storage, $OS, $CPU, $RAM, $MAC, $IP, $firmware, $peripheral, $network, $evidenceID);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 

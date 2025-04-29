@@ -55,6 +55,7 @@ $query2 = "SELECT CaseReference FROM cases WHERE Identifier = $identifier";
                 <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier" ?>" id="navcase-button">Crime Scene Reports</a>
                 <a href="<?php echo "viewCaseNotes.php?identifier=$identifier" ?>" id="navcase-button">Case Notes</a>
                 <a href="<?php echo "listReports.php?identifier=$identifier" ?>" id="navcase-button">Reports</a>
+                <a href="<?php echo "auditCase.php?identifier=$identifier" ?>" id="navcase-button">Case Audit</a>
                 <?php include 'displayCaseAdminButtonFunction.php'; ?>
             </div>
 

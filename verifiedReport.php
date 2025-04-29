@@ -70,6 +70,7 @@ $query = "SELECT CaseReference FROM cases WHERE Identifier = ?";
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier" ?>" id="navcase-button">Crime Scene Reports</a>
             <a href="<?php echo "viewCaseNotes.php?identifier=$identifier" ?>" id="navcase-button">Case Notes</a>
             <a href="<?php echo "listReports.php?identifier=$identifier" ?>" id="navcase-button">Reports</a>
+            <a href="<?php echo "auditCase.php?identifier=$identifier" ?>" id="navcase-button">Case Audit</a>
             <?php include 'displayCaseAdminButtonFunction.php'; ?>
         </div>
 
@@ -87,7 +88,8 @@ $query = "SELECT CaseReference FROM cases WHERE Identifier = ?";
             $identifier = $_GET['identifier'];
             $reportID = $_GET['ReportID'];
 
-            $stmt = $connection->prepare("SELECT FileName, FileType, FileSize, FileContent, MD5Hash, SHA1Hash FROM reportfiles WHERE Identifier = ? AND ReportID = ?");
+            $stmt = $connection->prepare("SELECT FileName, FileType, FileSize, FileContent, MD5Hash, SHA1Hash 
+                                            FROM reportfiles WHERE Identifier = ? AND ReportID = ?");
             $stmt->bind_param("ss", $identifier, $reportID);
             $stmt->execute();
             $stmt->store_result();
