@@ -6,7 +6,7 @@ $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL
 
 if (isset($_POST['subEvent'])) {
 
-    $sql = "SELECT CaseReference FROM evidence WHERE Identifier = ?";
+    $sql = "SELECT CaseReference FROM cases WHERE Identifier = ?";
     $stmt = $connection->prepare($sql);
     $stmt->bind_param("s", $identifier);
     $stmt->execute();

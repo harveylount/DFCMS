@@ -12,7 +12,7 @@ $identifier = intval($_GET['identifier']);  // Sanitize the input to prevent SQL
 
 include 'checkUserAddedToCaseFunction.php'; 
 
-$sql = "SELECT CaseReference FROM evidence WHERE Identifier = ?";
+$sql = "SELECT CaseReference FROM cases WHERE Identifier = ?";
 $stmt = $connection->prepare($sql);
 $stmt->bind_param("s", $identifier);
 $stmt->execute();
@@ -235,7 +235,7 @@ $_SESSION['timestampInDisplayLBU06'] = date('d-m-Y H:i:s');
                 function validateOthersInput(event) {
                     const inputField = event.target;
                     const value = inputField.value;
-                    const regex = /^[A-Za-z]{0,50}$/; // Allows only letters (A-Z, a-z) and max 50 chars
+                    const regex = /^[A-Za-z ]{0,50}$/; // Allows only letters (A-Z, a-z) and max 50 chars
 
                     if (!regex.test(value)) {
                         alert("The 'Others' field can only contain letters (A-Z, a-z) and must be 50 characters or less.");

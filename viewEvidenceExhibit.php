@@ -89,6 +89,7 @@ mysqli_stmt_close($stmt);
             <a href="<?php echo "viewCrimeSceneReports.php?identifier=$identifier"?>" id="navcase-button">LBU06</a>
             <a href="<?php echo "viewExhibitNotes.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Notes</a>
             <a href="<?php echo "listImageFiles.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Files</a>
+            <a href="<?php echo "auditExhibit.php?identifier=$identifier&EvidenceID=$evidenceID" ?>" id="navcase-button">Exhibit Audit</a>
         </div>
 
         <section id="LBU">
